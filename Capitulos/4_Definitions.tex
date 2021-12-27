@@ -1,0 +1,49 @@
+\chapter{Definitions}
+\label{cap:definiciones}
+
+\todo{No empieces la sección con una subsección, pon algo de texto
+explicando de qué va a ir.}
+
+\section{Node}\todo{Usar entorno definition o algo así. Cuando una definición salga de un artículo pon la cita en el nombre de la definición (esto ya para las siguientes)}
+A node is a function/method execution.
+It contains:
+\begin{itemize}
+\item The name of the function/method executed\todo{Punto despúes de cada item}
+\item The input arguments when it was called (if any)
+\item The object state when it was called (if it is a method call)
+\item The global variables state when it was called (if any)
+\item The output arguments when it returned (if there where passed as reference or pointer)
+\item The object state when it returned (if it is a method call)
+\item The global variables state when it returned (if any)
+\end{itemize}
+\section{Weighted Marked Execution Tree}
+We here expand the definition of MET in "An Optimal Strategy for Algorithmic Debugging" to WMET.\todo{Las comillas en latex son ``asi''}\todo{falta referencia}
+
+A weighted marked execution tree (WMET) is a tree T = (N,E,W,M) where N are the nodes,E⊆N×N\todo{Usar entorno matemático y los comandos correspondientes en todas las fórmulas} are  the edges, M:N→V is a total function that assigns to all the nodes in N a value in the domain D={Wrong,Undefined} and W is a total function that assigns to all the nodes in N a value which is the weight  of  the  sub-tree  rooted  at  node n in N,wn,  is  defined recursively as its number of descendants including itself (i.e.,1 +∑{wn'|n→n′)∈E}).
+\section{Buggy node}
+A buggy node is a node that is marked as incorrect by the user.
+
+At first we considered inferring that the root node of the tree, upon completing of the building of the tree, is wrong, since the user started a debugging session.
+
+Upon closer analysis we decided against doing so, to provide more flexibility to the user.
+\section{Detected errors}
+DDC can help the user detect the following errors:
+\begin{itemize}
+\item A function/method was called with the wrong arguments
+\item A function/method returns a wrong value
+\item A global variable is visible from the function/method scope when it should not 
+\item A global variable is not visible from the function/method scope when it should 
+\item A method modifies its object when it should not 
+\item A method does not modify its object when it should do so.
+\item A function/method modifies an argument passed by reference or pointer when it should not 
+\item A function/method does not modify an argument passed by reference or pointer when it should do so
+\item An argument passed by reference or pointer has the wrong value when returning.
+\item A function/method does not terminate when it should do so
+\item A function/method calls a sub-computation when it should not.
+\item A function/method does not call a sub-computation when it should do so.
+\end{itemize}
+\section{Completion of the debugging session}
+The debugging session is finished when:
+The WMET is empty, therefore no buggy node has been found
+The WMET consists of one node marked wrong, therefore the buggy node has been found.
+\section{Correctness}

@@ -1,0 +1,58 @@
+\chapter{Conclusions and Future Work}
+\label{cap:conclusions}
+
+Conclusions.
+
+By using GDB as a framework to build the declarative debugger, we have the benefit of supporting not only C++ but several programming languages (https://sourceware.org/gdb/current/onlinedocs/gdb/Supported-Languages.html).
+
+This is done through a common Python API.
+
+Also, by using a language with a broad amount of libraries such as Python, the user interface and execution tree representation have been easy to implement.
+
+During the development and use of the debugger, some execution trees did not match expectations.
+
+Upon close examination, these maybe caused by GDB.
+
+The first is that with recursive calls
+
+The second is that if two function calls are identical in terms of arguments passed to them, then their frames are identical.
+
+The workaround implemented to avoid building an erroneous execution tree is two fold:
+
+When filling information about the call on entry, the current node is appended to the list of node if:
+nodes is empty
+last node's frame is invalid (meaning is no longer active)
+last node's frame is not a parent of current node.
+
+When filling information about the call on return, only fill it if it is empty.
+
+Another future line of improvements could come from the presentation of node information to the user.
+
+Two issues have been highlighted by doing this project.
+
+The first is arrays in C++. C++ arrays are typed as pointers to the first element of the array when passed as argument to a function. (insert screen capture of GDB to prove this)
+
+Then, it does not seem to be a way to differentiate between pointers and arrays when working in GDB.
+
+To surmount this difficulty, the examples programs use std::vector instead of C-style arrays.
+
+Another issue with variable display is pointers.
+
+Some functions, like swap(int *, int *) in the example provided, do pointer arithmetic.
+
+Maybe we should display both the memory address pointed by the pointer and the content.
+
+Another line of future development could be 
+
+\section{Conclusions}
+\section{Future work}
+\subsection{Benchmarking overhead of building execution tree}
+\subsection{Supporting concurrency}
+\subsection{Support for more strategies}
+\subsection{Support for C-style arrays}
+\subsection{Report GDB bugs}
+\subsubsection{Wrong backtrace with recursive functions}
+\subsubsection{Frame ID is the same for function call with the same arguments}
+\subsection{Increase granularity in error detection}
+\subsection{Increase flexibility inside a debugging session}
+\subsection{Interactive/collapsible execution tree}

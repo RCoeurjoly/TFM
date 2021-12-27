@@ -1,0 +1,24 @@
+\chapter{Preliminaries}
+\label{cap:preliminares}
+
+\section{Declarative debugging}
+Declarative debugging, also called algorithmic debugging, is a debugging technique that consists in asking questions about the correctness of computations to the user until either a certain computation is narrowed down as buggy or no buggy computation is found.
+
+A declarative debugger (DD) takes as argument a program execution which the user deems incorrect.
+
+Then, the DD builds an execution tree of the execution of this program.
+
+Since the number of questions depends on the size of the tree (number of nodes, width and depth of the tree), most DD have the option of either trusting some computations before hand, to avoid adding to the tree, or focusing on some computations and only adding those to the tree.
+
+Another method to reduce the size of the debugging tree is to 
+\section{C++ programming language}
+The C++ programming language is a general-purpose, statically typed, compiled language.
+
+In C++, a method (or member function) is function that is defined inside a class. It has, therefore, access to all members of that class.
+
+DDC can build an execution tree composed of function
+\section{Technologies used}
+\subsection{GDB: The GNU Project Debugger}
+\subsection{rr: Record and Replay Framework}
+\subsection{Poetry: Dependency Management for Python}
+\subsection{Nix: the purely functional package manager}

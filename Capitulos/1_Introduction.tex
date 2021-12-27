@@ -1,0 +1,63 @@
+\chapter{Introduction}
+\label{cap:introduccion}
+
+\chapterquote{Program testing can be used to show the presence of bugs, but never to show their absence!}{Edsger Dijkstra}
+
+\section{Motivation}
+
+Debugging is the most expensive part of developing software.
+It is estimated that between 80 and 90 percent of development effort is spent on debugging tasks.  (reference?)
+
+Furthermore, no paradigm (imperative, functional, logical, etc) or language can claim that it removes the need to debug.
+
+Therefore, it is important to develop tools and workflows to alleviate this issue.
+
+Declarative debugging (also known as algorithmic debugging) takes a semiautomatic approach.
+
+To the best of our knowledge, there is no declarative debugger for C++.
+
+There are declarative debuggers for:
+ \begin{itemize}
+ \item Maude
+\item  Java
+\item Erlang
+\end{itemize}
+
+Developing a declarative debugger for C++ involves figuring out a way to treat pointers in a way useful for the user.
+
+\section{Goals}
+The goal of this thesis is to develop a declarative debugger for the C++ language.
+
+This debugger, called DDC, should have the following features:
+\begin{itemize}
+  \item The debugger has to scale to real programs.
+  \item Integrated in the existing debugging workflow of the developer.
+  \item The user has to be able to debug a program with no or few changes to its compilation (at most setting some compilation flags).
+\end{itemize}
+
+scalability issue:
+
+Provide a way for the user to choose what are the suspect functions or methods.
+This would reduce the number of nodes in the execution tree (ET), therefore reducing the time to build it and its memory footprint.
+Provide a way for the user to choose a point in the code that, if reached, triggers the end of the building of the ET and begins the asking questions to the user.
+
+Use test cases to reduce the number of nodes in the tree, therefore reducing the number of questions needed to find the buggy node.
+
+Usability:
+
+Integrate the declarative debugger into the debugger most used by C++ developers.
+
+This would provide several benefits:
+
+The user would set the breakpoints (both the suspect function or methods and the final point) in a way that is identical to her usual debugging workflow.
+
+Common features when setting breakpoints like auto-completion
+
+The user would not have to switch tools between normal debugging and declarative debugging.
+\section{Main contributions}
+
+The main contributions of this thesis are:
+\begin{itemize}
+\item The development of a declarative debugger for the C++ language.
+\item 
+\end{itemize}
