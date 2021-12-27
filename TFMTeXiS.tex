@@ -39,7 +39,7 @@
 % apéndice.
 %
 %
-% Si  queremos   compilar  solo   una  parte  del   documento  podemos
+% Si  queremos   compilar  solo  una  parte  del   documento  podemos
 % especificar mediante  \includeonly{...} qué ficheros  son los únicos
 % que queremos  que se incluyan.  Esto  es útil por  ejemplo para sólo
 % compilar un capítulo.
@@ -51,6 +51,9 @@
 % Total,  que definimos  una constante  con los  ficheros  que siempre
 % vamos a querer compilar  (aquellos relacionados con configuración) y
 % luego definimos \compilaCapitulo.
+
+\usepackage{todonotes}
+
 \newcommand{\ficherosBasicosTeXiS}{%
 TeXiS/TeXiS_pream,TeXiS/TeXiS_cab,TeXiS/TeXiS_bib,TeXiS/TeXiS_cover%
 }
@@ -137,20 +140,20 @@ constantes,guionado,Cascaras/bibliografia,config%
 \restauraCabecera
 
 
-\include{Capitulos/Introduccion}
-\include{Capitulos/EstadoDeLaCuestion}
-\include{Capitulos/DescripcionTrabajo}
-%\include{Capitulos/Capitulo4}
-%\include{Capitulos/Capitulo5}
-\include{Capitulos/ConclusionesTrabajoFuturo}
+\include{Capitulos/1_Introduction}
+\include{Capitulos/2_Preliminaries}
+\include{Capitulos/3_StateOfTheArt}
+\include{Capitulos/4_Definitions}
+\include{Capitulos/5_ToolDescription}
+\include{Capitulos/6_ConclusionsAndFutureWork}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Si el TFM se escribe en inglés, comentar las siguientes líneas 
 % porque no es necesario incluir nuevamente las Conclusiones en inglés
-\begin{otherlanguage}{english}
-\include{Capitulos/Introduction}
-\include{Capitulos/ConclusionsFutureWork}
-\end{otherlanguage}
+% \begin{otherlanguage}{english}
+% \include{Capitulos/Introduction}
+% \include{Capitulos/ConclusionsFutureWork}
+% \end{otherlanguage}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %
