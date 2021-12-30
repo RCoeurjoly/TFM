@@ -67,9 +67,10 @@
 \contentsline {subsection}{\numberline {6.2.8}Report GDB bugs}{14}{subsection.84}% 
 \contentsline {subsubsection}{\numberline {6.2.8.1}Wrong backtrace with recursive functions}{14}{subsubsection.85}% 
 \contentsline {subsubsection}{\numberline {6.2.8.2}Frame ID is the same for function call with the same arguments}{14}{subsubsection.86}% 
-\contentsline {subsection}{\numberline {6.2.9}Increase granularity in error detection}{14}{subsection.87}% 
-\contentsline {subsection}{\numberline {6.2.10}Increase flexibility inside a debugging session}{14}{subsection.88}% 
-\contentsline {subsection}{\numberline {6.2.11}Interactive/collapsible execution tree}{14}{subsection.89}% 
-\contentsline {chapter}{Bibliograf\'{\i }a}{15}{chapter*.90}% 
-\contentsline {chapter}{\numberline {A}T\IeC {\'\i }tulo del Ap\IeC {\'e}ndice A}{17}{appendix.91}% 
-\contentsline {chapter}{\numberline {B}T\IeC {\'\i }tulo del Ap\IeC {\'e}ndice B}{19}{appendix.92}% 
+\contentsline {subsubsection}{\numberline {6.2.8.3}Interactive Metamorphic Testing of Debuggers}{14}{subsubsection.87}% 
+\contentsline {subsection}{\numberline {6.2.9}Increase granularity in error detection}{14}{subsection.88}% 
+\contentsline {subsection}{\numberline {6.2.10}Increase flexibility inside a debugging session}{14}{subsection.89}% 
+\contentsline {subsection}{\numberline {6.2.11}Interactive/collapsible execution tree}{14}{subsection.90}% 
+\contentsline {chapter}{Bibliograf\'{\i }a}{15}{chapter*.91}% 
+\contentsline {chapter}{\numberline {A}T\IeC {\'\i }tulo del Ap\IeC {\'e}ndice A}{17}{appendix.92}% 
+\contentsline {chapter}{\numberline {B}T\IeC {\'\i }tulo del Ap\IeC {\'e}ndice B}{19}{appendix.93}% 

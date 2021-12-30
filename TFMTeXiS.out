@@ -69,10 +69,11 @@
 \BOOKMARK [2][-]{subsection.84}{Report GDB bugs}{section.76}% 69
 \BOOKMARK [3][-]{subsubsection.85}{Wrong backtrace with recursive functions}{subsection.84}% 70
 \BOOKMARK [3][-]{subsubsection.86}{Frame ID is the same for function call with the same arguments}{subsection.84}% 71
-\BOOKMARK [2][-]{subsection.87}{Increase granularity in error detection}{section.76}% 72
-\BOOKMARK [2][-]{subsection.88}{Increase flexibility inside a debugging session}{section.76}% 73
-\BOOKMARK [2][-]{subsection.89}{Interactive/collapsible execution tree}{section.76}% 74
-\BOOKMARK [0][-]{chapter*.90}{Bibliograf\355a}{}% 75
-\BOOKMARK [0][-]{appendix.91}{T\355tulo del Ap\351ndice A}{}% 76
-\BOOKMARK [0][-]{appendix.92}{T\355tulo del Ap\351ndice B}{}% 77
-\BOOKMARK [0][-]{fin.0}{End}{}% 78
+\BOOKMARK [3][-]{subsubsection.87}{Interactive Metamorphic Testing of Debuggers}{subsection.84}% 72
+\BOOKMARK [2][-]{subsection.88}{Increase granularity in error detection}{section.76}% 73
+\BOOKMARK [2][-]{subsection.89}{Increase flexibility inside a debugging session}{section.76}% 74
+\BOOKMARK [2][-]{subsection.90}{Interactive/collapsible execution tree}{section.76}% 75
+\BOOKMARK [0][-]{chapter*.91}{Bibliograf\355a}{}% 76
+\BOOKMARK [0][-]{appendix.92}{T\355tulo del Ap\351ndice A}{}% 77
+\BOOKMARK [0][-]{appendix.93}{T\355tulo del Ap\351ndice B}{}% 78
+\BOOKMARK [0][-]{fin.0}{End}{}% 79
