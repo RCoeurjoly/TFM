@@ -3,7 +3,9 @@
 
 Conclusions.
 
-By using GDB as a framework to build the declarative debugger, we have the benefit of supporting not only C++ but several programming languages (https://sourceware.org/gdb/current/onlinedocs/gdb/Supported-Languages.html).
+By using GDB as a framework to build the declarative debugger, we have the benefit of supporting not only C++ but 
+several programming languages 
+(https://sourceware.org/gdb/current/onlinedocs/gdb/Supported-Languages.html).
 
 This is done through a common Python API.
 
@@ -47,8 +49,14 @@ Another line of future development could be
 \section{Conclusions}
 \section{Future work}
 \subsection{Benchmarking overhead of building execution tree}
-\subsection{Supporting concurrency}
-\subsection{Support for more strategies}
+\subsection{Support concurrent programs}
+\subsection{Test programming languages other than C++}
+\subsection{Implement more strategies}
+\subsection{Formally verify all algorithms}
+Nagini fails
+Cross hair fails (recursion too deep)
+Maybe Lean to C, and the C to Python
+\subsection{Generate test cases from correct nodes}
 \subsection{Support for C-style arrays}
 \subsection{Report GDB bugs}
 \subsubsection{Wrong backtrace with recursive functions}

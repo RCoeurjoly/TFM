@@ -8,9 +8,17 @@ A declarative debugger (DD) takes as argument a program execution which the user
 
 Then, the DD builds an execution tree of the execution of this program.
 
-Since the number of questions depends on the size of the tree (number of nodes, width and depth of the tree), most DD have the option of either trusting some computations before hand, to avoid adding to the tree, or focusing on some computations and only adding those to the tree.
+\subsection{Building the tree}
 
-Another method to reduce the size of the debugging tree is to 
+Building the execution tree is the central, critical stage of the debugging process.
+
+
+\subsubsection{Strategies for reducing the size of the tree}
+
+Since the number of questions depends on the size of the tree (number of nodes, width and depth of the tree), most DD have the option of either trusting some computations before hand, to avoid adding to the tree, or focusing on some computations and only adding those to the tree.
+\paragraph{trusting computations}
+\paragraph{Trusting all computations but some suspect computations}
+\paragraph{using test cases to eliminate nodes}
 \section{C++ programming language}
 The C++ programming language is a general-purpose, statically typed, compiled language.
 

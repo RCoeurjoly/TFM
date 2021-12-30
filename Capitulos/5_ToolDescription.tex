@@ -1,25 +1,47 @@
 \chapter{Tool description}
 \label{cap:descripcionHerramienta}
-DDC consists of approximately 900 lines of Python.
+DDC consists of approximately 900 lines of statically typed Python.
 
+It gets loaded into rr through the source command.
 
 \section{Implementation}
 \subsection{Tree building}
 \subsubsection{Adding a node to the tree}
-\subsubsection{Adding a node to the tree}
-\subsubsection{Finding a node in the tree}
+\subsubsection{Finishing a node}
+\subsubsection{Finishing the tree building process}
+The tree is considered built one of the following happens:
+\begin{itemize}
+    \item A final point has been hit
+    \item The program has finished
+    \item The root node has been completed
+\end{itemize}
 \subsection{Tree transformation}
 \subsubsection{Simplified tree compression}
+\subsection{General debugging algorithm}
 \subsection{Strategies}
 \subsubsection{Top-down}
 \subsubsection{Divide and Query (Shapiro)}
 \subsubsection{Heaviest first}
+\subsection{User answers to correctness questions}
+\subsubsection{I don't know}
+\subsubsection{Yes}
+\subsubsection{No}
+\subsubsection{Trusted}
+\subsection{Test cases as oracles}
 \section{Commands}
 \subsection{suspect-function}
-\subsection{final-point}
-\subsection{print-nodes}
+gdb.COMPLETE LOCATION
 \subsection{add-node-to-session}
 \subsection{save-returning-node}
-\subsection{start-declarative-debugging-session}
+\subsection{final-point}
+gdb.COMPLETE LOCATION
 \subsection{finish-debugging-session}
-
+\subsection{start-declarative-debugging-session}
+\subsection{save-correct-function}
+gdb.COMPLETE LOCATION
+\subsection{save-returning-correct-node}
+\subsection{add-node-to-correct-list}
+\subsection{til-the-end}
+\subsection{listen-for-correct-nodes}
+\subsection{send-correct-nodes}
+\subsection{print-nodes}

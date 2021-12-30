@@ -1,33 +1,57 @@
 \chapter{Definitions}
 \label{cap:definiciones}
 
-\todo{No empieces la sección con una subsección, pon algo de texto
-explicando de qué va a ir.}
+\newtheorem{definition}{Definition}
+\todo{No empieces la sección con una subsección, pon algo de texto explicando de qué va a ir.}
 
-\section{Node}\todo{Usar entorno definition o algo así. Cuando una definición salga de un artículo pon la cita en el nombre de la definición (esto ya para las siguientes)}
-A node is a function/method execution.
-It contains:
+In this chapter we will provide definitions for the key ideas needed to approach the building of the tool.
+
+\begin{definition}[Node]\todo{Usar entorno definition o algo así. Cuando una definición salga de un artículo pon la cita en el nombre de la definición (esto ya para las siguientes)}
+A node n is a function/method execution, denoted \(f(I) \to O\), where:
 \begin{itemize}
-\item The name of the function/method executed\todo{Punto despúes de cada item}
-\item The input arguments when it was called (if any)
-\item The object state when it was called (if it is a method call)
-\item The global variables state when it was called (if any)
-\item The output arguments when it returned (if there where passed as reference or pointer)
-\item The object state when it returned (if it is a method call)
-\item The global variables state when it returned (if any)
+\item \(f\) is the name of the function/method executed.
+\item \(I\) is the set of inputs to \(f\), \(I = \{I_a, I_o, I_g\}\), where:
+\begin{itemize}
+\item \(I_a\) is the set of input arguments when it was called (if any).
+\item \(I_o\) is the object state when it was called (if it is a method call).
+\item \(I_g\) is the set global variables when it was called (if any).
 \end{itemize}
-\section{Weighted Marked Execution Tree}
-We here expand the definition of MET in "An Optimal Strategy for Algorithmic Debugging" to WMET.\todo{Las comillas en latex son ``asi''}\todo{falta referencia}
-
-A weighted marked execution tree (WMET) is a tree T = (N,E,W,M) where N are the nodes,E⊆N×N\todo{Usar entorno matemático y los comandos correspondientes en todas las fórmulas} are  the edges, M:N→V is a total function that assigns to all the nodes in N a value in the domain D={Wrong,Undefined} and W is a total function that assigns to all the nodes in N a value which is the weight  of  the  sub-tree  rooted  at  node n in N,wn,  is  defined recursively as its number of descendants including itself (i.e.,1 +∑{wn'|n→n′)∈E}).
-\section{Buggy node}
-A buggy node is a node that is marked as incorrect by the user.
+\item \(O\) is the set of outputs to \(f\), \(O = \{O_a, O_o, O_g\}\), where:
+\begin{itemize}
+\item \(O_a\) is the set of output arguments when it returned (if there where passed as reference or pointer).
+\item \(O_o\) is the object state when it returned (if it is a method call).
+\item \(O_g\) is the set of global variables when it returned (if any).
+\end{itemize}
+\end{itemize}
+\end{definition}
+\begin{definition}[Edge]\todo{Aristas?}
+An edge is hierarchical relationship between two nodes, a parent node and a child node.
+A node can have 0 or more children nodes.
+A node can have 0 or 1 parent nodes.
+A node that has no edges leading to children nodes is a leaf node.
+A node that has no edge leading to its parent node is the root node of a tree.
+Nodes that share the same parent node are siblings.
+\end{definition}
+We here expand the definition of MET \citep{6100055} to WMET.\todo{Las comillas en latex son ``asi''}\todo{falta referencia}
+\begin{definition}[Weighted Marked Execution Tree]
+A weighted marked execution tree (WMET) is a tree \(T=(N,E,W,M)\)where N are the nodes,
+\(E\subseteq N \times N\)
+\todo{Usar entorno matemático y los comandos correspondientes en todas las fórmulas} are  the edges, \(M:N\to V\) is a total function that assigns to all the nodes in N a value in the domain \(D=\{Wrong,Undefined\}\) and W is a total function that assigns to all the nodes in N a value which is the weight of the sub-tree rooted at node n in N,\(w_n\) is  defined recursively as its number of descendants including itself (i.e.,\(1 + \sum {w_{n^\prime}\mid n \to n^{\prime}) \in E}\)).
+\end{definition}
+\begin{definition}[Intended interpretation]
+The intended interpretation (\(II\)) of a function/method \(f\) given inputs \(I\) is (adapted from \cite{Caballero_adeclarative}) \(II = f(I) \to O\)
+\end{definition}
+\begin{definition}[Buggy node]
+A buggy node is a node that is not equal to its intended interpretation.
+\end{definition}
+A buggy node is marked as incorrect by the user.
 
 At first we considered inferring that the root node of the tree, upon completing of the building of the tree, is wrong, since the user started a debugging session.
 
 Upon closer analysis we decided against doing so, to provide more flexibility to the user.
-\section{Detected errors}
-DDC can help the user detect the following errors:
+\begin{definition}[Detected errors]
+
+DDC can help the user detect the following errors:\todo{Esto es confuso, porque DDC detecta un solo tipo de error, porque solo hay un tipo de nodo buggy. Otra cosa es que pueda ser buggy por todas estas razones, pero se distinguen en la información dada al usuario?}
 \begin{itemize}
 \item A function/method was called with the wrong arguments
 \item A function/method returns a wrong value
@@ -42,8 +66,11 @@ DDC can help the user detect the following errors:
 \item A function/method calls a sub-computation when it should not.
 \item A function/method does not call a sub-computation when it should do so.
 \end{itemize}
-\section{Completion of the debugging session}
+\end{definition}
+\begin{definition}[Completion of the debugging session]
 The debugging session is finished when:
 The WMET is empty, therefore no buggy node has been found
 The WMET consists of one node marked wrong, therefore the buggy node has been found.
-\section{Correctness}
+\end{definition}
+\begin{definition}[Correctness]
+\end{definition}
