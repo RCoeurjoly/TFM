@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2021.8.27)  28 DEC 2021 15:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2021.8.27)  30 DEC 2021 19:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1155,7 +1155,7 @@ Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 \evensidemarginOriginal=\skip88
 \oddsidemarginOriginal=\skip89
 \longTitulo=\skip90
-<Imagenes/Bitmap/escudoUCMcolor.png, id=280, 600.3228pt x 678.3744pt>
+<Imagenes/Bitmap/escudoUCMcolor.png, id=342, 600.3228pt x 678.3744pt>
 File: Imagenes/Bitmap/escudoUCMcolor.png Graphic file (type png)
 <use Imagenes/Bitmap/escudoUCMcolor.png>
 Package pdftex.def Info: Imagenes/Bitmap/escudoUCMcolor.png  used on input line
@@ -1288,18 +1288,18 @@ LaTeX Info: Redefining \% on input line 143.
 
 (./Capitulos/2_Preliminaries.tex
 Cap\'itulo 2.
-)
-Underfull \vbox (badness 3838) has occurred while \output is active []
 
- [3
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 19.
+
+) [3
 
 
 
 ]
 LaTeX Info: Redefining \. on input line 144.
 LaTeX Info: Redefining \% on input line 144.
-
-[4]
+ [4]
 \openout2 = `Capitulos/3_StateOfTheArt.aux'.
 
  (./Capitulos/3_StateOfTheArt.tex
@@ -1319,28 +1319,27 @@ Cap\'itulo 3.
 Cap\'itulo 4.
 \c@definition=\count331
 Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
-ine 6.
+ine 5.
+
+LaTeX Warning: Marginpar on page 7 moved.
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 15.
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 15.
+
 
 LaTeX Warning: Marginpar on page 7 moved.
 
 
-LaTeX Warning: Marginpar on page 7 moved.
+Overfull \hbox (12.62955pt too wide) in paragraph at lines 37--40
+[][]\T1/cmr/bx/n/10.95 Definition 3 \T1/cmr/m/n/10.95 (Weigh-ted Mar-ked Execu-
+tion Tree)\T1/cmr/bx/n/10.95 . []\T1/cmr/m/it/10.95 A weigh-ted mar-ked execu-t
+ion tree (WMET)
+ []
 
-
-LaTeX Warning: Marginpar on page 7 moved.
-
-
-! Package inputenc Error: Unicode character → (U+2192)
-(inputenc)                not set up for use with LaTeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.30 ...odas las fórmulas} are  the edges, M:N→
-                                                  V is a total function that...
-
-? 
 
 LaTeX Warning: Marginpar on page 7 moved.
 
@@ -1352,33 +1351,45 @@ LaTeX Info: Redefining \% on input line 146.
 
  (./Capitulos/5_ToolDescription.tex
 Cap\'itulo 5.
-) [9
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [9
 
 
 
-]
+])
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+LaTeX Info: Redefining \. on input line 147.
+LaTeX Info: Redefining \% on input line 147.
+ [10]
+LaTeX Info: Redefining \. on input line 147.
+LaTeX Info: Redefining \% on input line 147.
+
+[11]
 \openout2 = `Capitulos/6_ConclusionsAndFutureWork.aux'.
 
- (./Capitulos/6_ConclusionsAndFutureWork.tex [10
+ (./Capitulos/6_ConclusionsAndFutureWork.tex [12
 
 
 
 ]
 Cap\'itulo 6.
 
-Overfull \hbox (173.94919pt too wide) in paragraph at lines 6--7
+Overfull \hbox (173.94919pt too wide) in paragraph at lines 6--9
 \T1/cmr/m/n/10.95 sup-por-ting not only C++ but se-ve-ral pro-gram-ming lan-gua
 -ges (https://sourceware.org/gdb/current/onlinedocs/gdb/Supported-
  []
 
-)
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [11]
+ [13])
 LaTeX Info: Redefining \. on input line 148.
 LaTeX Info: Redefining \% on input line 148.
 
-[12]
+[14]
 \openout2 = `Cascaras/bibliografia.aux'.
 
  (./Cascaras/bibliografia.tex (./TFMTeXiS.bbl
@@ -1386,7 +1397,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 1.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 1.
-)) [13
+)) [15
 
 
 
@@ -1394,30 +1405,30 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \openout2 = `Apendices/appendixA.aux'.
 
 
-(./Apendices/appendixA.tex [14
+(./Apendices/appendixA.tex [16
 
 
 
 ]
 Ap\'{e}ndice A.
-) [15]
+) [17]
 \openout2 = `Apendices/appendixB.aux'.
 
- (./Apendices/appendixB.tex [16
+ (./Apendices/appendixB.tex [18
 
 
 
 ]
 Ap\'{e}ndice B.
-) [17] [18
+) [19] [20
 
 
 ]
 \openout2 = `Cascaras/fin.aux'.
 
- (./Cascaras/fin.tex [19
+ (./Cascaras/fin.tex [21
 
-] [20])
+] [22])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 214.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 214.
  (./TFMTeXiS.aux
@@ -1437,159 +1448,48 @@ LaTeX Info: Redefining \% on input line 32.
 (./Apendices/appendixB.aux) (./Cascaras/fin.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 214.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 214.
+Package rerunfilecheck Info: File `TFMTeXiS.out' has not changed.
+(rerunfilecheck)             Checksum: EDF0EF278F732DE04D42EC8538904118;5527.
 
-
-Package rerunfilecheck Warning: File `TFMTeXiS.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `TFMTeXiS.out':
-(rerunfilecheck)             Before: 1EBE48436D7F1240BEE64C32FD8FFD5D;4257
-(rerunfilecheck)             After:  B4ACA59182BF78865A68FA959259F9A6;4314.
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 214.
  ) 
 Here is how much of TeX's memory you used:
- 33106 strings out of 494499
- 608756 string characters out of 6175516
+ 33125 strings out of 494499
+ 609260 string characters out of 6175516
  849142 words of memory out of 5000000
- 35788 multiletter control sequences out of 15000+600000
- 550317 words of font info for 53 fonts, out of 8000000 for 9000
+ 35817 multiletter control sequences out of 15000+600000
+ 549551 words of font info for 52 fonts, out of 8000000 for 9000
  278 hyphenation exceptions out of 8191
- 72i,12n,100p,966b,1015s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{appendix.69} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{appendix.68} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter*.67} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.66} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.65} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.63} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.62} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.59} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.58} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.57} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.56} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{section.55} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.54} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.49} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.48} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.47} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.46} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.45} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.43} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.42} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.40} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.39} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.38} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.37} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.36} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.34} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{section.31} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{section.30} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{section.26} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{section.23} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.21} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.20} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.17} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.16} has been referenced but does not exi
-st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.15} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{section.14} has been referenced but does not exist,
- replaced by a fixed one
-
- </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti0800
-.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour/jknappen/ec/e
-crm1000.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour/jknapp
-en/ec/ecti1000.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour
-/jknappen/ec/ecrm0600.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk
-/ljfour/jknappen/ec/ecrm0800.600pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvi
-ps/base/8r.enc} </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour/jknap
-pen/ec/ecbx1095.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfou
-r/jknappen/ec/ecrm1095.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/p
-k/ljfour/jknappen/ec/eccc1095.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/
-fonts/pk/ljfour/jknappen/ec/ecti1095.600pk> </home/drcoeurjoly/.texlive2018/tex
-mf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </home/drcoeurjoly/.texlive2
-018/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2488.600pk> </home/drcoeurjoly/.t
-exlive2018/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/drcoeur
-joly/.texlive2018/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/urw/times/utmr8a.pfb>
-Output written on TFMTeXiS.pdf (38 pages, 575793 bytes).
+ 72i,12n,100p,966b,1019s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti08
+00.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour/jknappen/ec
+/ecrm1000.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour/jkna
+ppen/ec/ecti1000.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfo
+ur/jknappen/ec/ecrm0800.600pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/ba
+se/8r.enc} </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour/jknappen/e
+c/ecbx1095.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljfour/jkn
+appen/ec/ecrm1095.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts/pk/ljf
+our/jknappen/ec/eccc1095.600pk> </home/drcoeurjoly/.texlive2018/texmf-var/fonts
+/pk/ljfour/jknappen/ec/ecti1095.600pk> </home/drcoeurjoly/.texlive2018/texmf-va
+r/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </home/drcoeurjoly/.texlive2018/t
+exmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2488.600pk> </home/drcoeurjoly/.texliv
+e2018/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/drcoeurjoly/
+.texlive2018/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhv
+r8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+Output written on TFMTeXiS.pdf (40 pages, 630527 bytes).
 PDF statistics:
- 1143 PDF objects out of 1200 (max. 8388607)
- 614 compressed objects within 7 object streams
- 159 named destinations out of 1000 (max. 500000)
- 610 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1231 PDF objects out of 1440 (max. 8388607)
+ 682 compressed objects within 7 object streams
+ 147 named destinations out of 1000 (max. 500000)
+ 738 words of extra memory for PDF output out of 10000 (max. 10000000)
 

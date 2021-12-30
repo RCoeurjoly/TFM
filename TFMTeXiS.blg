@@ -7,56 +7,58 @@ A level-1 auxiliary file: Cascaras/agradecimientos.aux
 A level-1 auxiliary file: Cascaras/resumen.aux
 A level-1 auxiliary file: Cascaras/abstract.aux
 A level-1 auxiliary file: TeXiS/TeXiS_toc.aux
-A level-1 auxiliary file: Capitulos/Introduccion.aux
-A level-1 auxiliary file: Capitulos/EstadoDeLaCuestion.aux
-A level-1 auxiliary file: Capitulos/DescripcionTrabajo.aux
-A level-1 auxiliary file: Capitulos/ConclusionesTrabajoFuturo.aux
-A level-1 auxiliary file: Capitulos/Introduction.aux
-A level-1 auxiliary file: Capitulos/ConclusionsFutureWork.aux
+A level-1 auxiliary file: Capitulos/1_Introduction.aux
+A level-1 auxiliary file: Capitulos/2_Preliminaries.aux
+A level-1 auxiliary file: Capitulos/3_StateOfTheArt.aux
+A level-1 auxiliary file: Capitulos/4_Definitions.aux
+A level-1 auxiliary file: Capitulos/5_ToolDescription.aux
+A level-1 auxiliary file: Capitulos/6_ConclusionsAndFutureWork.aux
 A level-1 auxiliary file: Cascaras/bibliografia.aux
 The style file: TeXiS/TeXiS.bst
 A level-1 auxiliary file: Apendices/appendixA.aux
 A level-1 auxiliary file: Apendices/appendixB.aux
 A level-1 auxiliary file: Cascaras/fin.aux
 Database file #1: biblio.bib
-You've used 6 entries,
+Warning--empty year in Caballero_adeclarative; set to ????
+You've used 8 entries,
             2962 wiz_defined-function locations,
-            1122 strings with 13369 characters,
-and the built_in function-call counts, 3271 in all, are:
-= -- 216
-> -- 149
-< -- 3
-+ -- 63
-- -- 51
-* -- 237
-:= -- 511
-add.period$ -- 18
-call.type$ -- 6
-change.case$ -- 42
-chr.to.int$ -- 6
-cite$ -- 6
-duplicate$ -- 260
-empty$ -- 276
-format.name$ -- 63
-if$ -- 640
+            1132 strings with 13702 characters,
+and the built_in function-call counts, 4501 in all, are:
+= -- 318
+> -- 193
+< -- 5
++ -- 84
+- -- 66
+* -- 325
+:= -- 688
+add.period$ -- 25
+call.type$ -- 8
+change.case$ -- 59
+chr.to.int$ -- 8
+cite$ -- 9
+duplicate$ -- 356
+empty$ -- 367
+format.name$ -- 86
+if$ -- 889
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 59
-newline$ -- 34
-num.names$ -- 25
-pop$ -- 142
+missing$ -- 76
+newline$ -- 44
+num.names$ -- 33
+pop$ -- 190
 preamble$ -- 1
-purify$ -- 41
+purify$ -- 54
 quote$ -- 0
-skip$ -- 99
+skip$ -- 137
 stack$ -- 0
-substring$ -- 72
-swap$ -- 113
-text.length$ -- 0
+substring$ -- 126
+swap$ -- 162
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 42
-warning$ -- 0
-while$ -- 18
+type$ -- 62
+warning$ -- 1
+while$ -- 26
 width$ -- 0
-write$ -- 76
+write$ -- 100
+(There was 1 warning)

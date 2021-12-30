@@ -9,55 +9,70 @@
 \BOOKMARK [1][-]{section.11}{Main contributions}{chapter.8}% 9
 \BOOKMARK [0][-]{chapter.12}{Preliminaries}{}% 10
 \BOOKMARK [1][-]{section.13}{Declarative debugging}{chapter.12}% 11
-\BOOKMARK [2][-]{subsection.14}{B}{section.13}% 12
-\BOOKMARK [3][-]{subsubsection.15}{S}{subsection.14}% 13
-\BOOKMARK [1][-]{section.16}{C++ programming language}{chapter.12}% 14
-\BOOKMARK [1][-]{section.17}{Technologies used}{chapter.12}% 15
-\BOOKMARK [2][-]{subsection.18}{GDB: The GNU Project Debugger}{section.17}% 16
-\BOOKMARK [2][-]{subsection.19}{rr: Record and Replay Framework}{section.17}% 17
-\BOOKMARK [2][-]{subsection.20}{Poetry: Dependency Management for Python}{section.17}% 18
-\BOOKMARK [2][-]{subsection.21}{Nix: the purely functional package manager}{section.17}% 19
-\BOOKMARK [0][-]{chapter.22}{State of the art}{}% 20
-\BOOKMARK [0][-]{chapter.23}{Definitions}{}% 21
-\BOOKMARK [1][-]{section.27}{Weighted Marked Execution Tree}{chapter.23}% 22
-\BOOKMARK [1][-]{section.32}{Buggy node}{chapter.23}% 23
-\BOOKMARK [1][-]{section.33}{Detected errors}{chapter.23}% 24
-\BOOKMARK [1][-]{section.35}{Completion of the debugging session}{chapter.23}% 25
-\BOOKMARK [1][-]{section.36}{Correctness}{chapter.23}% 26
-\BOOKMARK [0][-]{chapter.37}{Tool description}{}% 27
-\BOOKMARK [1][-]{section.38}{Implementation}{chapter.37}% 28
-\BOOKMARK [2][-]{subsection.39}{Tree building}{section.38}% 29
-\BOOKMARK [3][-]{subsubsection.40}{Adding a node to the tree}{subsection.39}% 30
-\BOOKMARK [3][-]{subsubsection.41}{Adding a node to the tree}{subsection.39}% 31
-\BOOKMARK [3][-]{subsubsection.42}{Finding a node in the tree}{subsection.39}% 32
-\BOOKMARK [2][-]{subsection.43}{Tree transformation}{section.38}% 33
-\BOOKMARK [3][-]{subsubsection.44}{Simplified tree compression}{subsection.43}% 34
-\BOOKMARK [2][-]{subsection.45}{Strategies}{section.38}% 35
-\BOOKMARK [3][-]{subsubsection.46}{Top-down}{subsection.45}% 36
-\BOOKMARK [3][-]{subsubsection.47}{Divide and Query \(Shapiro\)}{subsection.45}% 37
-\BOOKMARK [3][-]{subsubsection.48}{Heaviest first}{subsection.45}% 38
-\BOOKMARK [1][-]{section.49}{Commands}{chapter.37}% 39
-\BOOKMARK [2][-]{subsection.50}{suspect-function}{section.49}% 40
-\BOOKMARK [2][-]{subsection.51}{final-point}{section.49}% 41
-\BOOKMARK [2][-]{subsection.52}{print-nodes}{section.49}% 42
-\BOOKMARK [2][-]{subsection.53}{add-node-to-session}{section.49}% 43
-\BOOKMARK [2][-]{subsection.54}{save-returning-node}{section.49}% 44
-\BOOKMARK [2][-]{subsection.55}{start-declarative-debugging-session}{section.49}% 45
-\BOOKMARK [2][-]{subsection.56}{finish-debugging-session}{section.49}% 46
-\BOOKMARK [0][-]{chapter.57}{Conclusions and Future Work}{}% 47
-\BOOKMARK [1][-]{section.58}{Conclusions}{chapter.57}% 48
-\BOOKMARK [1][-]{section.59}{Future work}{chapter.57}% 49
-\BOOKMARK [2][-]{subsection.60}{Benchmarking overhead of building execution tree}{section.59}% 50
-\BOOKMARK [2][-]{subsection.61}{Supporting concurrency}{section.59}% 51
-\BOOKMARK [2][-]{subsection.62}{Support for more strategies}{section.59}% 52
-\BOOKMARK [2][-]{subsection.63}{Support for C-style arrays}{section.59}% 53
-\BOOKMARK [2][-]{subsection.64}{Report GDB bugs}{section.59}% 54
-\BOOKMARK [3][-]{subsubsection.65}{Wrong backtrace with recursive functions}{subsection.64}% 55
-\BOOKMARK [3][-]{subsubsection.66}{Frame ID is the same for function call with the same arguments}{subsection.64}% 56
-\BOOKMARK [2][-]{subsection.67}{Increase granularity in error detection}{section.59}% 57
-\BOOKMARK [2][-]{subsection.68}{Increase flexibility inside a debugging session}{section.59}% 58
-\BOOKMARK [2][-]{subsection.69}{Interactive/collapsible execution tree}{section.59}% 59
-\BOOKMARK [0][-]{chapter*.70}{Bibliograf\355a}{}% 60
-\BOOKMARK [0][-]{appendix.71}{T\355tulo del Ap\351ndice A}{}% 61
-\BOOKMARK [0][-]{appendix.72}{T\355tulo del Ap\351ndice B}{}% 62
-\BOOKMARK [0][-]{fin.0}{End}{}% 63
+\BOOKMARK [2][-]{subsection.14}{Building the tree}{section.13}% 12
+\BOOKMARK [3][-]{subsubsection.15}{Strategies for reducing the size of the tree}{subsection.14}% 13
+\BOOKMARK [4][-]{section*.16}{trusting computations}{subsubsection.15}% 14
+\BOOKMARK [4][-]{section*.16}{Trusting all computations but some suspect computations}{subsubsection.15}% 15
+\BOOKMARK [4][-]{section*.16}{using test cases to eliminate nodes}{subsubsection.15}% 16
+\BOOKMARK [1][-]{section.17}{C++ programming language}{chapter.12}% 17
+\BOOKMARK [1][-]{section.18}{Technologies used}{chapter.12}% 18
+\BOOKMARK [2][-]{subsection.19}{GDB: The GNU Project Debugger}{section.18}% 19
+\BOOKMARK [2][-]{subsection.20}{rr: Record and Replay Framework}{section.18}% 20
+\BOOKMARK [2][-]{subsection.21}{Poetry: Dependency Management for Python}{section.18}% 21
+\BOOKMARK [2][-]{subsection.22}{Nix: the purely functional package manager}{section.18}% 22
+\BOOKMARK [0][-]{chapter.23}{State of the art}{}% 23
+\BOOKMARK [1][-]{section.24}{}{chapter.23}% 24
+\BOOKMARK [0][-]{chapter.25}{Definitions}{}% 25
+\BOOKMARK [0][-]{chapter.41}{Tool description}{}% 26
+\BOOKMARK [1][-]{section.42}{Implementation}{chapter.41}% 27
+\BOOKMARK [2][-]{subsection.43}{Tree building}{section.42}% 28
+\BOOKMARK [3][-]{subsubsection.44}{Adding a node to the tree}{subsection.43}% 29
+\BOOKMARK [3][-]{subsubsection.45}{Finishing a node}{subsection.43}% 30
+\BOOKMARK [3][-]{subsubsection.46}{Finishing the tree building process}{subsection.43}% 31
+\BOOKMARK [2][-]{subsection.47}{Tree transformation}{section.42}% 32
+\BOOKMARK [3][-]{subsubsection.48}{Simplified tree compression}{subsection.47}% 33
+\BOOKMARK [2][-]{subsection.49}{General debugging algorithm}{section.42}% 34
+\BOOKMARK [2][-]{subsection.50}{Strategies}{section.42}% 35
+\BOOKMARK [3][-]{subsubsection.51}{Top-down}{subsection.50}% 36
+\BOOKMARK [3][-]{subsubsection.52}{Divide and Query \(Shapiro\)}{subsection.50}% 37
+\BOOKMARK [3][-]{subsubsection.53}{Heaviest first}{subsection.50}% 38
+\BOOKMARK [2][-]{subsection.54}{User answers to correctness questions}{section.42}% 39
+\BOOKMARK [3][-]{subsubsection.55}{I don't know}{subsection.54}% 40
+\BOOKMARK [3][-]{subsubsection.56}{Yes}{subsection.54}% 41
+\BOOKMARK [3][-]{subsubsection.57}{No}{subsection.54}% 42
+\BOOKMARK [3][-]{subsubsection.58}{Trusted}{subsection.54}% 43
+\BOOKMARK [2][-]{subsection.59}{Test cases as oracles}{section.42}% 44
+\BOOKMARK [1][-]{section.60}{Commands}{chapter.41}% 45
+\BOOKMARK [2][-]{subsection.61}{suspect-function}{section.60}% 46
+\BOOKMARK [2][-]{subsection.62}{add-node-to-session}{section.60}% 47
+\BOOKMARK [2][-]{subsection.63}{save-returning-node}{section.60}% 48
+\BOOKMARK [2][-]{subsection.64}{final-point}{section.60}% 49
+\BOOKMARK [2][-]{subsection.65}{finish-debugging-session}{section.60}% 50
+\BOOKMARK [2][-]{subsection.66}{start-declarative-debugging-session}{section.60}% 51
+\BOOKMARK [2][-]{subsection.67}{save-correct-function}{section.60}% 52
+\BOOKMARK [2][-]{subsection.68}{save-returning-correct-node}{section.60}% 53
+\BOOKMARK [2][-]{subsection.69}{add-node-to-correct-list}{section.60}% 54
+\BOOKMARK [2][-]{subsection.70}{til-the-end}{section.60}% 55
+\BOOKMARK [2][-]{subsection.71}{listen-for-correct-nodes}{section.60}% 56
+\BOOKMARK [2][-]{subsection.72}{send-correct-nodes}{section.60}% 57
+\BOOKMARK [2][-]{subsection.73}{print-nodes}{section.60}% 58
+\BOOKMARK [0][-]{chapter.74}{Conclusions and Future Work}{}% 59
+\BOOKMARK [1][-]{section.75}{Conclusions}{chapter.74}% 60
+\BOOKMARK [1][-]{section.76}{Future work}{chapter.74}% 61
+\BOOKMARK [2][-]{subsection.77}{Benchmarking overhead of building execution tree}{section.76}% 62
+\BOOKMARK [2][-]{subsection.78}{Support concurrent programs}{section.76}% 63
+\BOOKMARK [2][-]{subsection.79}{Test programming languages other than C++}{section.76}% 64
+\BOOKMARK [2][-]{subsection.80}{Implement more strategies}{section.76}% 65
+\BOOKMARK [2][-]{subsection.81}{Formally verify all algorithms}{section.76}% 66
+\BOOKMARK [2][-]{subsection.82}{Generate test cases from correct nodes}{section.76}% 67
+\BOOKMARK [2][-]{subsection.83}{Support for C-style arrays}{section.76}% 68
+\BOOKMARK [2][-]{subsection.84}{Report GDB bugs}{section.76}% 69
+\BOOKMARK [3][-]{subsubsection.85}{Wrong backtrace with recursive functions}{subsection.84}% 70
+\BOOKMARK [3][-]{subsubsection.86}{Frame ID is the same for function call with the same arguments}{subsection.84}% 71
+\BOOKMARK [2][-]{subsection.87}{Increase granularity in error detection}{section.76}% 72
+\BOOKMARK [2][-]{subsection.88}{Increase flexibility inside a debugging session}{section.76}% 73
+\BOOKMARK [2][-]{subsection.89}{Interactive/collapsible execution tree}{section.76}% 74
+\BOOKMARK [0][-]{chapter*.90}{Bibliograf\355a}{}% 75
+\BOOKMARK [0][-]{appendix.91}{T\355tulo del Ap\351ndice A}{}% 76
+\BOOKMARK [0][-]{appendix.92}{T\355tulo del Ap\351ndice B}{}% 77
+\BOOKMARK [0][-]{fin.0}{End}{}% 78

@@ -1,4 +1,4 @@
-\begin{thebibliography}{6}
+\begin{thebibliography}{8}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
 \bibitem[{Bautista et\ al.(1998)Bautista, Oetiker, Partl, Hyna y
@@ -7,6 +7,18 @@
   Schlegl, E.}
 \newblock {\em Una Descripción de \LaTeXe\/}.
 \newblock Versión electrónica, 1998.
+
+\bibitem[{Caballero et\ al.()Caballero, Martin-martin y
+  Tamarit}]{Caballero_adeclarative}
+{\sc Caballero, R.}, {\sc Martin-martin, E.} y {\sc Tamarit, S.}
+\newblock A declarative debugger for sequential erlang programs.
+\newblock ????
+
+\bibitem[{Insa y Silva(2011)}]{6100055}
+{\sc Insa, D.} y {\sc Silva, J.}
+\newblock An optimal strategy for algorithmic debugging.
+\newblock En {\em 2011 26th IEEE/ACM International Conference on Automated
+  Software Engineering (ASE 2011)\/}, p\'aginas 203--212. 2011.
 
 \bibitem[{Knuth(1986)}]{texKnuth}
 {\sc Knuth, D.~E.}
