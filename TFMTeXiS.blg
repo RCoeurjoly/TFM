@@ -20,45 +20,45 @@ A level-1 auxiliary file: Apendices/appendixB.aux
 A level-1 auxiliary file: Cascaras/fin.aux
 Database file #1: biblio.bib
 Warning--empty year in Caballero_adeclarative; set to ????
-You've used 8 entries,
+You've used 2 entries,
             2962 wiz_defined-function locations,
-            1132 strings with 13702 characters,
-and the built_in function-call counts, 4501 in all, are:
-= -- 318
-> -- 193
-< -- 5
-+ -- 84
-- -- 66
-* -- 325
-:= -- 688
-add.period$ -- 25
-call.type$ -- 8
-change.case$ -- 59
-chr.to.int$ -- 8
-cite$ -- 9
-duplicate$ -- 356
-empty$ -- 367
-format.name$ -- 86
-if$ -- 889
+            1099 strings with 12995 characters,
+and the built_in function-call counts, 1253 in all, are:
+= -- 102
+> -- 44
+< -- 2
++ -- 21
+- -- 15
+* -- 90
+:= -- 185
+add.period$ -- 7
+call.type$ -- 2
+change.case$ -- 17
+chr.to.int$ -- 2
+cite$ -- 3
+duplicate$ -- 96
+empty$ -- 92
+format.name$ -- 23
+if$ -- 250
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 76
-newline$ -- 44
-num.names$ -- 33
-pop$ -- 190
+missing$ -- 17
+newline$ -- 14
+num.names$ -- 8
+pop$ -- 48
 preamble$ -- 1
-purify$ -- 54
+purify$ -- 13
 quote$ -- 0
-skip$ -- 137
+skip$ -- 39
 stack$ -- 0
-substring$ -- 126
-swap$ -- 162
+substring$ -- 54
+swap$ -- 49
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 62
+type$ -- 20
 warning$ -- 1
-while$ -- 26
+while$ -- 8
 width$ -- 0
-write$ -- 100
+write$ -- 27
 (There was 1 warning)

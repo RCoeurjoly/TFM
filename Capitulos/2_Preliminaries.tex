@@ -27,6 +27,21 @@ In C++, a method (or member function) is function that is defined inside a class
 DDC can build an execution tree composed of function
 \section{Technologies used}
 \subsection{GDB: The GNU Project Debugger}
+We make extensive use of the Python API (insert link), expecially of the following:
+\subsubsection{Frames}
+\subsubsection{Breakpoints}
+A breakpoint is a bookmark set in a certain location of a program, such a function or specific line, that tells the debugger to stop the execution.
+We make use of breakpoints for:
+\begin{itemize}
+    \item Identifying functions/methods we want to add to the tree
+    \item Identifying functions/methods we want to build correct nodes from
+    \item Setting the final point, where the building of the debugging tree must stop
+\end{itemize}
+A breakpoint has an attribute named commands, which are executed when it is reached, and if the method stop returns false.
+
+We make use of these commands to store the information of the current frame, such as function or method
+\subsubsection{Final breakpoints}
+\subsubsection{Values}
 \subsection{rr: Record and Replay Framework}
 \subsection{Poetry: Dependency Management for Python}
 \subsection{Nix: the purely functional package manager}
