@@ -38,16 +38,17 @@
 % Gestión de la configuración
 %%%
 
-% Título de la portada
-\def\tituloPortadaVal{\titulo}
-\newcommand{\tituloPortada}[1]{
-\def\tituloPortadaVal{#1}
-}
 
 % Título de la portada en ingles
 \def\tituloPortadaEngVal{\titulo}
 \newcommand{\tituloPortadaEng}[1]{
 	\def\tituloPortadaEngVal{#1}
+}
+
+% Título de la portada
+\def\tituloPortadaVal{\titulo}
+\newcommand{\tituloPortada}[1]{
+\def\tituloPortadaVal{#1}
 }
 
 % Autor
@@ -303,8 +304,8 @@
 \begin{center}
 \rule{\longTitulo}{.5mm}\\
 \vskip 1cm
-\textbf{\tituloPortadaVal}\\
-\textbf{\tituloPortadaEngVal}
+\textbf{\tituloPortadaEngVal}\\
+\textbf{\tituloPortadaVal}
 \vskip 0.7cm
 \rule{\longTitulo}{.5mm}\\
 \end{center}
@@ -388,8 +389,8 @@
 
 \begin{Huge}
 \begin{center}
-\tituloPortadaVal \\
-\tituloPortadaEngVal
+\tituloPortadaEngVal \\
+\tituloPortadaVal
 \end{center}
 \end{Huge}
 

@@ -2,75 +2,226 @@
 \label{cap:definiciones}
 
 \newtheorem{definition}{Definition}
-\todo{No empieces la sección con una subsección, pon algo de texto explicando de qué va a ir.}
+\newtheorem{exmp}{Example}
 
-In this chapter we will provide definitions for the key ideas needed to approach the building of the tool.
+In this chapter we will provide definitions for the key ideas which form the theoretical basis\todo{Buscar palabra mejor} of the tool.
 
-\begin{definition}[Node]\todo{Usar entorno definition o algo así. Cuando una definición salga de un artículo pon la cita en el nombre de la definición (esto ya para las siguientes)}
+\begin{definition}[Node]
 A node n is a function/method execution, denoted \(f(I) \to O\), where:
 \begin{itemize}
 \item \(f\) is the name of the function/method executed.
-\item \(I\) is the set of inputs to \(f\), \(I = \{I_a, I_o, I_g\}\), where:
+\item \(I\) is the 3-tuple\todo{Hablas mucho de conjuntos pero a veces son tuplas o listas, no? Aquí y en adelante} of inputs to \(f\), \(I = \{I_o, I_a, I_g\}\)\todo[color=green!40]{He puesto tuplas de las dimensiones apropiadas en vez de sets}, where:
 \begin{itemize}
-\item \(I_a\) is the set of input arguments when it was called (if any).
 \item \(I_o\) is the object state when it was called (if it is a method call).
-\item \(I_g\) is the set global variables when it was called (if any).
+\item \(I_a\) is the n-tuple of input arguments when it was called (if any).
+\item \(I_g\) is the set of global variables when it was called (if any).\todo[color=green!40]{Las variables globales las pongo como set}
 \end{itemize}
-\item \(O\) is the set of outputs to \(f\), \(O = \{O_a, O_o, O_g\}\), where:
+\item \(O\) is the 4-tuple of outputs of \(f\), \(O = \{O_o, O_a, O_g, O_r\}\), where:
 \begin{itemize}
-\item \(O_a\) is the set of output arguments when it returned (if there where passed as reference or pointer).
 \item \(O_o\) is the object state when it returned (if it is a method call).
+\item \(O_a\) is the m-tuple of output arguments when it returned (if there where passed as reference or pointer). Note that \(m <= n\), where $m=\mathbf{card}(O_a)$ and $n=\mathbf{card}(I_a)$
+\todo[color=green!40]{Aqui comparo los tamaños de las tuplas de \(I_a\) y \(O_a\)}
 \item \(O_g\) is the set of global variables when it returned (if any).
+\item \(O_r\) is the return value (if any).
 \end{itemize}
 \end{itemize}
+
+\todo{Sale un poco rara la numeración de los ejemplos}
+\todo[color=green!40]{Con definir el teorema exmpl al inicio de la pagina queda igual que el resto}
+\begin{exmp}
+Figure \ref{fig:carNode} is the node extracted from the execution of the method \verb|Car::move| with arguments 10 and 5, called from \verb|main| in Listing~\ref{lst:carClass}\todo{when executing... Explica además un poco el listing si no se ha hecho antes}. This listing constists of a \verb|Car| class, which only has one method, \verb|Car::move| and the \verb|main| function, from which we instantiate a \verb|Car| object and move it. It is composed of:\todo{Explica un poco qué llamada haces y en qué contexto y luego explica un poco cada rama.}
+\begin{itemize}
+    \item \(f\) is \verb|Car::move(int const&, int const&)|.
+    \item \(I_o\) is the branch called \verb|object state on entry|. It has two variables, \verb|x| and \verb|y|, both with a value of 0, since those are the values we assign in the constructor.
+    \item \(I_a\) is the branch called \verb|arguments on entry|. It displays the names of the arguments, \verb|xDelta| and \verb|yDelta|, and their value, 10 and 5 respectively. Since they are passed as reference, we also display their addresses in memory, @0x7ffe80e3cd08 and @0x7ffe80e3cd0c.
+    \item \(I_g\) is the branch called \verb|global variables on entry|. In this branch we list all global variables upon entry on the method. In this case there is only one, \verb|number_of_cars|, which got set to 1 when the constructor was called.
+    \item \(O_o\) is the branch called \verb|object state when returning|. In this branch we display the object state when the \verb|return| statement is executed. If we did not have an explicit \verb|return| statement, the content of this branch would be the object state at the curly bracket (\}) that terminates the function or method. 
+    \item \(O_a\) is the branch called \verb|arguments when returning|. This branch is present in the node because the arguments are passed by reference. Passing by pointer also would have created this branch. Passing by value would have not.
+    \item \(O_g\) is the branch called \verb|global variables when returning|. Same as \(I_g\), but when returning. We display this branch even if the global variables are the same as in entry, as is the case in this example.
+    \item \(O_r\) is the branch called \verb|return value|. In C++ return values are not named, so we only have to display the value, in this case \verb|true|. 
+\end{itemize}
+
+\begin{lstlisting}[language=C++, caption=Car class, frame=tb, label={lst:carClass}]
+int number_of_cars = 0;
+
+class Car {
+public:
+  Car() {
+    x = 0;
+    y = 0;
+    number_of_cars++;
+  };
+  bool move(const int& xDelta, const int& yDelta) {
+    x += xDelta;
+    y += yDelta;
+    return true;
+  };
+private:
+  int x;
+  int y;
+};
+
+int main() {
+  Car my_car;
+  my_car.move(10, 5);
+}
+\end{lstlisting}
+
+\begin{figure}[ht]
+\caption{Node representing the execution of a method}
+\label{fig:carNode}
+\begin{verbatim}
+Car::move(int const&, int const&)                                                                                                                    
+├── object state on entry = {                                                                                                                        
+│     x = 0,                                                                                                                                         
+│     y = 0                                                                                                                                          
+│   }                                                                                                                                                
+├── arguments on entry                                                                                                                               
+│   ├── xDelta = @0x7ffe80e3cd08: 10                                                                                                                 
+│   └── yDelta = @0x7ffe80e3cd0c: 5                                                                                                                  
+├── global variables on entry                                                                                                                        
+│   └── number_of_cars = 1                                                                                                                           
+├── object state when returning = {                                                                                                                  
+│     x = 10,                                                                                                                                        
+│     y = 5                                                                                                                                          
+│   }                                                                                                                                                
+├── arguments when returning                                                                                                                         
+│   ├── xDelta = @0x7ffe80e3cd08: 10                                                                                                                 
+│   └── yDelta = @0x7ffe80e3cd0c: 5                                                                                                                  
+├── global variables when returning                                                                                                                  
+│   └── number_of_cars = 1                                                                                                                           
+└── return value                                                                                                                                     
+    └── true
+\end{verbatim}
+\end{figure}
+\end{exmp}
+
 \end{definition}
-\begin{definition}[Edge]\todo{Aristas?}
-An edge is hierarchical relationship between two nodes, a parent node and a child node.
-A node can have 0 or more children nodes.
-A node can have 0 or 1 parent nodes.
-A node that has no edges leading to children nodes is a leaf node.
-A node that has no edge leading to its parent node is the root node of a tree.
-Nodes that share the same parent node are siblings.
+\begin{definition}[Edge]
+An edge is a hierarchical relationship between two nodes, a parent node and a child node, in which the child node represents a function or method call made from the body of the parent node.\todo{El problema es que un nodo es una llamada a función, por lo que falta algo, la noción de cuerpo que contiene la llamada a la función hijo.}
 \end{definition}
-We here expand the definition of MET \citep{6100055} to WMET.\todo{Las comillas en latex son ``asi''}\todo{falta referencia}
-\begin{definition}[Weighted Marked Execution Tree]
-A weighted marked execution tree (WMET) is a tree \(T=(N,E,W,M)\)where N are the nodes,
-\(E\subseteq N \times N\)
-\todo{Usar entorno matemático y los comandos correspondientes en todas las fórmulas} are  the edges, \(M:N\to V\) is a total function that assigns to all the nodes in N a value in the domain \(D=\{Wrong,Undefined\}\) and W is a total function that assigns to all the nodes in N a value which is the weight of the sub-tree rooted at node n in N,\(w_n\) is  defined recursively as its number of descendants including itself (i.e.,\(1 + \sum {w_{n^\prime}\mid n \to n^{\prime}) \in E}\)).
+\newtheorem{remark}{Remark}
+\begin{remark}
+We can make the following observations:
+\begin{itemize}
+    \item A node can have 0 or more children nodes.
+    \item A node that has no children nodes is a leaf node.
+    \item A node can have 0 or 1 parent nodes.
+    \item A node that has no edge leading to its parent node is the root node of the tree.
+    \item Nodes that share the same parent node are siblings.
+\end{itemize}
+\end{remark}
+We here expand the definition of Marked Execution Tree (MET in \citep{optimal_strategy}) to Weighted Marked Execution Tree (WMET).
+\begin{definition}[Weighted marked execution tree]
+A weighted marked execution tree is a tree, denoted \(T=(N,E,W,M)\), where N is a set of nodes, \(E\subseteq N \times N\) is the set of edges, \(M:N\to V\) is a total function that assigns to all the nodes in N a value in the domain \(D=\{\mathit{Wrong},\mathit{Undefined}\}\) and W is a total function that assigns to all the nodes in N a value which is the weight of the sub-tree rooted at node n in N, \(w_n\), which is defined recursively as its number of descendants including itself (i.e.,\(1 + \sum {w_{n^\prime}\mid n \to n^{\prime}) \in E}\)).
+\theoremstyle{definition}
+\begin{exmp}
+Figure \ref{fig:partitionTree} is an example tree representing the  WMET of partition (see \ref{lst:quicksortFunctions} for the corresponding code) called with \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\)\todo{De qué tipo, ejecutando qué función sobre qué código.}. In it we can see three nodes:
+\begin{itemize}
+    \item Function partition called with arguments \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\) (\(n_0\)).
+    \item Function swap called with arguments pointer a to 10 and pointer b to 1 (\(n_1\)).
+    \item Function swap called with arguments pointer a to 7 and pointer b to 5 (\(n_2\)).
+\end{itemize}
+We can make the following remarks:
+\begin{itemize}
+    \item \(n_0\) is the root node of the tree, since there is no edge leading to a parent node.
+    \item \(n_1\) and \(n_2\) are siblings, since they share the same parent, \(n_0\).
+    \item \(n_1\) and \(n_2\) are leaf nodes, since they do not have any edges leading to children. Note the lack of \verb|children| branch in both nodes.
+    \item Leaf nodes (\(n_1\) and \(n_2\)) have weight 1 each, denoted \(w_{n_1}\) and \(w_{n_0}\) respectively.
+    \item The root node (\(n_0\)) has a weight \(w_{n_0} = w_{n_1} + w_{n_2} + 1 = 1 + 1 + 1 = 3\).  
+    \item All three nodes are undefined, that is, \(M(n_0) = M(n_1) = M(n_2) = \mathit{Undefined}\)
+\end{itemize}
+
+\begin{figure}[ht]
+
+\begin{verbatim}
+
+\end{verbatim}
+\end{figure}
+\end{exmp}
 \end{definition}
+
+\begin{figure}[p]
+\centering
+    \caption{WMET of partition (see \ref{lst:quicksortFunctions} for the corresponding code) called with \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\)}
+    \label{fig:partitionTree}
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/partitionTree.pdf}
+\end{figure}
+
 \begin{definition}[Intended interpretation]
-The intended interpretation (\(II\)) of a function/method \(f\) given inputs \(I\) is (adapted from \cite{Caballero_adeclarative}) \(II = f(I) \to O\)
+The intended interpretation of a function or method \(f\) given an input set \(I\), denoted \(II_f(I) \to O'\), is a mapping from \(I\) to \(O'\), where \(O'\) is the expected result of executing \(f(I)\).\todo{Escribe este conjunto de tal manera que sea comparable a los nodos.}
+\end{definition}
+\begin{definition}[Wrong node]
+A wrong node \(n_{wrong} = f(I) \to O\) is a node that is not equal to its intended interpretation, \(II_f(I) \to O'\).\todo{Si lo de arriba es un conjunto que se construye con elementos con pinta de nodos lo que tenemos es que el conjunto no incluye el nodo. Lo mismo después.}\todo[color=green!40]{Dudo si hay que comparar \(II_f(I) \to O' \neq f(I) \to O\) o \(O' \neq O\)}
+\end{definition}
+\begin{definition}[Correct node]
+A correct node is a node that is equal to its intended interpretation.
 \end{definition}
 \begin{definition}[Buggy node]
-A buggy node is a node that is not equal to its intended interpretation.
+A buggy node is a wrong node in which all its children are correct nodes\todo{Basta decir que todos sus hijos son correctos. Que no tenga es un caso particular de lo anterior.}. 
 \end{definition}
-A buggy node is marked as incorrect by the user.
+\theoremstyle{definition}
+\begin{exmp}
+Figure~\ref{fig:intendedInterpretationSwap} is the intended interpretation of swap \(II_{swap}(I) \to O'\)\todo{No entiendo esta notación, creo que no se ha introducido}, \(I\) being two pointers pointing to 10 and 1 respectively.
+On the other hand, Figure~\ref{fig:buggySwap} is the node \(n_{swap}(I) \to O\) of the execution of swap given the same arguments.
+Since \(O'\neq O\) (note that in figure \ref{fig:buggySwap} swap returns \(a = 10\) and \(b = 1\), whereas in figure \todo{Figure?} \ref{fig:intendedInterpretationSwap} \texttt{swap} returns \(a = 1\) and \(b = 10\)), we can say that \(n_{swap}\) is a buggy node, and therefore there is a bug in the function \(swap\).
 
-At first we considered inferring that the root node of the tree, upon completing of the building of the tree, is wrong, since the user started a debugging session.
+\begin{figure}[h]
+\caption{Intended interpretation of swap function given pointer a to 10 and pointer b to 1}
+\label{fig:intendedInterpretationSwap}
+\begin{verbatim}
+swap(int*, int*)
+├── arguments on entry
+│   ├── a = 10
+│   └── b = 1
+└── arguments when returning
+    ├── a = 1
+    └── b = 10
+\end{verbatim}
+\end{figure}
 
-Upon closer analysis we decided against doing so, to provide more flexibility to the user.
+\begin{figure}[h]
+\caption{Buggy node representing the execution of swap}
+\label{fig:buggySwap}
+\begin{verbatim}
+swap(int*, int*)
+├── correctness
+│   └── no
+├── weight
+│   └── 1
+├── arguments on entry
+│   ├── a = 10
+│   └── b = 1
+└── arguments when returning
+    ├── a = 10
+    └── b = 1
+\end{verbatim}
+\end{figure}
+
+\end{exmp}
+
 \begin{definition}[Detected errors]
-
-DDC can help the user detect the following errors:\todo{Esto es confuso, porque DDC detecta un solo tipo de error, porque solo hay un tipo de nodo buggy. Otra cosa es que pueda ser buggy por todas estas razones, pero se distinguen en la información dada al usuario?}
+When our debugger returns a buggy node \(n_{buggy} = f(I) \to O\), an error in the definition of \(f\) has been detected. 
+\todo{Necesitas definir esto de tal manera que veas que se corresponde con un buggy node.}
+\end{definition}
+\newtheorem{theorem}{Theorem}
+\begin{theorem}
+%Completion theorem
+Let \(T = (N,E,W,M)\) be a weighted marked execution tree and S the top down strategy.
+If S receives T as input, it always terminates, producing either \(\bot\) or \(n'\in N\) as output. 
+\end{theorem}
+\begin{proof}
+See \cite{DeclarativeErrorDiagnosis}.
+\end{proof}
+\begin{theorem}
+%Soundness theorem
+Let \(T = (N,E,W,M)\) be a weighted marked execution tree, F a total function such that for every node \(n\in N\) there is a function or method \(f\) such that \(F:n\to f\), \(II\) a total function such that for every function or method \(f\in F\) there is an intended interpretation \(ii\) such that \(II:f\to ii\), and S the top down strategy.
 \begin{itemize}
-\item A function/method was called with the wrong arguments
-\item A function/method returns a wrong value
-\item A global variable is visible from the function/method scope when it should not 
-\item A global variable is not visible from the function/method scope when it should 
-\item A method modifies its object when it should not 
-\item A method does not modify its object when it should do so.
-\item A function/method modifies an argument passed by reference or pointer when it should not 
-\item A function/method does not modify an argument passed by reference or pointer when it should do so
-\item An argument passed by reference or pointer has the wrong value when returning.
-\item A function/method does not terminate when it should do so
-\item A function/method calls a sub-computation when it should not.
-\item A function/method does not call a sub-computation when it should do so.
+    \item If S receives T as input and returns a node \(n'\), then \(n'\in N\), \(F(n') = f'\), \(II(f') = ii'\) and \(ii'\neq n'\).
+    \item If S receives T as input and returns \(\bot\), then \(\forall n'\in N\), \(F(n') = f'\), \(II(f') = ii'\) and \(ii' = n'\).
 \end{itemize}
-\end{definition}
-\begin{definition}[Completion of the debugging session]
-The debugging session is finished when:
-The WMET is empty, therefore no buggy node has been found
-The WMET consists of one node marked wrong, therefore the buggy node has been found.
-\end{definition}
-\begin{definition}[Correctness]
-\end{definition}
+\end{theorem}
+\begin{proof}
+See \cite{DeclarativeErrorDiagnosis}.
+\end{proof}
+

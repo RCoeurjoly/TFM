@@ -3,67 +3,69 @@
 
 \chapterquote{Program testing can be used to show the presence of bugs, but never to show their absence!}{Edsger Dijkstra}
 
+In this section, we present the motivation of the project, its goals, contributions, and the structure of the rest of the document.
+
 \section{Motivation}
+C++ is a programming language that dates back to 1979 \cite{cppHistory}, and one of its goals is to maintain backward compatibility with C \cite{cCompat}. As such, C++ has inherited the defects of C, such as lack of memory safety \cite{practicalmemorysafety}.
+Despite these shortcomings, C++ is still one of the most used programming languages \cite{popularityPL}, including being used in such important areas such as:
+\begin{itemize}
+    \item Compilers: GCC \cite{gcc}, LLVM \cite{llvm}.
+    \item Databases: MySQL \cite{mysql}, MongoDB \cite{mongodb}.
+    \item Theorem provers: Z3 \cite{z3}, Lean \cite{lean}.
+    \item Debuggers: GDB \cite{gdb}, rr \cite{rr}.
+    \item Machine learning frameworks: TensorFlow \cite{tensorflow}, PyTorch \cite{pytorch}.
+    \item Digital currency and smart contracts technology: Bitcoin \cite{bitcoin}, Solidity \cite{solidity}.
+\end{itemize}
 
-Debugging is the most expensive part of developing software.
-It is estimated that between 80 and 90 percent of development effort is spent on debugging tasks.  (reference?)
+Furthermore, C++ is actively developed, with the last release being C++20. This, together with the upward trending usage statistics \cite{popularityPL}, tends to indicate that the need to develop, test, and debug C++ programs is going to continue into the future.
 
-Furthermore, no paradigm (imperative, functional, logical, etc) or language can claim that it removes the need to debug.
+This need to debug C++ programs is what lead to this thesis.
+Debugging is one of the most expensive part of developing software.
+It is estimated that between 35 and 50 percent of development effort is spent on validation and debugging tasks \cite{debuggingMindset}.
+\todo{Ya suponemos que la gente sabe qué es el debugging, pero cuenta algo más: qué es, estilos, depuradores de C++ en IDEs. Puedes simplemente esbozar algunas cosas si las desarrollas en preliminares}
+\todo[color=green!40]{Pongo algunos ejemplos de estilos de depuracion en el siguiente parrafo y digo que voy a expandir la definicion en preliminares}
+%Debugging is important because the developer can make mistakes, that is, her objectives in writing a certain program do not match the computer interpretation of it. Strategies like rising the level of abstraction in the program can help the developer reason about it, but there are always opportunities for a mismatch between the developer and the computer's interpretation to arise.
 
-Therefore, it is important to develop tools and workflows to alleviate this issue.
+There are many debugging approaches, ranging from the fully manual to the almost fully automatic, like delta debugging or program slicing \cite{WhyProgramsFail}. In this thesis we focus on declarative debugging, also called algorithmic debugging, which is a semi automatic approach in which the debugger builds an execution tree of the program and guides the user through it by asking questions about the correctness of sub-computations until a buggy function is found. We expands the definition of declarative debugging in Chapter \ref{cap:preliminares}.
 
-Declarative debugging (also known as algorithmic debugging) takes a semiautomatic approach.
+\todo{Hablas de un depurador declarativo pero el lector no tiene la idea intuitiva de qué es. Enlaza la idea en el párrafo anterior}
+
 
 To the best of our knowledge, there is no declarative debugger for C++.
 
-There are declarative debuggers for:
- \begin{itemize}
- \item Maude
-\item  Java
-\item Erlang
-\end{itemize}
-
-Developing a declarative debugger for C++ involves figuring out a way to treat pointers in a way useful for the user.
-
 \section{Goals}
-The goal of this thesis is to develop a declarative debugger for the C++ language.
+The goal of this Master's thesis is to develop a declarative debugger for the C++ language.
+This debugger should have the following features:
+\begin{enumerate}
+  \item Integrated in workflow: it has to be integrated in the existing debugging workflow of the developer. \label{goal1}
+  \item No changes to program: The user has to be able to debug a program with no or few changes the program and its compilation (at most setting some compilation flags). \label{goal2}
+  \item Tree transformations: it has to perform tree transformations to reduce the size of the execution tree. \label{goal3}
+  \item Test cases as oracles: it has to use test cases to reduce the tree size. \label{goal4}
+\end{enumerate}
 
-This debugger, called DDC, should have the following features:
-\begin{itemize}
-  \item The debugger has to scale to real programs.
-  \item Integrated in the existing debugging workflow of the developer.
-  \item The user has to be able to debug a program with no or few changes to its compilation (at most setting some compilation flags).
-\end{itemize}
-
-scalability issue:
-
-Provide a way for the user to choose what are the suspect functions or methods.
-This would reduce the number of nodes in the execution tree (ET), therefore reducing the time to build it and its memory footprint.
-Provide a way for the user to choose a point in the code that, if reached, triggers the end of the building of the ET and begins the asking questions to the user.
-
-Use test cases to reduce the number of nodes in the tree, therefore reducing the number of questions needed to find the buggy node.
-
-Usability:
-
-Integrate the declarative debugger into the debugger most used by C++ developers.
-
-This would provide several benefits:
-
-The user would set the breakpoints (both the suspect function or methods and the final point) in a way that is identical to her usual debugging workflow.
-
-Common features when setting breakpoints like auto-completion
-
-The user would not have to switch tools between normal debugging and declarative debugging.
 \section{Main contributions}
 
 The main contribution of this thesis is the development of a declarative debugger for C++, called DDC.
-
+%
 The most notable characteristics of DDC are the following:
 \begin{itemize}
-\item Support for several programming languages, by means of using GDB
-\item Non terminating programs can be debugged
-\item Test cases can be used to reduce the tree size
-\item 3 asking strategies developed
-\item 1 tree transformation developed
-\item easily extensible (more strategies, more tree transformations)
+\item Support for several programming languages, by means of using GDB.
+\item Non terminating programs can be debugged.
+\item Test cases can be used as oracles to reduce the tree size.
+\item 3 navigation strategies developed.
+\item 1 tree transformation developed.
+\item Easily extensible (more strategies, more tree transformations).
+\end{itemize}
+
+The source code of the project is available at \url{https://github.com/RCoeurjoly/DDC} 
+and its license is AGPL-3.0 License.
+
+\section{Structure of the document}
+The rest of the thesis is organized as follows:
+\begin{itemize}
+    \item In Chapter \ref{cap:preliminares} we introduce declarative debugging and the different tools needed to implement DDC.
+    \item  In Chapter \ref{cap:estadoDeLaCuestion} we review the state of the art in declarative debugging. 
+    \item Chapter \ref{cap:definiciones} contains the definitions and proofs that form the theoretical basis of DDC. 
+    \item Chapter \ref{cap:toolDescription} presents the most important usage scenarios of the tool, describes how the debugger was implemented, lists its commands and compares its features to other declarative debuggers. 
+    \item Chapter \ref{cap:conclusions} discuses the achievements and the future lines of work that can be taken.
 \end{itemize}

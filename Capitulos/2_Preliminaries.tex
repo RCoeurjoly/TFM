@@ -5,43 +5,131 @@
 Declarative debugging, also called algorithmic debugging, is a debugging technique that consists in asking questions about the correctness of computations to the user until either a certain computation is narrowed down as buggy or no buggy computation is found.
 
 A declarative debugger (DD) takes as argument a program execution which the user deems incorrect.
+The DD builds an execution tree (ET) of the execution of this program.
+Once the ET is built, the DD traverses it in a semi-automatic fashion, asking questions to the user about the correctness of sub-computations, until a buggy computation is found or no computations remain. 
 
-Then, the DD builds an execution tree of the execution of this program.
+\todo{Falta contar que se recorre de manera semi-automática hasta que se detecta un error}
 
-\subsection{Building the tree}
+\todo{Cuenta que en las siguientes subsecciones contarás tal y cual}
+\todo[color=green!40]{No se si tanto detalle esta bien ponerlo aqui o en Estado del la question}
+In the following subsections we will discuss the most important stages in a declarative debugging session, namely:
+\begin{itemize}
+    \item Building the execution tree
+    \item Simplifying the execution tree
+    \item Navigating the execution tree
+\end{itemize}
+\subsection{Building the execution tree}
 
-Building the execution tree is the central, critical stage of the debugging process.
+Building the execution tree (ET) is the central, critical stage of the debugging process.
 
+To build the ET, the DD must have access to the following information:
+\begin{itemize}
+    \item When a new function or method begins executing, and state of variables at that point. 
+    \item When a new function or method returns, and state of variables at that point.
+    \item Which function or method is the caller and which is the callee. 
+\end{itemize}
 
-\subsubsection{Strategies for reducing the size of the tree}
+With this information, the debugger can build a node, and from nodes it can build the ET.
 
-Since the number of questions depends on the size of the tree (number of nodes, width and depth of the tree), most DD have the option of either trusting some computations before hand, to avoid adding to the tree, or focusing on some computations and only adding those to the tree.
-\paragraph{trusting computations}
-\paragraph{Trusting all computations but some suspect computations}
-\paragraph{using test cases to eliminate nodes}
+For formal definitions, please see \autoref{cap:definiciones}.
+\subsection{Simplifying the execution tree}
+
+Since the number of questions depends on the size of the tree (number of nodes, width and depth of the tree), most DDs provide certain functionality to reduce the ET size.
+
+\subsubsection{Trusting computations}
+
+Most DDs built the ET assuming all functions or methods are suspect of being wrong.
+However, this is hardly ever the case.
+
+By trusting some functions or methods, the debugger 
+
+In the case of debugging a C++ program, one option would be to trust all functions and methods provided by the language implementation, which are located under the \verb|std| namespace, or trusting everything provided by a reputable third party, like Boost \cite{TheBoostLibraries}.
+This process requires manual input from the user in selecting those computations that can be trusted.
+\subsubsection{Suspecting computations}
+
+When debugging a program, it is usually the case that the user believes the problem lays in the parts she developed, not in the external functions she calls.
+
+By suspecting only the functions and methods developed by the user (and implicitly trusting all other functions), the debugger can ignore all other functions, like those provided by the standard or by external libraries.
+This is the approach used in developing DDC.
+This process requires manual input from the user in selecting those computations that should be suspected.
+\subsubsection{Using test cases as oracles}
+Another method to reduce the size of the ET is to have an external oracle mark computations as correct.
+This oracle is the set of tests that use some of the suspect functions or methods. By collecting those test executions, which we assume are correct, we can discard the same executions if present in the ET of the program being debugged.
+
+This functionality requires manual input from the user in selecting the test case to be executed.
+
+This functionality is provided by DDC.
+\subsubsection{Tree transformations}
+Tree transformations happen once the ET has been built, so the improvement happens in terms of navigation time, not in building time or memory footprint.
+
+There are several transformations proposed in the literature, like loop expansion and tree compression.
+This process is fully automatic, not needing any input from the user.
+\subsection{Navigating the execution tree}
 \section{C++ programming language}
-The C++ programming language is a general-purpose, statically typed, compiled language.
+The C++ programming language is a general-purpose, statically typed, compiled language \cite{cppHistory}.
 
-In C++, a method (or member function) is function that is defined inside a class. It has, therefore, access to all members of that class.
+C++ supports several programming paradigms, including:
+\begin{itemize}
+    \item Object-oriented programming (OOP).
+    \item Functional programming.
+    \item Generic programming.
+\end{itemize}
 
-DDC can build an execution tree composed of function
+In generic programming in C++, types are a parameter for classes or functions.
+Once a template is instantiated with a specific type, the compiler creates a class or function for that type.
+The instantiated class or function is what is executed at run time. Therefore, supporting OOP implies support for generic programming.
+
+The requirements for a DD that supports OOP are greater than for functional programming, since in functional programming a function only:
+\begin{itemize}
+    \item Takes arguments.
+    \item Returns a value.
+\end{itemize}
+On the other hand, in OOP, apart from the arguments and return value, we have to monitor:
+\begin{itemize}
+    \item Object state on entry.
+    \item Object state when returning.
+    \item Global variables on entry.
+    \item Global variables when returning.
+\end{itemize}
+Therefore, support for OOP implies support for functional programming.
+
+Being statically typed gives the advantage of providing type information for functions arguments and return values, variables and classes. This is important for the debugger to be able to display information adequately to the user, making the debugging experience better.
+
+The process of compilation usually removes a lot of information about the source code, with the purpose of creating a faster and smaller binary.
+However, source code information is necessary to make the debugging session user friendly. This information includes class, function and variable names, among others.
+To make this information available for the debugger, the C++ program must be compiled with the debug information flag set to true.
+
 \section{Technologies used}
 \subsection{GDB: The GNU Project Debugger}
-We make extensive use of the Python API (insert link), expecially of the following:
+GDB is the most common debugger for C++ programs in GNU/Linux.
+
+We make extensive use of the Python API, especially of the following classes:
 \subsubsection{Frames}
+We use frames to determine the relationship between nodes.
+A frame 
 \subsubsection{Breakpoints}
 A breakpoint is a bookmark set in a certain location of a program, such a function or specific line, that tells the debugger to stop the execution.
 We make use of breakpoints for:
 \begin{itemize}
-    \item Identifying functions/methods we want to add to the tree
-    \item Identifying functions/methods we want to build correct nodes from
-    \item Setting the final point, where the building of the debugging tree must stop
+    \item Identifying functions/methods we want to add to the tree.
+    \item Identifying functions/methods we want to build correct nodes from.
+    \item Setting the final point, where the building of the debugging tree must stop.
 \end{itemize}
 A breakpoint has an attribute named commands, which are executed when it is reached, and if the method stop returns false.
 
-We make use of these commands to store the information of the current frame, such as function or method
+We make use of these commands to store the information of the current frame, such as function or method name, 
 \subsubsection{Final breakpoints}
 \subsubsection{Values}
+\subsubsection{Symbols}
 \subsection{rr: Record and Replay Framework}
-\subsection{Poetry: Dependency Management for Python}
+rr enhances GDB, providing support for record and replay functionality, as well as reverse execution.
+
+DDC uses rr for its reverse execution capabilities. This is needed because once a final breakpoint is reached, we need to step back to get:
+\begin{itemize}
+    \item Object state when returning.
+    \item Arguments when returning (if passed as reference or pointers).
+    \item Global variables when returning.
+\end{itemize}
+Although GDB itself provides some support for reverse execution, rr is more complete in this respect.
+%\subsection{Poetry: Dependency Management for Python}
 \subsection{Nix: the purely functional package manager}
