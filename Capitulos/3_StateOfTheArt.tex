@@ -1,4 +1,51 @@
 \chapter{State of the art}
 \label{cap:estadoDeLaCuestion}
+\todo[color=green]{Casi todo viene del survey}
 
-\section{}
+\section{Issues of algorithmic debugging}
+\subsection{The Scalability Problem}
+\subsubsection{Time Needed to Generate the Debugging Tree}
+\subsubsection{Memory Needed to Store the Debugging Tree}
+\subsection{User Experience and Effectiveness}
+\subsubsection{Amount and Difficulty of the Questions}
+\subsubsection{Rigidity and Loss of Control During the Navigation Phase}
+\subsubsection{Integration with Other Debugging Tools}
+\subsubsection{Bug Granularity}
+\subsection{Completeness}
+\subsubsection{Termination}
+\subsubsection{Concurrency}
+\subsubsection{I/O}
+\section{Solutions of algorithmic debuggers}
+\subsection{Scalability}
+\subsection{Trusting Modules, Routines and Arguments}
+\subsection{Multiple Navigation Strategies}
+\subsection{Accepted Answers}
+\subsection{Tracing Subexpressions}
+\subsection{Debugging Tree Transformations}
+\subsection{Memoization}
+\subsection{Debugging Tree Exploration}
+\subsection{Undo Capabilities}
+\subsection{Communication with an IDE}
+\subsection{Different Levels of Errors}
+\subsection{Program Slicing}
+This alleviates certain issue pointed in the survey \cite{unifiedFrameworkDeclarativeDebuggingTesting}.
+
+
+This solves the granularity issue \cite{AlgorithmicDebuggingGeneralized}
+\section{Table}
+\begin{tabular}{|l||*{9}{c|}}\hline
+\backslashbox{Feature}{Issue}
+&\makebox{1}&\makebox{2}&\makebox{3}&\makebox{4}&\makebox{5}&\makebox{6}&\makebox{7}&\makebox{8}&\makebox{9}\\\hline\hline
+Navigation strategy &&&\checkmark&&&&&&\\\hline
+Answers &&&\checkmark&&&&&&\\\hline
+Trac. subexp. &&&\checkmark&\checkmark&&&&&\\\hline
+DT transf. &&&\checkmark&&&\checkmark&&&\\\hline
+Memoization &&&\checkmark&&\checkmark&&&&\\\hline
+DT exploration &&&&\checkmark&&&&&\\\hline
+Undo &&&&\checkmark&&&&&\\\hline
+Trusting &\checkmark&\checkmark&\checkmark&&&&&&\\\hline
+Scalability &\checkmark&\checkmark&&&&&&&\\\hline
+Levels of errors &&&\ding{55}&&&\checkmark&&&\\\hline
+Program slicing &&&&&&\checkmark&&&\\\hline
+IDE &&&&&\checkmark&\checkmark&&&\\\hline
+\end{tabular}
