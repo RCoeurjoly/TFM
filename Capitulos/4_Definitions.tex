@@ -4,17 +4,17 @@
 \newtheorem{definition}{Definition}
 \newtheorem{exmp}{Example}
 
-In this chapter we will provide definitions for the key ideas which form the theoretical basis\todo{Buscar palabra mejor} of the tool.
+In this chapter we will provide definitions for the key ideas that establish the theoretical basis of the tool.
 
 \begin{definition}[Node]
 A node n is a function/method execution, denoted \(f(I) \to O\), where:
 \begin{itemize}
 \item \(f\) is the name of the function/method executed.
-\item \(I\) is the 3-tuple\todo{Hablas mucho de conjuntos pero a veces son tuplas o listas, no? Aquí y en adelante} of inputs to \(f\), \(I = \{I_o, I_a, I_g\}\)\todo[color=green!40]{He puesto tuplas de las dimensiones apropiadas en vez de sets}, where:
+\item \(I\) is the 3-tuple of inputs to \(f\), \(I = \{I_o, I_a, I_g\}\), where:
 \begin{itemize}
-\item \(I_o\) is the object state when it was called (if it is a method call).
+\item \(I_o\) is the object state when it was called (if it is a method call).\todo{Exactamente qué pinta tiene? Y si es una función?}
 \item \(I_a\) is the n-tuple of input arguments when it was called (if any).
-\item \(I_g\) is the set of global variables when it was called (if any).\todo[color=green!40]{Las variables globales las pongo como set}
+\item \(I_g\) is the set of global variables when it was called (if any).
 \end{itemize}
 \item \(O\) is the 4-tuple of outputs of \(f\), \(O = \{O_o, O_a, O_g, O_r\}\), where:
 \begin{itemize}
