@@ -1,6 +1,6 @@
 \chapter{Tool description}
 \label{cap:toolDescription}
-DDC consists of approximately 900 lines of mostly statically typed Python.
+DDC consists of approximately 900 lines of mostly statically typed Python, which can be found in the following url: \url{https://github.com/RCoeurjoly/DDC/blob/main/declarative_debugger.py}.
 %
 It is loaded into rr through the source command, which itself can be put inside a \verb|.gdbinit| file.
 
@@ -366,29 +366,352 @@ swap(int*, int*)
 \section{Implementation}
 In this section we detail and justify the most important design decisions made while developing DDC.
 \subsection{Tree building}
-Tree building is the fundamental process in which all other steps rely on.
+The tree is stored as the attribute \verb|node| of the global variable \verb|MY_DEBUGGING_SESSION|.
+\begin{lstlisting}[language=Python, caption=DebuggingSession class and global object]
+class DebuggingSession:
+    def __init__(self) -> None:
+        self.node = None
+        self.started = False
+        self.is_tree_built = False
+
+    def start(self) -> None:
+        self.started = True
+
+    def tree_built(self) -> None:
+        self.is_tree_built = True
+
+MY_DEBUGGING_SESSION = DebuggingSession()
+\end{lstlisting}
+The \verb|Node| class is a recursive data structure, since it has an attribute called \verb|children| which is a list of \verb|Node|s.
 \subsubsection{Adding a node to the tree}
+We add a node to the debugging tree once we hit a breakpoint.
+The node is added to the last position of the tree.
+At that moment we add the 3-tuple of inputs to the node.
 \subsubsection{Finishing a node}
+When the finish breakpoint of a certain function it hit, we add the 4-tuple of outputs.
 \subsubsection{Finishing the tree building process}
-The tree is considered built one of the following happens:
+The tree is considered built if one of the following happens:
 \begin{itemize}
     \item A final point has been hit
     \item The program has finished
     \item The root node has been completed
 \end{itemize}
-\subsection{Tree transformation}
+\subsection{Tree transformations}
+After having the WMET built, we apply all tree transformations available.
+\begin{lstlisting}[language=Python, caption=Applying all tree transformations]
+tree_transformations = [simplified_tree_compression]
+for tree_transformation in tree_transformations:
+    apply_tree_transformations(MY_DEBUGGING_SESSION.node,
+                               tree_transformation)
+\end{lstlisting}
+A tree transformation is an algorithm that receives a WMET an returns another WMET.
+DDC implements for the simplified tree compression algorithm, which is described next.
 \subsubsection{Simplified tree compression}
+The simplified tree compression algorithm consists in two steps:
+\begin{itemize}
+    \item Compressing the root of the WMET if it can be compressed.
+    \item Compressing each of the children nodes of the root of the WMET if they can be compressed.
+\end{itemize}
+\begin{lstlisting}[language=Python, caption=Simplified tree compression algorithm]
+def simplified_tree_compression(marked_execution_tree: Node, position: List[int]) -> None:
+    compress, nodes_to_compress = can_node_be_compressed(marked_execution_tree)
+    if compress:
+        compress_node_in_position_and_update_weight(marked_execution_tree,
+                                                    position,
+                                                    nodes_to_compress)
+    for index, child_node in enumerate(marked_execution_tree.children):
+        compress, nodes_to_compress = can_node_be_compressed(child_node)
+        if compress:
+            position.append(index)
+            compress_node_in_position_and_update_weight(marked_execution_tree,
+                                                        position,
+                                                        nodes_to_compress)
+\end{lstlisting}
+Given a WMET, we can compress nodes if:
+\begin{itemize}
+    \item The root node has only one child node.
+    \item The root and child nodes function names are the same.
+\end{itemize}
+To check if a node can be compressed we use the following recursive function, which takes a node as an argument and returns a 2-tuple, whose elements are:
+\begin{itemize}
+    \item bool: True if the node can be compressed. False otherwise.
+    \item int: If the node can be compressed, number of nodes to compress. Zero Otherwise. 
+\end{itemize}
+This algorithm searches for the longest compression possible.
+\begin{lstlisting}[language=Python, caption=Checking if node can be compressed]
+def can_node_be_compressed(marked_execution_tree: Node) -> Tuple[bool, int]:
+    if len(marked_execution_tree.children) != 1:
+        return False, 0
+    if marked_execution_tree.children[0].function_name != marked_execution_tree.function_name:
+        return False, 0
+    _, downstream_length = can_node_be_compressed(marked_execution_tree.children[0])
+    return True, downstream_length + 1
+\end{lstlisting}
+
+Given a WMET and a number of nodes to compress \(n\), the compress node is composed of:
+\begin{itemize}
+    \item The 3-tuple of inputs to the root node.
+    \item The 4-tuple of outputs of the node in depth \(n\) of the WMET.
+    \item The name of the root node with an indication that corresponds to \(n\) compressed nodes.
+\end{itemize}
+This is implemented in the following function:
+\begin{lstlisting}[language=Python, caption=Compression node]
+def compress_node(marked_execution_tree: Node, nodes_to_compress: int) -> Node:
+    head_node = marked_execution_tree
+    tail_node = marked_execution_tree
+    for _ in range(nodes_to_compress):
+        tail_node = tail_node.children[0]
+    compressed_node = tail_node
+    compressed_node.arguments_on_entry_tree = head_node.arguments_on_entry_tree
+    compressed_node.global_variables_on_entry_tree = head_node.global_variables_on_entry_tree
+    compressed_node.object_state_on_entry_tree = head_node.object_state_on_entry_tree
+    compressed_node.function_name = head_node.function_name + "^" + str(nodes_to_compress + 1)
+    return compressed_node
+\end{lstlisting}
+
+The following function substitutes the compress node in place and updates the weights upstream.
+\begin{lstlisting}[language=Python, caption=How to determine if a buggy node has been found]
+def compress_node_in_position_and_update_weight(marked_execution_tree: Node,
+                                                position: List[int],
+                                                nodes_to_compress: int) -> None:
+    get_node_from_position(
+        marked_execution_tree,
+        position).deepcopy(
+            compress_node(
+                get_node_from_position(marked_execution_tree,
+                                       position), nodes_to_compress))
+    update_nodes_weight(marked_execution_tree, position, - nodes_to_compress)
+    get_node_from_position(marked_execution_tree, position).weight += nodes_to_compress
+\end{lstlisting}
 \subsection{General debugging algorithm}
-\subsection{Strategies}
+The general debugging algorithm takes two arguments:
+\begin{itemize}
+    \item The WMET.
+    \item A navigation strategy.
+\end{itemize}
+It returns either a buggy node or \(\bot\).
+It consists of loop, from which we exit if the WMET is empty or a buggy node has been found.
+To determine if a node has been found we have to check that the WMET consists of an unique incorrect node.
+\begin{lstlisting}[language=Python, caption=How to determine if a buggy node has been found]
+def buggy_node_found(marked_execution_tree: Node) -> bool:
+    return (marked_execution_tree.iscorrect == Correctness.NO
+            and len(marked_execution_tree.children) == 0)
+\end{lstlisting}
+Once inside the loop, first we select the node to be asked about by means of the strategies, which are explained in \hyperref[implementation:Strategies]{Section Strategies}.
+We then ask the user about the node. One of the options available to the user is to change strategy. If this is chosen, we ask the user her preferred strategy and continue the execution of the loop.
+\begin{lstlisting}[language=Python, caption=Function to ask about node]
+def ask_about_node_with_extra_functionality(node: Node) -> Union[Correctness, ExtraFunctionality]:
+    print("Is the following node correct?")
+    print_tree(node.get_tree(get_children=False))
+    correctness_options = ["Yes", "No", "I don't know", "Trusted"]
+    total_options = correctness_options + [
+        "Change strategy"]
+    terminal_menu = TerminalMenu(total_options)
+    menu_entry_index = terminal_menu.show()
+    answers_dict = {
+        "Yes": Correctness.YES,
+        "No": Correctness.NO,
+        "I don't know": Correctness.IDK,
+        "Trusted": Correctness.TRUSTED,
+        "Change strategy": ExtraFunctionality.CHANGE_STRATEGY
+    }
+    return answers_dict[total_options[menu_entry_index]]
+\end{lstlisting}
+
+If no change in strategy is required, we execute the adequate action corresponding to the correctness answer (see \hyperref[implementation:correctnessAnswers]{Section User answers to correctness questions}) and continue the execution of the loop.
+
+\begin{lstlisting}[language=Python, caption=General debugging algorithm implementation]
+def general_debugging_algorithm(marked_execution_tree: Optional[Node],
+                                strategy: Callable[[Node,
+                                                    List[int]],
+                                                   Tuple[Node,
+                                                         bool,
+                                                         List[int]]]
+                                ) -> Optional[Node]:
+    while (marked_execution_tree is not None
+           and not and not buggy_node_found(marked_execution_tree)):
+        assert marked_execution_tree.iscorrect == Correctness.NO
+        selected_node, found, position = select_node(marked_execution_tree,
+                                                     strategy)
+        assert found
+        assert selected_node.weight > 0
+        answer = ask_about_node_with_extra_functionality(selected_node)
+        if answer == ExtraFunctionality.CHANGE_STRATEGY:
+            strategy = strategies_dict[choose_strategy()]
+            continue
+        selected_node.iscorrect = answer
+        function_name = selected_node.function_name
+        node_tree = selected_node.get_tree(get_children=False,
+                                           get_weight=False,
+                                           get_correctness=False)
+        if answer == Correctness.NO:
+            marked_execution_tree = selected_node
+            continue
+        elif answer in [Correctness.YES,
+                        Correctness.IDK,
+                        Correctness.TRUSTED]:
+            # Remove the node and remove the weight from all its parents
+            remove_node_and_update_tree(marked_execution_tree,
+                                        position)
+        if answer == Correctness.YES:
+            remove_correct_node_from_tree(marked_execution_tree,
+                                          node_tree)
+        elif answer == Correctness.TRUSTED:
+            remove_trusted_node_from_tree(marked_execution_tree,
+                                          function_name)
+    return marked_execution_tree
+\end{lstlisting}
+\subsection{Navigation strategies}
+\label{implementation:Strategies}
+A navigation strategy is an algorithm that takes a WMET and returns a node.
+In the implementation we also need to keep track of the position of the current node, since Top-down is a recursive algorithm.
+
+To ease the task of adding more strategies to DDC, we implemented a wrapper to the strategies.
+\begin{lstlisting}[language=Python, caption=Select node implementation]
+def select_node(marked_execution_tree: Node,
+                strategy: Callable[[Node, List[int]],
+                                   Tuple[Node, bool, List[int]]]) -> Tuple[Node, bool, List[int]]:
+    return strategy(marked_execution_tree, [])
+\end{lstlisting}
 \subsubsection{Top-down}
-\subsubsection{Divide and Query (Shapiro)}
+Top-down is a recursive algorithm, which searches for the first node whose correctness is unknown. 
+\begin{lstlisting}[language=Python, caption=Top-down strategy implementation]
+def top_down_strategy(marked_execution_tree: Node,
+                      position: List[int]) -> Tuple[Optional[Node], bool, List[int]]:
+    """Search for closest undefined node.
+    Returns:
+    Found: bool
+    Node
+    Position: list of int
+    """
+    if marked_execution_tree.iscorrect == Correctness.IDK:
+        return marked_execution_tree, True, position
+    for index, child in enumerate(marked_execution_tree.children):
+        tmp_marked_execution_tree, found, tmp_position = top_down_strategy(child, position)
+        if found:
+            tmp_position.append(index)
+            return tmp_marked_execution_tree, found, tmp_position
+    return None, False, []
+\end{lstlisting}
+\subsubsection{Divide and Query (Hirunkitti)}
+In Divide and Query (Hirunkitti), we select the child node whose weight is the closest to half of the root node weight.
+\begin{lstlisting}[language=Python, caption=Divide and Query (Hirunkitti) strategy implementation]
+def divide_and_query_hirunkitti_strategy(marked_execution_tree: Node,
+                                         position: List[int]) -> Tuple[Node, bool, List[int]]:
+    assert len(marked_execution_tree.children) > 0
+    pivot = marked_execution_tree.weight/2
+    distance = marked_execution_tree.weight/2
+    choosen_node = marked_execution_tree
+    position = []
+    for index, child in enumerate(marked_execution_tree.children):
+        if abs(child.weight - pivot) < distance:
+            distance = abs(child.weight - pivot)
+            choosen_node = child
+            position = [index]
+    return choosen_node, True, position
+\end{lstlisting}
 \subsubsection{Heaviest first}
+In heaviest first, we select the child node whose weight is the heaviest.
+\begin{lstlisting}[language=Python, caption=Heaviest first strategy implementation]
+def heaviest_first_strategy(marked_execution_tree: Node,
+                            position: List[int]) -> Tuple[Node, bool, List[int]]:
+    assert len(marked_execution_tree.children) > 0
+    heaviest_weight = 0
+    for index, child in enumerate(marked_execution_tree.children):
+        if child.weight > heaviest_weight:
+            heaviest_weight = child.weight
+            choosen_node = child
+            position = [index]
+    return choosen_node, True, position
+\end{lstlisting}
 \subsection{User answers to correctness questions}
+\label{implementation:correctnessAnswers}
+When asked about the correctness of a node, the user has the possibility of answering (i) I don't know, (ii) Yes, (iii) No or (iv) Trusted.
+We choose the next node and/or prune the debugging tree depending on the answer
 \subsubsection{I don't know}
+If the user does not know if the node is correct, we remove it from the WMET and continue the debugging session. 
 \subsubsection{Yes}
+If the node is deemed correct by the user, we remove it from the WMET and all other nodes equal to the correct node.
+\begin{lstlisting}[language=Python, caption=Correct node action]
+def remove_correct_node_from_tree(marked_execution_tree: Node, node_tree: Node):
+    # Remove nodes with the same node_tree and remove the weight from all its parents
+    while True:
+        _, found, position = find_node_with_node_tree(marked_execution_tree, [], node_tree)
+        if found is False:
+            break               
+        update_nodes_weight(marked_execution_tree,
+                            position,
+                            - get_node_from_position(marked_execution_tree,
+                                                    position).weight)
+        deleted_tree = remove_node_from_tree(marked_execution_tree, position)
+        if deleted_tree:
+            marked_execution_tree = None
+            break
+\end{lstlisting}
 \subsubsection{No}
+If the node is deemed incorrect by the user, we continue the navigation phase with this node as the WMET root.
+\begin{lstlisting}[language=Python, caption=Incorrect node action]
+if answer == Correctness.NO:
+    marked_execution_tree = selected_node
+\end{lstlisting}
 \subsubsection{Trusted}
+If the node is trusted by the user, we remove it from the WMET and all other nodes which correspond to executions of the same function of the correct node.
+\begin{lstlisting}[language=Python, caption=Trusted node action]
+def remove_trusted_node_from_tree(marked_execution_tree: Node, function_name: str):
+    # Remove nodes with the same name and remove the weight from all its parents
+    found = True
+    while True:
+        _, found, position = find_node_with_name(marked_execution_tree, [], function_name)
+        if found is False:
+            break
+        update_nodes_weight(marked_execution_tree,
+                            position,
+                            - get_node_from_position(marked_execution_tree,
+                                                     position).weight)
+        deleted_tree = remove_node_from_tree(marked_execution_tree, position)
+        if deleted_tree:
+            marked_execution_tree = None
+            break
+\end{lstlisting}
+
 \subsection{Test cases as oracles}
+DDC implements the functionality of test cases as oracles with the following global variables.
+\begin{lstlisting}[language=Python, caption=Global variables related to using test cases as oracles]
+CORRECT_NODES: List[ComparableTree] = []
+PENDING_CORRECT_NODES: List[Node] = []
+\end{lstlisting}
+
+In \verb|CORRECT_NODES| we store a list of all nodes that have finished, that is, whose functions have returned.
+In \verb|PENDING_CORRECT_NODES| we store a list of all nodes that have started but not finished.
+
+\verb|ComparableTree| is a class that derives from \verb|rich.tree|, which is the class used to present the information to the user.
+
+The \verb|Node| class has a member function \verb|get_tree|, which returns a \verb|ComparableTree|.
+For comparison with elements in the \verb|CORRECT_NODES| list, the node gets stripped of its correctness value, children and weight. 
+\begin{lstlisting}[language=Python, caption={Node class method signature for getting a comparable tree}]
+def get_tree(self,
+             get_children: bool = True,
+             get_weight: bool = True,
+             get_correctness: bool = True) -> ComparableTree:
+\end{lstlisting}
+\begin{lstlisting}[language=Python, caption=Comparable tree class]
+class ComparableTree(Tree):
+    def __eq__(self, other: object) -> bool:
+        return (isinstance(other, self.__class__)
+            and self.to_json() == other.to_json())
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+            sort_keys=True, indent=4)
+\end{lstlisting}
+
+Once a node finishes, we search for it in the \verb|CORRECT_NODES| list. If found, we remove it from the debugging tree.
+\begin{lstlisting}[language=Python, caption=Removing finished node from tree if it is correct]
+if my_node.get_tree(False, False, False) in CORRECT_NODES:
+    remove_node_and_update_tree(MY_DEBUGGING_SESSION.node,
+                                my_node.position)
+\end{lstlisting}
+
 \section{Commands}
 We now list and describe all the available commands. These can be issued inside rr. Completion for these commands is enabled, that is, if you type \verb|sus| and then \verb|TAB|, \verb|suspect-function| should appear.
 The following information can also be found with \verb|help <command>|, where \verb|<command>| is one of the commands that follow.
