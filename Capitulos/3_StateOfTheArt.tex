@@ -32,7 +32,7 @@ This alleviates certain issue pointed in the survey \cite{unifiedFrameworkDeclar
 
 
 This solves the granularity issue \cite{AlgorithmicDebuggingGeneralized}
-\section{Table}
+\section{Features vs Issues}
 \begin{tabular}{|l||*{9}{c|}}\hline
 \backslashbox{Feature}{Issue}
 &\makebox{1}&\makebox{2}&\makebox{3}&\makebox{4}&\makebox{5}&\makebox{6}&\makebox{7}&\makebox{8}&\makebox{9}\\\hline\hline
@@ -49,3 +49,26 @@ Levels of errors &&&\ding{55}&&&\checkmark&&&\\\hline
 Program slicing &&&&&&\checkmark&&&\\\hline
 IDE &&&&&\checkmark&\checkmark&&&\\\hline
 \end{tabular}
+\section{DDs Features}
+\begin{sidewaystable}
+\begin{tabular}{|l||*{9}{c|}}\hline
+\backslashbox{Feature}{Debugger}
+&\makebox{1}&\makebox{2}&\makebox{3}&\makebox{4}&\makebox{5}&\makebox{6}&\makebox{7}&\makebox{8}&\makebox{9}\\\hline\hline
+Target language &&&\checkmark&&&&&&\\\hline
+Imp. language &&&\checkmark&&&&&&\\\hline
+Strategies &&&\checkmark&\checkmark&&&&&\\\hline
+DataBase / Memoization &&&\checkmark&&&\checkmark&&&\\\hline
+Debugging tree &&&\checkmark&&\checkmark&&&&\\\hline
+Accepted answers &&&&\checkmark&&&&&\\\hline
+Tracing subexpressions? &&&&\checkmark&&&&&\\\hline
+Granularity &\checkmark&\checkmark&\checkmark&&&&&&\\\hline
+DT exploration &\checkmark&\checkmark&&&&&&&\\\hline
+Transformations &&&\ding{55}&&&\checkmark&&&\\\hline
+Early start &&&&&&\checkmark&&&\\\hline
+Undo &&&&&\checkmark&\checkmark&&&\\\hline
+Trusting &&&&&\checkmark&\checkmark&&&\\\hline
+External oracle &&&&&\checkmark&\checkmark&&&\\\hline
+GUI &&&&&\checkmark&\checkmark&&&\\\hline
+Version &&&&&\checkmark&\checkmark&&&\\\hline
+\end{tabular}
+\end{sidewaystable}

@@ -1,22 +1,26 @@
 \chapter{Tool description}
 \label{cap:toolDescription}
 DDC consists of approximately 900 lines of mostly statically typed Python.
-
-It gets loaded into rr through the source command, which itself can be put inside a \verb|.gdbinit| file.
+%
+It is loaded into rr through the source command, which itself can be put inside a \verb|.gdbinit| file.
 
 In the following section, we will go through two usage scenarios:
 \begin{itemize}
-    \item Bug finding
-    \item Using test cases as oracles to reduce tree size
+    \item Bug finding.
+    \item Using test cases as oracles to reduce tree size.
 \end{itemize}
 
 Then, we will explain the implementation of the tool and the most important design decisions made. 
-
+%
 Lastly, we will list all commands provided by the tool.
+
 \section{Usage scenarios}
+
+\todo{Algo de texto}
+
 \subsection{Bug finding}
-The execution of the code in \ref{lst:unexpectedQuicksortSource} results in an unexpected output, \(\{10, 5, 1, 7, 8, 9\}\), which is not sorted.
-It uses the implementations of functions \verb|quickSort|, \verb|partition| and \verb|swap| defined in \ref{lst:quicksortFunctions}.
+The execution of the code in Figure~\ref{lst:unexpectedQuicksortSource} results in an unexpected output, \(\{10, 5, 1, 7, 8, 9\}\), which is not sorted.
+It uses the implementations of functions \verb|quickSort|, \verb|partition|, and \verb|swap| defined in Figure~\ref{lst:quicksortFunctions}.
 \begin{lstlisting}[language=C++, caption={Code that results in unexpected output}, frame=tb, label={lst:unexpectedQuicksortSource}]
 #include <quicksort.h>
 
@@ -76,14 +80,15 @@ void print_vector(const std::vector<int> &my_vector)
 }
 \end{lstlisting}
 
-To begin a debugging session with the purpose of finding the root cause of the error, we first have to record and replay the buggy program with \verb|rr|. This is shown in figure \ref{lst:compileRecordReplayQuicksort}.
+To begin a debugging session with the purpose of finding the cause of the error, we first have to record and replay the buggy program with \verb|rr|. This is shown in 
+Figure~\ref{lst:compileRecordReplayQuicksort}.
 \begin{lstlisting}[language=bash, caption={Compiling, recording and replaying quickSort}, frame=tb, label={lst:compileRecordReplayQuicksort}]
 nix build
 rr record ./result/bin/quicksort
 rr replay
 \end{lstlisting}
 Once inside the \verb|rr| command prompt, we have to tell DDC in which functions we suspect the bug to reside.
-To do this, we use the \verb|suspect-function|\ref{command:suspect-function} command. In this case, we suspect the functions we defined, that is, \verb|quickSort|, \verb|partition| and \verb|swap|. We execute the commands shown in figure \ref{fig:suspecting-functions} in \verb|rr|.
+To do this, we use the \verb|suspect-function|\ref{command:suspect-function}\todo{A menudo pones ref pero no Figure o lo que sea, revisar. Además, Figure va con mayúscula (ha cambiado varias, pero revisar)} command. In this case, we suspect the functions we defined, that is, \verb|quickSort|, \verb|partition|, and \verb|swap|. We execute the commands shown in figure \ref{fig:suspecting-functions} in \verb|rr|.
 \begin{figure}[h]
     \centering
     \caption{Setting the suspect functions}
@@ -118,7 +123,7 @@ Please choose navigation strategy
   Heaviest first
     \end{verbatim}
 \end{figure}
-Then, as shown in figure \ref{fig:correctnessQuestion}, the debugger asks us about the correctness of the root node of the execution tree. This question does not have the option to choose navigation strategy, as opposed to all other correctness questions, where the options are \ref{fig:correctnessQuestionNonRootOptions}. 
+Then, as shown in figure \ref{fig:correctnessQuestion}, the debugger asks us about the correctness of the root node of the execution tree. This question does not have the option to change the navigation strategy, as opposed to all other correctness questions, where the options are \ref{fig:correctnessQuestionNonRootOptions}. 
 
 \begin{figure}[h]
     \centering
@@ -331,7 +336,7 @@ This node has been removed from the debugging tree because it appeared in a test
 
 \begin{figure}[p]
 \centering
-    \caption{Tree of buggy quickSort before correct node elimination}
+    \caption{Tree of buggy quickSort before correct node elimination}\todo{Esto es imposible verlo}
     \label{fig:buggyTreeBefore}
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggy.pdf}
 \end{figure}
