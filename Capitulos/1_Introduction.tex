@@ -27,8 +27,7 @@ It is estimated that between 35 and 50 percent of development effort is spent on
 
 There are many debugging approaches, ranging from the fully manual to the almost fully automatic, like delta debugging or program slicing \cite{WhyProgramsFail}. In this Master's thesis we focus on declarative debugging \cite{shapiro1982algorithmic},\todo{Cita al articulo orginal de Shapiro} also called algorithmic debugging, which is a semi automatic approach in which the debugger builds an execution tree of the program and guides the user through it by asking questions about the correctness of sub-computations until a buggy function is found. We expand the definition of declarative debugging in Chapter \ref{cap:preliminares}.
 
-
-To the best of our knowledge, there is no declarative debugger for C++.
+Several declarative debuggers have been developed, including for object-oriented languages such as Java \cite{DDJ}, but to the best of our knowledge, there is no declarative debugger for C++. We review the State of the Art of declarative debuggers in Chapter \ref{cap:estadoDeLaCuestion}.
 \todo{Esta frase queda muy sola aquí, añade algo o únela de alguna manera al párrafo anterior (o a la sección siguiente)}
 
 \section{Goals}
@@ -52,7 +51,7 @@ The most notable characteristics of DDC are the following:
 \item Test cases can be used as oracles to reduce the tree size.
 \item Three navigation strategies have been developed.
 \item One tree transformation has been developed.
-\item Easily extensible (more strategies, more tree transformations).\todo{No hay verbo}
+\item It can be easily extended (more strategies, more tree transformations).\todo{No hay verbo}
 \end{itemize}
 
 The source code of the project is available at \url{https://github.com/RCoeurjoly/DDC} 

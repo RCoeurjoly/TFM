@@ -1,6 +1,10 @@
 \chapter{Definitions}
 \label{cap:definiciones}
-
+\lstdefinestyle{interfaces}{
+  float=tp,
+  floatplacement=tbp,
+  abovecaptionskip=-5pt
+}
 \newtheorem{definition}{Definition}
 \newtheorem{exmp}{Example}
 
@@ -9,25 +13,24 @@ In this chapter we will provide definitions for the key ideas that establish the
 \begin{definition}[Node]
 A node n is a function/method execution, denoted \(f(I) \to O\), where:
 \begin{itemize}
-\item \(f\) is the name of the function/method executed.
+\item \(f\) is the function/method executed.
 \item \(I\) is a 3-tuple of inputs to \(f\), \(I = \{I_o, I_a, I_g\}\), where:
 \begin{itemize}
-\item \(I_o\) is the object state when it was called (if it is a method call).\todo{Exactamente qué pinta tiene? Y si es una función?}
-\item \(I_a\) is an n-tuple of input arguments when it was called (if any).
-\item \(I_g\) is a set of global variables when it was called (if any).
+\item \(I_o\) is the object state when \(f\) was called if \(f\) is a method, $\bot$ otherwise.\todo{Exactamente qué pinta tiene? Y si es una función?}\todo[color=green]{Se muestra un ejemplo en \ref{fig:carNode}. Si es una funcion no se pone nada}
+\item \(I_a\) is an n-tuple of input arguments when \(f\) was called (if any).
+\item \(I_g\) is a set of global variables when \(f\) was called (if any).
 \end{itemize}
 \item \(O\) is a 4-tuple of outputs of \(f\), \(O = \{O_o, O_a, O_g, O_r\}\), where:
 \begin{itemize}
-\item \(O_o\) is the object state when it returned (if it is a method call).\todo{Lo mismo, tiene forma interesante? Y si no es a method call?}
-\item \(O_a\) is the m-tuple of output arguments when it returned\todo{It returned suena raro, no? Cuando la función finaliza o algo así?} (if there where passed as reference or pointer). Note that \(m <= n\), where $m=\mathbf{card}(O_a)$ and $n=\mathbf{card}(I_a)$
-
+\item \(O_o\) is the object state when \(f\) returns if \(f\) is a method, $\bot$ otherwise.\todo{Lo mismo, tiene forma interesante? Y si no es a method call?}\todo[color=green]{Se muestra un ejemplo en \ref{fig:carNode}. }
+\item \(O_a\) is the m-tuple of output arguments when \(f\) returns\todo{It returned suena raro, no? Cuando la función finaliza o algo así?} (if there where passed as reference or pointer). Note that \(m <= n\), where $m=\mathbf{card}(O_a)$ and $n=\mathbf{card}(I_a)$
 \item \(O_g\) is the set of global variables when it returned (if any).
 \item \(O_r\) is the return value (if any).
 \end{itemize}
 \end{itemize}
 
 \begin{exmp}
-Figure \ref{fig:carNode} is the node extracted from the execution of the method \verb|Car::move| with arguments 10 and 5, called from \verb|main| in Listing~\ref{lst:carClass}. This listing consists of a \verb|Car| class, which only has one method, \verb|Car::move| and the \verb|main| function, from which we instantiate a \verb|Car| object and move it. It is composed of:
+Figure \ref{fig:carNode} is the node extracted from the execution of the method \verb|Car::move| with arguments 10 and 5, called from \verb|main| in Listing~\ref{lst:carClass}. This listing consists of a \verb|Car| class, which only has one method, \verb|Car::move| and the \verb|main| function, from which we instantiate a \verb|Car| object and move it. Note that it has no children nodes. It is composed of:
 
 \begin{itemize}
     \item \(f\) is \verb|Car::move(int const&, int const&)|.
@@ -40,7 +43,7 @@ Figure \ref{fig:carNode} is the node extracted from the execution of the method 
     \item \(O_r\) is the branch called \verb|return value|. In C++ return values are not named, so we only have to display the value, in this case \verb|true|. 
 \end{itemize}
 
-\begin{lstlisting}[language=C++, caption=Car class, frame=tb, label={lst:carClass}]
+\begin{lstlisting}[style=interfaces, language=C++, caption=Car class, frame=tb, label={lst:carClass}]
 int number_of_cars = 0;
 
 class Car {
@@ -64,19 +67,19 @@ int main() {
   Car my_car;
   my_car.move(10, 5);
 }
-\end{lstlisting}\todo{Puede hacerse que el listing aparezca arriba en la página?}
+\end{lstlisting}\todo{Puede hacerse que el listing aparezca arriba en la página?}\todo[color=green]{Hecho}
 
 \begin{figure}[ht]
 \caption{Node representing the execution of a method}
 \label{fig:carNode}
 \begin{verbatim}
-Car::move(int const&, int const&)                                                                                                                    
-├── object state on entry = {                                                                                                                        
-│     x = 0,                                                                                                                                         
-│     y = 0                                                                                                                                          
-│   }                                                                                                                                                
-├── arguments on entry                                                                                                                               
-│   ├── xDelta = @0x7ffe80e3cd08: 10                                                                                                                 
+Car::move(int const&, int const&)                                   
+├── object state on entry = {
+│     x = 0,                                
+│     y = 0                                                         
+│   }                                                               
+├── arguments on entry
+│   ├── xDelta = @0x7ffe80e3cd08: 10                 
 │   └── yDelta = @0x7ffe80e3cd0c: 5                                                                                                                  
 ├── global variables on entry                                                                                                                        
 │   └── number_of_cars = 1                                                                                                                           
@@ -97,7 +100,7 @@ Car::move(int const&, int const&)
 
 \end{definition}
 \begin{definition}[Edge]
-An edge is a hierarchical relationship between two nodes, a parent node and a child node, in which the child node represents a function or method call made from the body of the parent node.\todo{El problema es que en tu definición de nodo no está claro qué es el cuerpo.}
+An edge is a hierarchical relationship between two nodes, a parent node and a child node, in which the child node represents a function or method call made from the body of the function corresponding to the parent node.\todo{El problema es que en tu definición de nodo no está claro qué es el cuerpo.}\todo[color=green]{He cambiado la definicion de f para que no sea el nombre de la funcion, sino la funcion en si. Tambien he cambiado aqui la definicion de vertice, para que el cuerpo sea de la funcion correspondiente al nodo, no del cuerpo del nodo}
 \end{definition}
 \newtheorem{remark}{Remark}
 \begin{remark}
@@ -204,22 +207,22 @@ When our debugger returns a buggy node \(n_{buggy} = f(I) \to O\), an error in t
 
 \end{definition}
 \newtheorem{theorem}{Theorem}
-\begin{theorem}
+\begin{theorem}[Completeness]
 %Completion theorem
 Let \(T = (N,E,W,M)\) be a weighted marked execution tree and S the top down strategy.
-If S receives T as input, it always terminates, producing either \(\bot\)\todo{A qué te refieres?} or \(n'\in N\) as output. 
+If S receives T as input, it always terminates, producing either \(\bot\) if the root node \(T\) is correct \todo{A qué te refieres?} or \(n'\in N\) otherwise.
 \end{theorem}
 \begin{proof}
 See \cite{DeclarativeErrorDiagnosis}.
 \end{proof}
-\begin{theorem}
+\begin{theorem}[Soundness]
 %Soundness theorem
-Let \(T = (N,E,W,M)\) be a weighted marked execution tree, F a total function such that for every node \(n\in N\) there is a function or method \(f\) such that \(F:n\to f\), \(\mathit{II}\) a total function such that for every function or method \(f\in F\) there is an intended interpretation \(ii\) such that \(\mathit{II}:f\to ii\), and S the top down strategy.
+Let \(T = (N,E,W,M)\) be a weighted marked execution tree, F a total function such that for every node \(n\in N\) there is a function or method \(f\) such that \(F:n\to f\), \(\mathit{II}\) a total function such that for every function or method \(f\in F\) there is an intended interpretation \(II_f\) such that \(\mathit{II}:f\to II_f\), G\todo[color=green]{No se que letra elegir aqui. Lo que quiero conseguir es la tupla de entrada a la funcion} a total function such that for every node \(n\in N\) there is 3-tuple of inputs \(I\) such that \(G:n\to I\) and S the top down strategy.
 \begin{itemize}
-    \item If S receives T as input and returns a node \(n'\), then \(n'\in N\), \(F(n') = f'\), \(\mathit{II}(f') = ii'\) and \(ii'\neq n'\).
-    \item If S receives T as input and returns \(\bot\), then \(\forall n'\in N\), \(F(n') = f'\), \(\mathit{II}(f') = ii'\) and \(ii' = n'\).
+    \item If S receives T as input and returns a node \(n'\), then \(n'\in N\), \(F(n') = f'\), \(\mathit{II}(f') = II_{f'}\), \(G(n') = I\), and \(II_{f'}(I)\neq f'(I)\).
+    \item If S receives T as input and returns \(\bot\), then \(\forall n'\in N\), \(F(n') = f'\), \(\mathit{II}(f') = II_{f'}\), \(G(n') = I\), and \(II_{f'}(I) = f'(I)\).
 \end{itemize}
-\end{theorem}\todo{Si esto es corrección debes decir que si se detecta un nodo buggy entonces corresponde a una función que realmente contiene un bug, ¿es eso lo que dices?}
+\end{theorem}\todo{Si esto es corrección debes decir que si se detecta un nodo buggy entonces corresponde a una función que realmente contiene un bug, ¿es eso lo que dices?}\todo[color=green]{Sí, en el segundo caso quiero decir que si no encuentra nada, (porque el nodo raiz es correcto), significa que todos las funciones se adecuan a sus respectivas interpretaciones pretendidas con los inputs dados}
 \begin{proof}
 See \cite{DeclarativeErrorDiagnosis}.
 \end{proof}

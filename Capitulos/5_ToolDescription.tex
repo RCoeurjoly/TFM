@@ -15,7 +15,8 @@ Then, we will explain the implementation of the tool and the most important desi
 Lastly, we will list all commands provided by the tool.
 
 \section{Usage scenarios}
-
+This section describes two usage scenarios with DDC.
+We will explain which commands should be executed and the expected output.
 \todo{Algo de texto}
 
 \subsection{Bug finding}
@@ -88,7 +89,7 @@ rr record ./result/bin/quicksort
 rr replay
 \end{lstlisting}
 Once inside the \verb|rr| command prompt, we have to tell DDC in which functions we suspect the bug to reside.
-To do this, we use the \verb|suspect-function|\ref{command:suspect-function}\todo{A menudo pones ref pero no Figure o lo que sea, revisar. Además, Figure va con mayúscula (ha cambiado varias, pero revisar)} command. In this case, we suspect the functions we defined, that is, \verb|quickSort|, \verb|partition|, and \verb|swap|. We execute the commands shown in figure \ref{fig:suspecting-functions} in \verb|rr|.
+To do this, we use the \verb|suspect-function| command described in \ref{command:suspect-function}\todo{A menudo pones ref pero no Figure o lo que sea, revisar. Además, Figure va con mayúscula (ha cambiado varias, pero revisar)}. In this case, we suspect the functions we defined, that is, \verb|quickSort|, \verb|partition|, and \verb|swap|. We execute the commands shown in Figure \ref{fig:suspecting-functions} in \verb|rr|.
 \begin{figure}[h]
     \centering
     \caption{Setting the suspect functions}
@@ -118,12 +119,12 @@ Now we can choose the navigation strategy.
     \label{fig:navigationsStrategyPrompt}
     \begin{verbatim}
 Please choose navigation strategy
-> Top-down                                                                                                                                            
-  Divide and Query (Hirunkitti)                                                                                                                       
+> Top-down
+  Divide and Query (Hirunkitti)
   Heaviest first
     \end{verbatim}
 \end{figure}
-Then, as shown in figure \ref{fig:correctnessQuestion}, the debugger asks us about the correctness of the root node of the execution tree. This question does not have the option to change the navigation strategy, as opposed to all other correctness questions, where the options are \ref{fig:correctnessQuestionNonRootOptions}. 
+Then, as shown in Figure \ref{fig:correctnessQuestion}, the debugger asks us about the correctness of the root node of the execution tree. This question does not have the option to change the navigation strategy, as opposed to all other correctness questions, where the options are shown in Figure \ref{fig:correctnessQuestionNonRootOptions}. 
 
 \begin{figure}[h]
     \centering
@@ -133,33 +134,33 @@ Then, as shown in figure \ref{fig:correctnessQuestion}, the debugger asks us abo
 You have selected Top-down!
 Is the following node correct?
 quickSort(std::vector<int, std::allocator<int> >&, int, int)         
-├── correctness                                                                                                                                       
-│   └── I don't know                                                                                                                                  
-├── weight                                                                                                                                            
-│   └── 14                                                                                                                                            
-├── arguments on entry                                                                                                                                
-│   ├── my_vector = std::vector of length 6, capacity 6 = {                                                                                           
-│   │     [0] = 10,                                                                                                                                   
-│   │     [1] = 7,                                                                                                                                    
-│   │     [2] = 8,                                                                                                                                    
-│   │     [3] = 9,                                                                                                                                    
-│   │     [4] = 1,                                                                                                                                    
-│   │     [5] = 5                                                                                                                                     
-│   │   }                                                                                                                                             
-│   ├── low = 0                                                                                                                                       
-│   └── high = 5                                                                                                                                      
-└── arguments when returning                                                                                                                          
-    └── my_vector = std::vector of length 6, capacity 6 = {                                                                                           
-          [0] = 10,                                                                                                                                   
-          [1] = 5,                                                                                                                                    
-          [2] = 1,                                                                                                                                    
-          [3] = 7,                                                                                                                                    
-          [4] = 8,                                                                                                                                    
-          [5] = 9                                                                                                                                     
-        }                                                                                                                                             
-> Yes                                                                                                                                                 
-  No                                                                                                                                                  
-  I don't know                                                                                                                                        
+├── correctness
+│   └── I don't know
+├── weight
+│   └── 14
+├── arguments on entry
+│   ├── my_vector = std::vector of length 6, capacity 6 = {
+│   │     [0] = 10,
+│   │     [1] = 7,
+│   │     [2] = 8,
+│   │     [3] = 9,
+│   │     [4] = 1,
+│   │     [5] = 5
+│   │   }
+│   ├── low = 0
+│   └── high = 5
+└── arguments when returning
+    └── my_vector = std::vector of length 6, capacity 6 = {
+          [0] = 10,
+          [1] = 5,
+          [2] = 1,
+          [3] = 7,
+          [4] = 8,
+          [5] = 9
+        }
+> Yes
+  No
+  I don't know
   Trusted
     \end{verbatim}
 \end{figure}
@@ -169,34 +170,34 @@ quickSort(std::vector<int, std::allocator<int> >&, int, int)
     \caption{Options to correctness question of non root node}
     \label{fig:correctnessQuestionNonRootOptions}
     \begin{verbatim}
-> Yes                                                                                                                                                 
-  No                                                                                                                                                  
-  I don't know                                                                                                                                        
+> Yes
+  No
+  I don't know
   Trusted
   Change strategy
     \end{verbatim}
 \end{figure}
 
-The debugging session ends when the buggy node is found \ref{fig:buggyNodeFound}. Although we only have the granularity to say which function is buggy, we also display with what inputs the buggy function misbehaves, so that the user can create a test case that reproduces the failure.
+The debugging session ends when the buggy node is found, as shown in Figure \ref{fig:buggyNodeFound}. Although we only have the granularity to say which function is buggy, we also display with what inputs the buggy function misbehaves, so that the user can create a test case that reproduces the failure.
 \begin{figure}[h]
     \centering
     \caption{Buggy node found}
     \label{fig:buggyNodeFound}
     \begin{verbatim}
 Buggy node found
-swap(int*, int*)                                                                                                                                      
-├── arguments on entry                                                                                                                                
-│   ├── a = 10                                                                                                                                        
-│   └── b = 1                                                                                                                                         
-└── arguments when returning                                                                                                                          
-    ├── a = 10                                                                                                                                        
+swap(int*, int*)
+├── arguments on entry
+│   ├── a = 10
+│   └── b = 1
+└── arguments when returning
+    ├── a = 10
     └── b = 1 
     \end{verbatim}
 \end{figure}
 
 \subsection{Using test cases as oracles to reduce tree size}
 Now, using the same buggy program as in the previous section, we are going to gather correct nodes by executing test cases.
-To do this, we first have to develop a C++ executable which uses the functions with suspect to be buggy, which we display in figure \ref{lst:quicksortTests}.
+To do this, we first have to develop a C++ executable which uses the functions with suspect to be buggy, which we display in Figure \ref{lst:quicksortTests}.
 \begin{lstlisting}[language=C++, caption=Test cases for quickSort, frame=tb, label={lst:quicksortTests}]
 #include <quicksort.h>
 #include <algorithm>
@@ -229,7 +230,7 @@ rr record ./result/tests/test_quicksort
 rr replay
 \end{lstlisting}
 Once inside the \verb|rr| command prompt, we have to tell DDC from which functions should the correct nodes be gathered.
-This can be done with the \verb|save-correct-function|\ref{command:save-returning-correct-node} command. In our example, we want to save correct nodes gathered from the functions we defined, that is, \verb|quickSort|, \verb|partition| and \verb|swap|. Therefore, we execute the commands shown in \ref{fig:saving-correct-functions} in \verb|rr|. Again, the results of the command \verb|info breakpoints| have been simplified.
+This can be done with the \verb|save-correct-function| command described in \ref{command:save-returning-correct-node}. In our example, we want to save correct nodes gathered from the functions we defined, that is, \verb|quickSort|, \verb|partition| and \verb|swap|. Therefore, we execute the commands shown in Figure \ref{fig:saving-correct-functions} in \verb|rr|. Again, the results of the command \verb|info breakpoints| have been simplified.
 \begin{figure}[h]
     \centering
     \caption{Setting the functions from which to gather correct nodes}
@@ -254,7 +255,7 @@ Num Type       Disp Enb Address         What
 
 At this point, we can use the \verb|GDB| commands \verb|start| and \verb|continue| (this last one repeatedly) to reach the end of the program.
 Alternatively, we have provided the convenience command \verb|til-the-end| (see section \ref{command:til-the-end}) that has the exact same functionality.
-Once we have reached the end of the program, all nodes have been collected. This can be checked by dropping into an interactive Python shell inside \verb|rr| like is shown in figure \ref{fig:python-interactive}. To exit the Python shell, use \verb|Ctrl-D|.
+Once we have reached the end of the program, all nodes have been collected. This can be checked by dropping into an interactive Python shell inside \verb|rr| like is shown in Figure \ref{fig:python-interactive}. To exit the Python shell, use \verb|Ctrl-D|.
 \begin{figure}[h]
     \centering
     \caption{Starting an interactive Python shell inside rr}
@@ -264,7 +265,7 @@ Once we have reached the end of the program, all nodes have been collected. This
     >>>
     \end{verbatim}
 \end{figure}
-Once inside the shell, we can examine the set of correct nodes. For example, we can check how many correct nodes we have gathered (see figure \ref{fig:lengthLists}) or display any of those nodes (see figure \ref{fig:printCorrectNode}).
+Once inside the shell, we can examine the set of correct nodes. For example, we can check how many correct nodes we have gathered (see Figure \ref{fig:lengthLists}) or display any of those nodes (see Figure \ref{fig:printCorrectNode}).
 \begin{figure}[h]
     \centering
     \caption{Length lists}
@@ -283,35 +284,35 @@ Once inside the shell, we can examine the set of correct nodes. For example, we 
     \label{fig:printCorrectNode}
     \begin{verbatim}
 >>> print_tree(CORRECT_NODES[0])
-partition(std::vector<int, std::allocator<int> >&, int, int)                                                                                          
-├── arguments on entry                                                                                                                                
-│   ├── my_vector = std::vector of length 6, capacity 6 = {                                                                                           
-│   │     [0] = 2,                                                                                                                                    
-│   │     [1] = 8,                                                                                                                                    
-│   │     [2] = 1,                                                                                                                                    
-│   │     [3] = 8,                                                                                                                                    
-│   │     [4] = 6,                                                                                                                                    
-│   │     [5] = 8                                                                                                                                     
-│   │   }                                                                                                                                             
-│   ├── low = 0                                                                                                                                       
-│   └── high = 5                                                                                                                                      
-├── arguments when returning                                                                                                                          
-│   └── my_vector = std::vector of length 6, capacity 6 = {                                                                                           
-│         [0] = 2,                                                                                                                                    
-│         [1] = 8,                                                                                                                                    
-│         [2] = 1,                                                                                                                                    
-│         [3] = 8,                                                                                                                                    
-│         [4] = 6,                                                                                                                                    
-│         [5] = 8                                                                                                                                     
-│       }                                                                                                                                             
-└── return value                                                                                                                                      
+partition(std::vector<int, std::allocator<int> >&, int, int)
+├── arguments on entry                                      
+│   ├── my_vector = std::vector of length 6, capacity 6 = {                 
+│   │     [0] = 2,                                                                                           
+│   │     [1] = 8,                     
+│   │     [2] = 1,                     
+│   │     [3] = 8,                     
+│   │     [4] = 6,                     
+│   │     [5] = 8                     
+│   │   }                      
+│   ├── low = 0                              
+│   └── high = 5                        
+├── arguments when returning                       
+│   └── my_vector = std::vector of length 6, capacity 6 = {           
+│         [0] = 2,
+│         [1] = 8,
+│         [2] = 1,
+│         [3] = 8,
+│         [4] = 6,
+│         [5] = 8
+│       }
+└── return value
     └── 5
     \end{verbatim}
 \end{figure}
-Once all correct nodes have been collected, we have to start the debugging session of our buggy program with a separate \verb|rr| execution (see figure \ref{lst:compileRecordReplayQuicksort}), which we will call \(rr_{client}\), and collect the correct nodes already gathered from \(rr_{server}\). This has to be done with the command \verb|listen-for-correct-nodes}| (see \ref{command:listen-for-correct-nodes}). 
+Once all correct nodes have been collected, we have to start the debugging session of our buggy program with a separate \verb|rr| execution (see Figure \ref{lst:compileRecordReplayQuicksort}), which we will call \(rr_{client}\), and collect the correct nodes already gathered from \(rr_{server}\). This has to be done with the command \verb|listen-for-correct-nodes}| (see \ref{command:listen-for-correct-nodes}). 
 
 Now we are ready to send the correct nodes from \(rr_{server}\) to \(rr_{client}\). This is done with the command \verb|send-correct-nodes| (see section \ref{command:send-correct-nodes}).
-In \(rr_{server}\) we can see that nodes are being sent, like shown in figure \ref{fig:sendingNode}.
+In \(rr_{server}\) we can see that nodes are being sent, like shown in Figure \ref{fig:sendingNode}.
 \begin{figure}[h]
     \centering
     \caption{Sending nodes to client}
@@ -320,7 +321,7 @@ In \(rr_{server}\) we can see that nodes are being sent, like shown in figure \r
     Sending node n# 87
     \end{verbatim}
 \end{figure}
-Likewise, in \(rr_{client}\) we can see that nodes are being received, like shown in figure \ref{fig:receivingNode}.
+Likewise, in \(rr_{client}\) we can see that nodes are being received, like shown in Figure \ref{fig:receivingNode}.
 \begin{figure}[h]
     \centering
     \caption{Receiving nodes from server}
@@ -330,20 +331,20 @@ Likewise, in \(rr_{client}\) we can see that nodes are being received, like show
     \end{verbatim}
 \end{figure}
 
-If we now start the debugging session (after setting the suspect functions like demonstrated in (insert reference)), we see that the WMET has 8 nodes (see \ref{fig:buggyTreeAfter}) instead of 9 (see \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in figure \ref{fig:removedNode}.
+If we now start the debugging session (after setting the suspect functions like demonstrated in (insert reference)), we see that the WMET has 8 nodes (see Figure \ref{fig:buggyTreeAfter}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:removedNode}.
 
 This node has been removed from the debugging tree because it appeared in a test case, therefore the debugger has deduced that this computation is correct.
 
 \begin{figure}[p]
 \centering
-    \caption{Tree of buggy quickSort before correct node elimination}\todo{Esto es imposible verlo}
+    \caption{Zoomable tree of buggy quickSort before correct node elimination}\todo{Esto es imposible verlo}
     \label{fig:buggyTreeBefore}
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggy.pdf}
 \end{figure}
 
 \begin{figure}[p]
 \centering
-    \caption{Tree of buggy quickSort after correct node elimination}
+    \caption{Zoomable tree of buggy quickSort after correct node elimination}
     \label{fig:buggyTreeAfter}
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggySwapRemoved.pdf}
 \end{figure}
@@ -363,6 +364,7 @@ swap(int*, int*)
     \end{verbatim}
 \end{figure}
 \section{Implementation}
+In this section we detail and justify the most important design decisions made while developing DDC.
 \subsection{Tree building}
 Tree building is the fundamental process in which all other steps rely on.
 \subsubsection{Adding a node to the tree}
