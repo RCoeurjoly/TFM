@@ -16,14 +16,14 @@ A node n is a function/method execution, denoted \(f(I) \to O\), where:
 \item \(f\) is the function/method executed.
 \item \(I\) is a 3-tuple of inputs to \(f\), \(I = \{I_o, I_a, I_g\}\), where:
 \begin{itemize}
-\item \(I_o\) is the object state when \(f\) was called if \(f\) is a method, $\bot$ otherwise.\todo{Exactamente qué pinta tiene? Y si es una función?}\todo[color=green]{Se muestra un ejemplo en \ref{fig:carNode}. Si es una funcion no se pone nada}
+\item \(I_o\) is the object state when \(f\) was called if \(f\) is a method, $\bot$ otherwise.
 \item \(I_a\) is an n-tuple of input arguments when \(f\) was called (if any).
 \item \(I_g\) is a set of global variables when \(f\) was called (if any).
 \end{itemize}
 \item \(O\) is a 4-tuple of outputs of \(f\), \(O = \{O_o, O_a, O_g, O_r\}\), where:
 \begin{itemize}
-\item \(O_o\) is the object state when \(f\) returns if \(f\) is a method, $\bot$ otherwise.\todo{Lo mismo, tiene forma interesante? Y si no es a method call?}\todo[color=green]{Se muestra un ejemplo en \ref{fig:carNode}. }
-\item \(O_a\) is the m-tuple of output arguments when \(f\) returns\todo{It returned suena raro, no? Cuando la función finaliza o algo así?} (if there where passed as reference or pointer). Note that \(m <= n\), where $m=\mathbf{card}(O_a)$ and $n=\mathbf{card}(I_a)$
+\item \(O_o\) is the object state when \(f\) returns if \(f\) is a method, $\bot$ otherwise.
+\item \(O_a\) is the m-tuple of output arguments when \(f\) returns (if there where\todo{they were?} passed as reference or pointer). Note that \(m <= n\), where $m=\mathbf{card}(O_a)$ and $n=\mathbf{card}(I_a)$
 \item \(O_g\) is the set of global variables when it returned (if any).
 \item \(O_r\) is the return value (if any).
 \end{itemize}
@@ -38,7 +38,7 @@ Figure \ref{fig:carNode} is the node extracted from the execution of the method 
     \item \(I_a\) is the branch called \verb|arguments on entry|. It displays the names of the arguments, \verb|xDelta| and \verb|yDelta|, and their value, 10 and 5, respectively. Since they are passed as reference, we also display their addresses in memory, \verb"@0x7ffe80e3cd08" and \verb"@0x7ffe80e3cd0c".
     \item \(I_g\) is the branch called \verb|global variables on entry|. In this branch we list all global variables upon entry on the method. In this case there is only one, \verb|number_of_cars|, which got set to 1 when the constructor was called.
     \item \(O_o\) is the branch called \verb|object state when returning|. In this branch we display the object state when the \verb|return| statement is executed. If we did not have an explicit \verb|return| statement, the content of this branch would be the object state at the curly bracket (\}) that terminates the function or method. 
-    \item \(O_a\) is the branch called \verb|arguments when returning|. This branch is present in the node because the arguments are passed by reference. Passing by pointer also would have created this branch. Passing by value would have not.
+    \item \(O_a\) is the branch called \verb|arguments when returning|. This branch is present in the node because the arguments are passed by reference. Passing by pointer also would have created this branch. Passing by value would have not\todo{Parece que la frase está inacabada}.
     \item \(O_g\) is the branch called \verb|global variables when returning|. Same as \(I_g\), but when returning. We display this branch even if the global variables are the same as in entry, as is the case in this example.
     \item \(O_r\) is the branch called \verb|return value|. In C++ return values are not named, so we only have to display the value, in this case \verb|true|. 
 \end{itemize}
@@ -67,7 +67,7 @@ int main() {
   Car my_car;
   my_car.move(10, 5);
 }
-\end{lstlisting}\todo{Puede hacerse que el listing aparezca arriba en la página?}\todo[color=green]{Hecho}
+\end{lstlisting}
 
 \begin{figure}[ht]
 \caption{Node representing the execution of a method}

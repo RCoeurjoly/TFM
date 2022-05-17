@@ -66,7 +66,7 @@ lo aumentan para mejorar el funcionamiento de las estrategias.}
 
 \subsection{Navigating the execution tree}
 Navigating the execution tree is the phase when the debugger asks an external oracle questions about the correctness of certain nodes, with the purpose of finding a buggy one.
-The goal is to minimize the number of questions, to make the process as fast as possible.\todo{Este párrafo se entiende muy mal.}
+The goal is to minimize the number of questions, to make the process as fast as possible.
 \section{C++ programming language}
 The C++ programming language is a general-purpose, statically typed, compiled language \cite{cppHistory}.
 %
@@ -109,13 +109,12 @@ There are two main dependencies in this project:
     \item rr, used for its reverse execution features.
 \end{itemize}
 \subsection{GDB: The GNU Project Debugger}
-GDB \cite{gdb} is a general purpose debugger for C and C++, with partial support for other languages. GDB allows the user to execute a program, stop the execution at any point, inspect the state of the program and change any part of the state of the execution.
-\todo{Contar un poco de qué tipo es y qué hace.}
-
+GDB \cite{gdb} is a general purpose debugger for C and C++, with partial support for other languages. GDB allows the user to execute a program, stop the execution at any point, inspect the state of the program, and change any part of the state of the execution.
+%
 We make extensive use of its Python API, especially of the classes described in the following sections.
 
 \subsubsection{Values}
-Values from the inferior, that is, the program being debugged, represent the content of the program variables.\todo{Esta frase se me hace rara}
+Values from the the program being debugged represent the content of the program variables.\todo{Estas subsecciones son cortísimas, igual sería mejor un itemize.}
 \subsubsection{Types}
 The type of a certain value is needed in two occasions: when displaying the value and to check whether arguments are passed as reference or as pointers.
 \subsubsection{Frames}
@@ -145,8 +144,8 @@ A final breakpoint is a breakpoint that is triggered when the current frame retu
 
 \subsection{rr: Record and Replay Framework}
 
-rr \cite{rr}\todo{Cita, aunque sea a la web de la herramienta con una entrada misc} enhances GDB, providing support for record and replay functionality, as well as for reverse execution.
-
+rr \cite{rr} enhances GDB, providing support for record and replay functionality, as well as for reverse execution.
+%
 DDC uses rr for its reverse execution capabilities. This is needed because once a final breakpoint is reached, we need to step back to get:
 \begin{itemize}
     \item The object state when returning.
