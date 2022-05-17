@@ -1,10 +1,10 @@
 \chapter{Tool description}
 \label{cap:toolDescription}
-DDC consists of approximately 900 lines of mostly statically typed Python, which can be found in the following url: \url{https://github.com/RCoeurjoly/DDC/blob/main/declarative_debugger.py}.
+DDC consists of approximately 900 lines of mostly statically typed Python, which can be found in \url{https://github.com/RCoeurjoly/DDC/blob/main/declarative_debugger.py}.
 %
 It is loaded into rr through the source command, which itself can be put inside a \verb|.gdbinit| file.
-
-In the following section, we will go through two usage scenarios:
+%
+In this section, we will go through two usage scenarios:
 \begin{itemize}
     \item Bug finding.
     \item Using test cases as oracles to reduce tree size.
@@ -17,7 +17,6 @@ Lastly, we will list all commands provided by the tool.
 \section{Usage scenarios}
 This section describes two usage scenarios with DDC.
 We will explain which commands should be executed and the expected output.
-\todo{Algo de texto}
 
 \subsection{Bug finding}
 The execution of the code in Figure~\ref{lst:unexpectedQuicksortSource} results in an unexpected output, \(\{10, 5, 1, 7, 8, 9\}\), which is not sorted.
@@ -265,7 +264,7 @@ Once we have reached the end of the program, all nodes have been collected. This
     >>>
     \end{verbatim}
 \end{figure}
-Once inside the shell, we can examine the set of correct nodes. For example, we can check how many correct nodes we have gathered (see Figure \ref{fig:lengthLists}) or display any of those nodes (see Figure \ref{fig:printCorrectNode}).
+Once inside the shell, we can examine the set of correct nodes. For example, we can check how many correct nodes we have gathered (see Figure~\ref{fig:lengthLists}) or display any of those nodes (see Figure \ref{fig:printCorrectNode}).
 \begin{figure}[h]
     \centering
     \caption{Length lists}
@@ -340,7 +339,7 @@ Likewise, in \(rr_{client}\) we can see that nodes are being received, like show
 
 \begin{figure}[p]
 \centering
-    \caption{Zoomable tree of buggy quickSort before correct node elimination}\todo{Esto es imposible verlo}
+    \caption{Zoomable tree of buggy quickSort before correct node elimination}
     \label{fig:buggyTreeBefore}
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggy.pdf}
 \end{figure}
@@ -364,7 +363,7 @@ Likewise, in \(rr_{client}\) we can see that nodes are being received, like show
     \label{fig:correctNodeRemoved}
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggy.pdf}
 \end{figure}
-If we now start the debugging session (after setting the suspect functions like demonstrated in (insert reference)), we see that the WMET has 8 nodes (see Figure \ref{fig:buggyTreeAfter}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:correctNodeRemoved}.
+If we now start the debugging session (after setting the suspect functions like demonstrated in (insert reference)\todo{Ojo}), we see that the WMET has 8 nodes (see Figure \ref{fig:buggyTreeAfter}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:correctNodeRemoved}.
 
 
 This node has been removed from the debugging tree because it appeared in a test case, therefore the debugger has deduced that this computation is correct.
@@ -401,9 +400,9 @@ When the finish breakpoint of a certain function it hit, we add the 4-tuple of o
 \subsubsection{Finishing the tree building process}
 The tree is considered built if one of the following happens:
 \begin{itemize}
-    \item A final point has been hit
-    \item The program has finished
-    \item The root node has been completed
+    \item A final point has been hit.
+    \item The program has finished.
+    \item The root node has been completed.
 \end{itemize}
 \subsection{Tree transformations}
 After having the WMET built, we apply all tree transformations available.
@@ -725,8 +724,10 @@ if my_node.get_tree(False, False, False) in CORRECT_NODES:
 We now list and describe all the available commands. These can be issued inside rr. Completion for these commands is enabled, that is, if you type \verb|sus| and then \verb|TAB|, \verb|suspect-function| should appear.
 The following information can also be found with \verb|help <command>|, where \verb|<command>| is one of the commands that follow.
 
-\subsection{suspect-function}
+\begin{itemize}
+    \item suspect-function
 \label{command:suspect-function}
+
 Mandatory command used in a debugging session.
 
 Sets a breakpoint on the location provided as argument. It also adds the command \hyperref[command:add-node-to-session]{add-node-to-session} to it.
@@ -735,13 +736,15 @@ It should be used at least once before starting the debugging session.
 Arguments: location.
 
 Location completion is enabled.
+\end{itemize}
+
 \subsection{add-node-to-session}
 \label{command:add-node-to-session}
 Optional command used in a debugging session.
 Adds the current frame to the debugging tree.
 It expects to be called on entry to a function or method.
 It also creates a finish breakpoint for the current function or method, with the attach command \hyperref[command:save-returning-node]{save-returning-node}.
-
+        
 It can be used to create an ad hoc debugging tree.
 
 It is used by \hyperref[command:suspect-function]{suspect-function}.
