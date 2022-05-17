@@ -1,15 +1,15 @@
 \chapter{Preliminaries}
 \label{cap:preliminares}
 
-\section{Declarative debugging}
-Declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, is a debugging technique that consists in (i) taking a program execution which the user deems incorrect, (ii) building an execution tree (ET) of the execution of this program and (iii) asking questions about the correctness of computations to an oracle (usually the user, but other sources such as tests can be used)\todo{Se pregunta a un oráculo externo, que usualmente es el usuario pero puede ser otra herramienta, como tus casos de test} until a certain computation is narrowed down as buggy.\todo{Si se empieza con un error por completitud se tiene que encontrar algo}
+\todo{Empezar diciendo ``En este capítulo...''}
 
-\todo{Estos dos párrafos son muy parecidos, no? Se pueden juntar?}
+\section{Declarative debugging}
+Declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, is a debugging technique that consists in (i) taking a program execution which the user deems incorrect, (ii) building an execution tree (ET)\todo{Fíjate que siempre hablas de Execution Tree pero lo interesante es el Debugging Tree, que es una abstracción del Execution Tree. Puede explicar en algún lugar que en este caso se corresponden, pero si no si hay algún experto en el tribunal se va a quejar.} of the execution of this program and (iii) asking questions about the correctness of computations to an oracle (usually the user, but other sources such as tests can be used) until a certain computation is narrowed down as buggy.
 
 In the following subsections we will discuss the most important stages in a declarative debugging session, namely:
 \begin{itemize}
     \item Building the execution tree.
-    \item Transforming the execution tree.
+    \item Transforming the execution tree.\todo{Aquí tiene sentido que sea el debugging tree, porque la ejecución es única y no tiene sentido modificarla.}
     \item Navigating the execution tree.
 \end{itemize}
 \subsection{Building the execution tree}
@@ -24,12 +24,12 @@ To build the ET, the DD must have access to the following information:
 \end{itemize}
 
 With this information, the debugger can build a node, and using these nodes it can build the ET.
-
-For formal definitions, please see Chapter \ref{cap:definiciones}.\todo{Chapter con mayúsculas}
+%
+For formal definitions, please see Chapter \ref{cap:definiciones}.
 
 \subsection{Transforming the execution tree}
 
-Since the number of questions depends on the size of the tree (number of nodes, width, and depth of the tree), most DDs provide certain functionality to reduce the ET size.
+Since the number of questions depends on the size of the tree (number of nodes, width, and depth of the tree),\todo{Dos cosas importantes, que habría que ver si poner o no: se puede reducir el número de nodos y aumentar el número de preguntas y el número de preguntas no solo depende del árbol, también de la estrategia de navegación} most DDs provide certain functionality to reduce the ET size.
 
 \subsubsection{Trusting computations}
 
@@ -41,24 +41,28 @@ This process happens before starting to build the ET, and therefore it reduces t
 
 \subsubsection{Suspecting computations}
 
+\todo{El punto anterior de trusting y este de suspecting no vienen a ser lo mismo?}
 When debugging a program, it is usually the case that the user believes the problem lays in the parts she developed, not in the external functions she calls.
 
 By suspecting only the functions and methods developed by the user (and implicitly trusting all other functions), the debugger can ignore all other functions, like those provided by the standard or by external libraries.
 This is the approach used in developing DDC.
 This process also happens before starting to build the ET. Also, it requires manual input from the user in selecting those computations that should be suspected.
+
 \subsubsection{Using test cases as oracles}
+
 Another method to reduce the size of the ET is to have an external oracle mark computations as correct.
 This oracle might be the set of tests that use some of the suspect functions or methods. By collecting these test executions, which we assume are correct, we can discard the same executions if present in the ET of the program being debugged.
 
-This functionality, provided by DDC, requires manual input from the user in selecting the test case to be executed.
+This functionality, provided by DDC, requires manual input from the user for selecting the test cases to be executed.
 
 %This functionality is provided by DDC.
 
 \subsubsection{Tree transformations}
 Tree transformations happen once the ET has been built, so the improvement happens in terms of navigation time, not in building time or memory footprint.
 
-There are several transformations proposed in the literature, like loop expansion and tree compression \cite{LoopExpansionTreeCompression}.\todo{Cita(s)}
-These processes are fully automatic, so they do not need any input from the user.
+There are several transformations proposed in the literature, like loop expansion and tree compression \cite{LoopExpansionTreeCompression}.
+These processes are fully automatic, so they do not need any input from the user.\todo{Se podría explicar que estas transformaciones a veces reducen el número de nodos y otros
+lo aumentan para mejorar el funcionamiento de las estrategias.}
 
 \subsection{Navigating the execution tree}
 Navigating the execution tree is the phase when the debugger asks an external oracle questions about the correctness of certain nodes, with the purpose of finding a buggy one.
