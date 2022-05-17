@@ -331,17 +331,6 @@ Likewise, in \(rr_{client}\) we can see that nodes are being received, like show
     \end{verbatim}
 \end{figure}
 
-If we now start the debugging session (after setting the suspect functions like demonstrated in (insert reference)), we see that the WMET has 8 nodes (see Figure \ref{fig:buggyTreeAfter}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:removedNode}.
-
-This node has been removed from the debugging tree because it appeared in a test case, therefore the debugger has deduced that this computation is correct.
-
-\begin{figure}[p]
-\centering
-    \caption{Zoomable tree of buggy quickSort before correct node elimination}\todo{Esto es imposible verlo}
-    \label{fig:buggyTreeBefore}
-\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggy.pdf}
-\end{figure}
-
 \begin{figure}[p]
 \centering
     \caption{Zoomable tree of buggy quickSort after correct node elimination}
@@ -349,20 +338,40 @@ This node has been removed from the debugging tree because it appeared in a test
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggySwapRemoved.pdf}
 \end{figure}
 
-\begin{figure}[h]
-    \centering
-    \caption{Correct node removed from execution tree}
-    \label{fig:removedNode}
-    \begin{verbatim}
-swap(int*, int*)
-├── arguments on entry
-│   ├── a = 7
-│   └── b = 1
-└── arguments when returning
-    ├── a = 1
-    └── b = 7
-    \end{verbatim}
+\begin{figure}[p]
+\centering
+    \caption{Zoomable tree of buggy quickSort before correct node elimination}\todo{Esto es imposible verlo}
+    \label{fig:buggyTreeBefore}
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggy.pdf}
 \end{figure}
+%\begin{figure}
+%\centering
+%\caption{Correct node removed from debugging tree}
+%\label{fig:removedNode}
+%\begin{verbatim}
+%swap(int*, int*)
+%├── arguments on entry
+%│   ├── a = 7
+%│   └── b = 1
+%└── arguments when returning
+%    ├── a = 1
+%    └── b = 7
+%\end{verbatim}
+%\end{figure}
+\begin{figure}[p]
+\centering
+    \caption{Prueba}
+    \label{fig:correctNodeRemoved}
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggy.pdf}
+\end{figure}
+If we now start the debugging session (after setting the suspect functions like demonstrated in (insert reference)), we see that the WMET has 8 nodes (see Figure \ref{fig:buggyTreeAfter}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:correctNodeRemoved}.
+
+
+This node has been removed from the debugging tree because it appeared in a test case, therefore the debugger has deduced that this computation is correct.
+
+
+
+
 \section{Implementation}
 In this section we detail and justify the most important design decisions made while developing DDC.
 \subsection{Tree building}
