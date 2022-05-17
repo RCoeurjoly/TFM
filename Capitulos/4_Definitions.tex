@@ -217,12 +217,13 @@ See \cite{DeclarativeErrorDiagnosis}.
 \end{proof}
 \begin{theorem}[Soundness]
 %Soundness theorem
-Let \(T = (N,E,W,M)\) be a weighted marked execution tree, F a total function such that for every node \(n\in N\) there is a function or method \(f\) such that \(F:n\to f\), \(\mathit{II}\) a total function such that for every function or method \(f\in F\) there is an intended interpretation \(II_f\) such that \(\mathit{II}:f\to II_f\), G\todo[color=green]{No se que letra elegir aqui. Lo que quiero conseguir es la tupla de entrada a la funcion} a total function such that for every node \(n\in N\) there is 3-tuple of inputs \(I\) such that \(G:n\to I\) and S the top down strategy.
+Let \(T = (N,E,W,M)\) be a weighted marked execution tree, F a total function such that for every node \(n\in N\) there is a function or method \(f\) such that \(F:n\to f\), \(\mathit{II}\) a total function such that for every function or method \(f\in F\) there is an intended interpretation \(\mathit{II}_f\) such that \(\mathit{II}:f\to \mathit{II}_f\), G\todo[color=green]{No se que letra elegir aqui. Lo que quiero conseguir es la tupla de entrada a la funcion} a total function such that for every node \(n\in N\) there is 3-tuple of inputs \(I\) such that \(G:n\to I\) and S the top down strategy.
 \begin{itemize}
     \item If S receives T as input and returns a node \(n'\), then \(n'\in N\), \(F(n') = f'\), \(\mathit{II}(f') = II_{f'}\), \(G(n') = I\), and \(II_{f'}(I)\neq f'(I)\).
     \item If S receives T as input and returns \(\bot\), then \(\forall n'\in N\), \(F(n') = f'\), \(\mathit{II}(f') = II_{f'}\), \(G(n') = I\), and \(II_{f'}(I) = f'(I)\).
 \end{itemize}
 \end{theorem}\todo{Si esto es corrección debes decir que si se detecta un nodo buggy entonces corresponde a una función que realmente contiene un bug, ¿es eso lo que dices?}\todo[color=green]{Sí, en el segundo caso quiero decir que si no encuentra nada, (porque el nodo raiz es correcto), significa que todos las funciones se adecuan a sus respectivas interpretaciones pretendidas con los inputs dados}
+\todo{Centrarse solo en el caso de raíces erróneas, si no te lías innecesariamente}
 \begin{proof}
 See \cite{DeclarativeErrorDiagnosis}.
 \end{proof}
