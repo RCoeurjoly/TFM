@@ -1,8 +1,8 @@
 \chapter{State of the Art}
 \label{cap:estadoDeLaCuestion}
-\todo[color=green]{Casi todo viene del survey}
 
 \section{Issues of algorithmic debugging}
+Lol
 \subsection{The Scalability Problem}
 \subsubsection{Time Needed to Generate the Debugging Tree}
 \subsubsection{Memory Needed to Store the Debugging Tree}
@@ -33,6 +33,9 @@ This alleviates certain issue pointed in the survey \cite{unifiedFrameworkDeclar
 
 This solves the granularity issue \cite{AlgorithmicDebuggingGeneralized}
 \section{Features vs Issues}
+\begin{table}
+\caption{Relation Between Issues and Solutions}
+\label{table:problemsVsFeatures}
 \begin{tabular}{|l||*{9}{c|}}\hline
 \backslashbox{Feature}{Issue}
 &\makebox{1}&\makebox{2}&\makebox{3}&\makebox{4}&\makebox{5}&\makebox{6}&\makebox{7}&\makebox{8}&\makebox{9}\\\hline\hline
@@ -49,26 +52,29 @@ Levels of errors &&&\ding{55}&&&\checkmark&&&\\\hline
 Program slicing &&&&&&\checkmark&&&\\\hline
 IDE &&&&&\checkmark&\checkmark&&&\\\hline
 \end{tabular}
+\end{table}
 \section{DDs Features}
 \begin{sidewaystable}
-\begin{tabular}{|l||*{9}{c|}}\hline
+\caption{Comparison of Algorithmic Debuggers}
+\label{table:debuggerFeatures}
+\begin{tabular}{|l||*{5}{m{3cm}|}}\hline
 \backslashbox{Feature}{Debugger}
-&\makebox{1}&\makebox{2}&\makebox{3}&\makebox{4}&\makebox{5}&\makebox{6}&\makebox{7}&\makebox{8}&\makebox{9}\\\hline\hline
-Target language &&&\checkmark&&&&&&\\\hline
-Imp. language &&&\checkmark&&&&&&\\\hline
-Strategies &&&\checkmark&\checkmark&&&&&\\\hline
-DataBase / Memoization &&&\checkmark&&&\checkmark&&&\\\hline
-Debugging tree &&&\checkmark&&\checkmark&&&&\\\hline
-Accepted answers &&&&\checkmark&&&&&\\\hline
-Tracing subexpressions? &&&&\checkmark&&&&&\\\hline
-Granularity &\checkmark&\checkmark&\checkmark&&&&&&\\\hline
-DT exploration &\checkmark&\checkmark&&&&&&&\\\hline
-Transformations &&&\ding{55}&&&\checkmark&&&\\\hline
-Early start &&&&&&\checkmark&&&\\\hline
-Undo &&&&&\checkmark&\checkmark&&&\\\hline
-Trusting &&&&&\checkmark&\checkmark&&&\\\hline
-External oracle &&&&&\checkmark&\checkmark&&&\\\hline
-GUI &&&&&\checkmark&\checkmark&&&\\\hline
-Version &&&&&\checkmark&\checkmark&&&\\\hline
+&\makebox{DDC}&\makebox{Hat-Delta}&\makebox{EDD}&\makebox{Mercury Debugger}&\makebox{DES}\\\hline\hline
+Target language &C++&Haskell 98&Erlang&Mercury&Datalog SQL\\\hline
+Imp. language &Python&Haskell&Erlang / \colorbox{green}{Java}&Mercury / C&Prolog\\\hline
+Strategies &TD DQ HF&TD HD&TD DQ&TD DQ BW SD&TD DQ\\\hline
+DataBase / Memoization &NO/NO&NO/YES&YES/YES&YES/YES&NO/YES\\\hline
+Debugging tree &Main memory&File&Main memory&Main memory on demand&External database\\\hline
+Accepted answers &YES NO DK TR&YES NO DK&YES NO DK IN TR&YES NO DK IN TR&YES NO TR DK\\\hline
+Tracing subexpressions? &NO&NO&YES&YES&NO\\\hline
+Granularity &NO&YES&YES&NO&YES\\\hline
+DT exploration &YES&YES&YES&NO&NO\\\hline
+Transformations &STC&TC&-&-&-\\\hline
+Early start &NO&NO&NO&YES&NO\\\hline
+Undo &NO&YES&YES&YES&YES\\\hline
+Trusting &Fun&Mod&Fun&Mod Fun&Mod\\\hline
+External oracle &YES&NO&YES&NO&NO\\\hline
+GUI &NO&YES&YES&NO&YES\\\hline
+Version &0.0.1 (May 2022)&Hat 2.9.4 (November 2017)&July 2020&Mercury 22.01.1 (April 2022)&DES 6.7 (September 2021)\\\hline
 \end{tabular}
 \end{sidewaystable}

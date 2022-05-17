@@ -104,8 +104,8 @@ This tree has two problems:
     \item Although it has already returned and the argument arr is mutable, the tree has no \verb|args when returning| branch.
     \item The representation of arr is not very helpful to the user, especially \verb|data_ptr|.
 \end{itemize}
-The \verb|args when returning| branch is created when following function returns a non empty list:
-\begin{lstlisting}[language=Python, caption=Python function, frame=tb]
+The \verb|args when returning| branch is created when the following function returns a non empty list:
+\begin{lstlisting}[language=Python, caption=Python function to select arguments passed as reference or pointer, frame=tb]
 def get_pointer_or_ref(arguments, frame):
     if arguments is None:
         return []
