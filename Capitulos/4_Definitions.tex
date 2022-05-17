@@ -109,13 +109,13 @@ We can make the following observations:
     \item A node can have 0 or more children nodes.
     \item A node that has no children nodes is a leaf node.
     \item A node can have 0 or 1 parent nodes.
-    \item A node that has no edge leading to its parent node is the root node of the tree.
+    \item A node that has no parent node is the root node of the tree.
     \item Nodes that share the same parent node are siblings.
 \end{itemize}
 \end{remark}
 We here expand the definition of Marked Execution Tree (MET in \citep{optimal_strategy}) to Weighted Marked Execution Tree (WMET).
 \begin{definition}[Weighted marked execution tree]
-A weighted marked execution tree is a tree, denoted \(T=(N,E,W,M)\), where N is a set of nodes, \(E\subseteq N \times N\) is the set of edges, \(M:N\to V\) is a total function that assigns to all the nodes in N a value in the domain \(D=\{\mathit{Wrong},\mathit{Undefined}\}\) and W is a total function that assigns to all the nodes in N a value which is the weight of the sub-tree rooted at node n in N, \(w_n\), which is defined recursively as its number of descendants including itself (i.e.,\(1 + \sum {w_{n^\prime}\mid n \to n^{\prime}) \in E}\)).
+A weighted marked execution tree is a tree, denoted \(T=(N,E,W,M)\), where N is a set of nodes, \(E\subseteq N \times N\) is the set of edges, \(M:N\to V\) is a total function that assigns to all the nodes in N a value in the domain \(D=\{\mathit{Wrong},\mathit{Undefined}\}\), and W is a total function that assigns to all the nodes in N a value which is the weight of the sub-tree rooted at node n in N, \(w_n\), which is defined recursively as its number of descendants including itself (i.e.,\(1 + \sum {w_{n^\prime}\mid n \to n^{\prime}) \in E}\)).
 \theoremstyle{definition}
 \begin{exmp}
 Figure \ref{fig:partitionTree} is an example tree representing the  WMET of partition (see Listing~\ref{lst:quicksortFunctions} for the corresponding code) called with \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\). In this case we have the following three nodes:
@@ -164,9 +164,9 @@ A buggy node is a wrong node in which all its children are correct nodes.
 \end{definition}
 \theoremstyle{definition}
 \begin{exmp}
-Figure~\ref{fig:intendedInterpretationSwap} is the intended interpretation of swap \(\mathit{II}_{swap}(I) \to O'\), \(I\) being two pointers pointing to 10 and 1 respectively.
+Figure~\ref{fig:intendedInterpretationSwap} is the intended interpretation of swap \(\mathit{II}_{swap}(I) \to O'\), \(I\) being two pointers pointing to 10 and 1, respectively.
 On the other hand, Figure~\ref{fig:buggySwap} is the node \(n_{swap}(I) \to O\) of the execution of swap given the same arguments.
-Since \(O'\neq O\) (note that in Figure \ref{fig:buggySwap} swap returns \(a = 10\) and \(b = 1\), whereas in Figure~\ref{fig:intendedInterpretationSwap} \texttt{swap} returns \(a = 1\) and \(b = 10\)), we can say that \(n_{swap}\) is a buggy node, and therefore there is a bug in the function \(swap\).
+Since \(O'\neq O\) (note that in Figure \ref{fig:buggySwap} swap returns \(a = 10\) and \(b = 1\), whereas in Figure~\ref{fig:intendedInterpretationSwap} \texttt{swap} returns \(a = 1\) and \(b = 10\)), we can say that \(n_{swap}\) is a buggy node, and therefore there is a bug in the function \(swap\), as we will see later.
 
 \begin{figure}[h]
 \caption{Intended interpretation of swap function given pointer a to 10 and pointer b to 1}
@@ -209,8 +209,8 @@ When our debugger returns a buggy node \(n_{buggy} = f(I) \to O\), an error in t
 \newtheorem{theorem}{Theorem}
 \begin{theorem}[Completeness]
 %Completion theorem
-Let \(T = (N,E,W,M)\) be a weighted marked execution tree and S the top down strategy.
-If S receives T as input, it always terminates, producing either \(\bot\) if the root node \(T\) is correct \todo{A qué te refieres?} or \(n'\in N\) otherwise.
+Let \(T = (N,E,W,M)\) be a weighted marked execution tree and S the top-down strategy\todo{Se ha definido esta estrategia antes?}.
+If S receives T as input, it always terminates, producing either \(\bot\) if the root node \(T\) is correct \todo{Yo creo que lo más sencillo es decir que la raíz de T es errónea y que entonces existe al menos un nodo buggy} or \(n'\in N\) otherwise.
 \end{theorem}
 \begin{proof}
 See \cite{DeclarativeErrorDiagnosis}.
