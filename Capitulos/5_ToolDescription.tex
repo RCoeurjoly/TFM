@@ -10,7 +10,7 @@ In this section, we will go through two usage scenarios:
     \item Using test cases as oracles to reduce tree size.
 \end{itemize}
 
-Then, we will explain the implementation of the tool and the most important design decisions made. 
+Then, we will explain the implementation of the tool and the most important design decisions made.
 %
 Lastly, we will list all commands provided by the tool.
 
@@ -80,7 +80,7 @@ void print_vector(const std::vector<int> &my_vector)
 }
 \end{lstlisting}
 
-To begin a debugging session with the purpose of finding the cause of the error, we first have to record and replay the buggy program with \verb|rr|. This is shown in 
+To begin a debugging session with the purpose of finding the cause of the error, we first have to record and replay the buggy program with \verb|rr|. This is shown in
 Figure~\ref{lst:compileRecordReplayQuicksort}.
 \begin{lstlisting}[language=bash, caption={Compiling, recording and replaying quickSort}, frame=tb, label={lst:compileRecordReplayQuicksort}]
 nix build
@@ -96,9 +96,9 @@ To do this, we use the \verb|suspect-function| command described in \ref{command
     \begin{verbatim}
 (rr) suspect-function quickSort(std::vector<int>&, int, int)
 Breakpoint 1 at 0x40135e: file quicksort.h, line 44.
-(rr) suspect-function partition(std::vector<int>&, int, int) 
+(rr) suspect-function partition(std::vector<int>&, int, int)
 Breakpoint 2 at 0x401256: file quicksort.h, line 20.
-(rr) suspect-function swap(int*, int*) 
+(rr) suspect-function swap(int*, int*)
 Breakpoint 3 at 0x401222: file quicksort.h, line 9.
 (rr) info breakpoints
 Num Type       Disp Enb Address         What
@@ -123,7 +123,7 @@ Please choose navigation strategy
   Heaviest first
     \end{verbatim}
 \end{figure}
-Then, as shown in Figure \ref{fig:correctnessQuestion}, the debugger asks us about the correctness of the root node of the execution tree. This question does not have the option to change the navigation strategy, as opposed to all other correctness questions, where the options are shown in Figure \ref{fig:correctnessQuestionNonRootOptions}. 
+Then, as shown in Figure \ref{fig:correctnessQuestion}, the debugger asks us about the correctness of the root node of the execution tree. This question does not have the option to change the navigation strategy, as opposed to all other correctness questions, where the options are shown in Figure \ref{fig:correctnessQuestionNonRootOptions}.
 
 \begin{figure}[h]
     \centering
@@ -132,7 +132,7 @@ Then, as shown in Figure \ref{fig:correctnessQuestion}, the debugger asks us abo
     \begin{verbatim}
 You have selected Top-down!
 Is the following node correct?
-quickSort(std::vector<int, std::allocator<int> >&, int, int)         
+quickSort(std::vector<int, std::allocator<int> >&, int, int)
 ├── correctness
 │   └── I don't know
 ├── weight
@@ -190,7 +190,7 @@ swap(int*, int*)
 │   └── b = 1
 └── arguments when returning
     ├── a = 10
-    └── b = 1 
+    └── b = 1
     \end{verbatim}
 \end{figure}
 
@@ -237,9 +237,9 @@ This can be done with the \verb|save-correct-function| command described in \ref
     \begin{verbatim}
 (rr) save-correct-function quickSort(std::vector<int>&, int, int)
 Breakpoint 1 at 0x40135e: file quicksort.h, line 44.
-(rr) save-correct-function partition(std::vector<int>&, int, int) 
+(rr) save-correct-function partition(std::vector<int>&, int, int)
 Breakpoint 2 at 0x401256: file quicksort.h, line 20.
-(rr) save-correct-function swap(int*, int*) 
+(rr) save-correct-function swap(int*, int*)
 Breakpoint 3 at 0x401222: file quicksort.h, line 9.
 (rr) info breakpoints
 Num Type       Disp Enb Address         What
@@ -284,19 +284,19 @@ Once inside the shell, we can examine the set of correct nodes. For example, we 
     \begin{verbatim}
 >>> print_tree(CORRECT_NODES[0])
 partition(std::vector<int, std::allocator<int> >&, int, int)
-├── arguments on entry                                      
-│   ├── my_vector = std::vector of length 6, capacity 6 = {                 
-│   │     [0] = 2,                                                                                           
-│   │     [1] = 8,                     
-│   │     [2] = 1,                     
-│   │     [3] = 8,                     
-│   │     [4] = 6,                     
-│   │     [5] = 8                     
-│   │   }                      
-│   ├── low = 0                              
-│   └── high = 5                        
-├── arguments when returning                       
-│   └── my_vector = std::vector of length 6, capacity 6 = {           
+├── arguments on entry
+│   ├── my_vector = std::vector of length 6, capacity 6 = {
+│   │     [0] = 2,
+│   │     [1] = 8,
+│   │     [2] = 1,
+│   │     [3] = 8,
+│   │     [4] = 6,
+│   │     [5] = 8
+│   │   }
+│   ├── low = 0
+│   └── high = 5
+├── arguments when returning
+│   └── my_vector = std::vector of length 6, capacity 6 = {
 │         [0] = 2,
 │         [1] = 8,
 │         [2] = 1,
@@ -308,7 +308,7 @@ partition(std::vector<int, std::allocator<int> >&, int, int)
     └── 5
     \end{verbatim}
 \end{figure}
-Once all correct nodes have been collected, we have to start the debugging session of our buggy program with a separate \verb|rr| execution (see Figure \ref{lst:compileRecordReplayQuicksort}), which we will call \(rr_{client}\), and collect the correct nodes already gathered from \(rr_{server}\). This has to be done with the command \verb|listen-for-correct-nodes}| (see \ref{command:listen-for-correct-nodes}). 
+Once all correct nodes have been collected, we have to start the debugging session of our buggy program with a separate \verb|rr| execution (see Figure \ref{lst:compileRecordReplayQuicksort}), which we will call \(rr_{client}\), and collect the correct nodes already gathered from \(rr_{server}\). This has to be done with the command \verb|listen-for-correct-nodes}| (see \ref{command:listen-for-correct-nodes}).
 
 Now we are ready to send the correct nodes from \(rr_{server}\) to \(rr_{client}\). This is done with the command \verb|send-correct-nodes| (see section \ref{command:send-correct-nodes}).
 In \(rr_{server}\) we can see that nodes are being sent, like shown in Figure \ref{fig:sendingNode}.
@@ -443,7 +443,7 @@ Given a WMET, we can compress nodes if:
 To check if a node can be compressed we use the following recursive function, which takes a node as an argument and returns a 2-tuple, whose elements are:
 \begin{itemize}
     \item bool: True if the node can be compressed. False otherwise.
-    \item int: If the node can be compressed, number of nodes to compress. Zero Otherwise. 
+    \item int: If the node can be compressed, number of nodes to compress. Zero Otherwise.
 \end{itemize}
 This algorithm searches for the longest compression possible.
 \begin{lstlisting}[language=Python, caption=Checking if node can be compressed]
@@ -582,7 +582,7 @@ def select_node(marked_execution_tree: Node,
     return strategy(marked_execution_tree, [])
 \end{lstlisting}
 \subsubsection{Top-down}
-Top-down is a recursive algorithm, which searches for the first node whose correctness is unknown. 
+Top-down is a recursive algorithm, which searches for the first node whose correctness is unknown.
 \begin{lstlisting}[language=Python, caption=Top-down strategy implementation]
 def top_down_strategy(marked_execution_tree: Node,
                       position: List[int]) -> Tuple[Optional[Node], bool, List[int]]:
@@ -637,7 +637,7 @@ def heaviest_first_strategy(marked_execution_tree: Node,
 When asked about the correctness of a node, the user has the possibility of answering (i) I don't know, (ii) Yes, (iii) No or (iv) Trusted.
 We choose the next node and/or prune the debugging tree depending on the answer
 \subsubsection{I don't know}
-If the user does not know if the node is correct, we remove it from the WMET and continue the debugging session. 
+If the user does not know if the node is correct, we remove it from the WMET and continue the debugging session.
 \subsubsection{Yes}
 If the node is deemed correct by the user, we remove it from the WMET and all other nodes equal to the correct node.
 \begin{lstlisting}[language=Python, caption=Correct node action]
@@ -646,7 +646,7 @@ def remove_correct_node_from_tree(marked_execution_tree: Node, node_tree: Node):
     while True:
         _, found, position = find_node_with_node_tree(marked_execution_tree, [], node_tree)
         if found is False:
-            break               
+            break
         update_nodes_weight(marked_execution_tree,
                             position,
                             - get_node_from_position(marked_execution_tree,
@@ -695,7 +695,7 @@ In \verb|PENDING_CORRECT_NODES| we store a list of all nodes that have started b
 \verb|ComparableTree| is a class that derives from \verb|rich.tree|, which is the class used to present the information to the user.
 
 The \verb|Node| class has a member function \verb|get_tree|, which returns a \verb|ComparableTree|.
-For comparison with elements in the \verb|CORRECT_NODES| list, the node gets stripped of its correctness value, children and weight. 
+For comparison with elements in the \verb|CORRECT_NODES| list, the node gets stripped of its correctness value, children and weight.
 \begin{lstlisting}[language=Python, caption={Node class method signature for getting a comparable tree}]
 def get_tree(self,
              get_children: bool = True,
@@ -736,30 +736,33 @@ It should be used at least once before starting the debugging session.
 Arguments: location.
 
 Location completion is enabled.
-\end{itemize}
 
-\subsection{add-node-to-session}
+
+\item add-node-to-session
 \label{command:add-node-to-session}
+
 Optional command used in a debugging session.
 Adds the current frame to the debugging tree.
 It expects to be called on entry to a function or method.
 It also creates a finish breakpoint for the current function or method, with the attach command \hyperref[command:save-returning-node]{save-returning-node}.
-        
+
 It can be used to create an ad hoc debugging tree.
 
 It is used by \hyperref[command:suspect-function]{suspect-function}.
 
 Arguments: none.
-\subsection{save-returning-node}
+\item save-returning-node
 \label{command:save-returning-node}
+
 It saves the arguments of the function or method that just returned.
 This is the command attached to finish breakpoints created with \hyperref[command:add-node-to-session]{add-node-to-session}.
 
 For internal use only.
 
 Arguments: none.
-\subsection{final-point}
+\item final-point
 \label{command:final-point}
+
 Optional command used in a debugging session.
 Sets a breakpoint on the location provided as argument and adds the command \hyperref[command:finish-debugging-session]{finish-debugging-session} to it.
 It can be used zero or more times.
@@ -767,29 +770,33 @@ It can be used zero or more times.
 Arguments: location.
 
 Location completion is enabled.
-\subsection{finish-debugging-session}
+\item finish-debugging-session
 \label{command:finish-debugging-session}
+
 Sets the Boolean variable describing that the tree has been built to true.
 This command is executed when a \hyperref[command:final-point]{final-point} is reached.
 
 Internal use only.
 
 Arguments: none.
-\subsection{start-declarative-debugging-session}
+\item start-declarative-debugging-session
 \label{command:start-declarative-debugging-session}
+
 Mandatory command used in a debugging session.
-If the debugging tree has not been built, it builds it. Otherwise, it starts to ask correctness questions to the user. 
+If the debugging tree has not been built, it builds it. Otherwise, it starts to ask correctness questions to the user.
 
 Arguments: none.
-\subsection{save-correct-function}
+\item save-correct-function
 \label{command:save-correct-function}
+
 Sets a breakpoint on the location provided as argument, setting as command \hyperref[command:save-returning-correct-node]{save-returning-correct-node}. Mandatory command used in gathering correct nodes.
 
 Arguments: location.
 
 Location completion is enabled.
-\subsection{add-node-to-correct-list}
+\item add-node-to-correct-list
 \label{command:add-node-to-correct-list}
+
 Optional command used in gathering correct nodes.
 Adds the current frame to the debugging tree.
 It expects to be called on entry to a function or method.
@@ -798,22 +805,25 @@ It also sets a final breakpoint on current function or method, with the attached
 Arguments: none.
 
 For internal use only.
-\subsection{save-returning-correct-node}
+\item save-returning-correct-node
 \label{command:save-returning-correct-node}
+
 It saves the arguments of the function or method that just returned into the appropriate node.
 
 Arguments: none.
 
 For internal use only.
-\subsection{til-the-end}
+\item til-the-end
 \label{command:til-the-end}
+
 Continues the execution of the inferior until the program is not being run.
 
 Optional command used in gathering correct nodes.
 
 Arguments: none.
-\subsection{listen-for-correct-nodes}
+\item listen-for-correct-nodes
 \label{command:listen-for-correct-nodes}
+
 Open a connection on localhost, port 4096, and wait for correct nodes to be sent.
 
 Executed by the client.
@@ -821,8 +831,9 @@ Mandatory command used in gathering correct nodes.
 Must be executed before calling \hyperref[command:send-correct-nodes]{send-correct-nodes} in the server.
 
 Arguments: none.
-\subsection{send-correct-nodes}
+\item send-correct-nodes
 \label{command:send-correct-nodes}
+
 Send all the correct nodes gathered from tests to the client.
 Executed by the server.
 The client has to have issued the \hyperref[command:listen-for-correct-nodes]{listen-for-correct-nodes} before, otherwise a ConnectionRefusedError exception is thrown.
@@ -830,10 +841,12 @@ The client has to have issued the \hyperref[command:listen-for-correct-nodes]{li
 Mandatory command used in gathering correct nodes.
 
 Arguments: none.
-\subsection{print-tree}
+\item print-tree
 \label{command:print-tree}
+
 Prints the debugging tree.
-An exception is thrown if the debugging tree has not been built yet. 
+An exception is thrown if the debugging tree has not been built yet.
 Optional command that can be used in a debugging session.
 
 Arguments: none.
+\end{itemize}
