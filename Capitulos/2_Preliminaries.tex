@@ -1,71 +1,71 @@
 \chapter{Preliminaries}
 \label{cap:preliminares}
 
+In this chapter we will introduce declarative debugging, the C++ programming language and the technologies used to develop DDC.
 \todo{Empezar diciendo ``En este capítulo...''}
 
 \section{Declarative debugging}
-Declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, is a debugging technique that consists in (i) taking a program execution which the user deems incorrect, (ii) building an execution tree (ET)\todo{Fíjate que siempre hablas de Execution Tree pero lo interesante es el Debugging Tree, que es una abstracción del Execution Tree. Puede explicar en algún lugar que en este caso se corresponden, pero si no si hay algún experto en el tribunal se va a quejar.} of the execution of this program and (iii) asking questions about the correctness of computations to an oracle (usually the user, but other sources such as tests can be used) until a certain computation is narrowed down as buggy.
+Declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, is a debugging technique that consists in (i) taking a program execution which the user deems incorrect, (ii) building an debugging tree (DT)\todo{Fíjate que siempre hablas de execution tree pero lo interesante es el Debugging Tree, que es una abstracción del execution tree. Puede explicar en algún lugar que en este caso se corresponden, pero si no si hay algún experto en el tribunal se va a quejar.} of the execution of this program and (iii) asking questions about the correctness of computations to an oracle (usually the user, but other sources such as tests can be used) until a certain computation is narrowed down as buggy.
 
 In the following subsections we will discuss the most important stages in a declarative debugging session, namely:
 \begin{itemize}
-    \item Building the execution tree.
-    \item Transforming the execution tree.\todo{Aquí tiene sentido que sea el debugging tree, porque la ejecución es única y no tiene sentido modificarla.}
-    \item Navigating the execution tree.
+    \item Building the debugging tree.
+    \item Transforming the debugging tree.\todo{Aquí tiene sentido que sea el debugging tree, porque la ejecución es única y no tiene sentido modificarla.}
+    \item Navigating the debugging tree.
 \end{itemize}
-\subsection{Building the execution tree}
+\subsection{Building the debugging tree}
 
-Building the execution tree (ET) is the central, critical stage of the debugging process.
+Building the debugging tree (DT) is the central, critical stage of the debugging process.
 
-To build the ET, the DD must have access to the following information:
+To build the DT, the DD must have access to the following information:
 \begin{itemize}
-    \item When a new function or method begins its execution, taking into account the state of the variables at that point. 
+    \item When a new function or method begins its execution, taking into account the state of the variables at that point.
     \item When a new function or method returns a value, and the state of variables at that point.
-    \item Which function or method is the caller and which one is the callee. 
+    \item Which function or method is the caller and which one is the callee.
 \end{itemize}
 
-With this information, the debugger can build a node, and using these nodes it can build the ET.
+With this information, the debugger can build a node, and using these nodes it can build the DT.
 %
 For formal definitions, please see Chapter \ref{cap:definiciones}.
 
-\subsection{Transforming the execution tree}
+\subsection{Transforming the debugging tree}
 
-Since the number of questions depends on the size of the tree (number of nodes, width, and depth of the tree),\todo{Dos cosas importantes, que habría que ver si poner o no: se puede reducir el número de nodos y aumentar el número de preguntas y el número de preguntas no solo depende del árbol, también de la estrategia de navegación} most DDs provide certain functionality to reduce the ET size.
+Since the number of questions depends on the size of the tree (number of nodes, width, and depth of the tree),\todo{Dos cosas importantes, que habría que ver si poner o no: se puede reducir el número de nodos y aumentar el número de preguntas y el número de preguntas no solo depende del árbol, también de la estrategia de navegación} most DDs provide certain functionality to reduce the DT size.
 
-\subsubsection{Trusting computations}
+\subsubsection{Trusting or suspecting computations}
 
-Most DDs built the ET assuming all functions or methods are suspicious  of being wrong.
+Most DDs built the DT assuming all functions or methods are suspicious of being wrong.
 However, this is hardly ever the case.
 
 In the case of debugging a C++ program, one option would be to trust all functions and methods provided by the language implementation, which are located under the \verb|std| namespace, or trusting everything provided by a reputable third party, like Boost \cite{TheBoostLibraries}.
-This process happens before starting to build the ET, and therefore it reduces the building time and memory footprint. Also, it requires manual input from the user for selecting those computations that can be trusted.
-
-\subsubsection{Suspecting computations}
+This process happens before starting to build the DT, and therefore it reduces the building time and memory footprint. Also, it requires manual input from the user for selecting those computations that can be trusted.
 
 \todo{El punto anterior de trusting y este de suspecting no vienen a ser lo mismo?}
-When debugging a program, it is usually the case that the user believes the problem lays in the parts she developed, not in the external functions she calls.
+\todo[color=green]{He unido las dos subsubsecciones en 1}
+Another perspective is that when debugging a program, it is usually the case that the user believes the problem lays in the parts she developed, not in the external functions she calls.
 
 By suspecting only the functions and methods developed by the user (and implicitly trusting all other functions), the debugger can ignore all other functions, like those provided by the standard or by external libraries.
 This is the approach used in developing DDC.
-This process also happens before starting to build the ET. Also, it requires manual input from the user in selecting those computations that should be suspected.
+This process also happens before starting to build the DT. Also, it requires manual input from the user in selecting those computations that should be suspected.
 
 \subsubsection{Using test cases as oracles}
 
-Another method to reduce the size of the ET is to have an external oracle mark computations as correct.
-This oracle might be the set of tests that use some of the suspect functions or methods. By collecting these test executions, which we assume are correct, we can discard the same executions if present in the ET of the program being debugged.
+Another method to reduce the size of the DT is to have an external oracle mark computations as correct.
+This oracle might be the set of tests that use some of the suspect functions or methods. By collecting these test executions, which we assume are correct, we can discard the same executions if present in the DT of the program being debugged.
 
 This functionality, provided by DDC, requires manual input from the user for selecting the test cases to be executed.
 
 %This functionality is provided by DDC.
 
 \subsubsection{Tree transformations}
-Tree transformations happen once the ET has been built, so the improvement happens in terms of navigation time, not in building time or memory footprint.
+Tree transformations happen once the DT has been built, so the improvement happens in terms of navigation time, not in building time or memory footprint.
 
 There are several transformations proposed in the literature, like loop expansion and tree compression \cite{LoopExpansionTreeCompression}.
 These processes are fully automatic, so they do not need any input from the user.\todo{Se podría explicar que estas transformaciones a veces reducen el número de nodos y otros
 lo aumentan para mejorar el funcionamiento de las estrategias.}
 
-\subsection{Navigating the execution tree}
-Navigating the execution tree is the phase when the debugger asks an external oracle questions about the correctness of certain nodes, with the purpose of finding a buggy one.
+\subsection{Navigating the debugging tree}
+Navigating the debugging tree is the phase when the debugger asks an external oracle questions about the correctness of certain nodes, with the purpose of finding a buggy one.
 The goal is to minimize the number of questions, to make the process as fast as possible.
 \section{C++ programming language}
 The C++ programming language is a general-purpose, statically typed, compiled language \cite{cppHistory}.
@@ -111,18 +111,26 @@ There are two main dependencies in this project:
 \subsection{GDB: The GNU Project Debugger}
 GDB \cite{gdb} is a general purpose debugger for C and C++, with partial support for other languages. GDB allows the user to execute a program, stop the execution at any point, inspect the state of the program, and change any part of the state of the execution.
 %
-We make extensive use of its Python API, especially of the classes described in the following sections.
+We make extensive use of its Python API, especially of the following classes:
 
-\subsubsection{Values}
+\begin{itemize}
+
+\item Values
+
 Values from the the program being debugged represent the content of the program variables.\todo{Estas subsecciones son cortísimas, igual sería mejor un itemize.}
-\subsubsection{Types}
+
+\item Types
+
 The type of a certain value is needed in two occasions: when displaying the value and to check whether arguments are passed as reference or as pointers.
-\subsubsection{Frames}
+\item Frames
+
 A frame contains the data relevant to a function call.
 Frames are organized hierarchically in a call stack, the frame \(n+1\) being the caller of frame \(n\), the callee.
-\subsubsection{Symbols}
-A symbol is a variable or a function. We use symbols to determine the variable names. Symbols also provide the scope they belong to. This is needed to mark a variable as a global one or an argument to a function. 
-\subsubsection{Breakpoints}
+\item Symbols
+
+A symbol is a variable or a function. We use symbols to determine the variable names. Symbols also provide the scope they belong to. This is needed to mark a variable as a global one or an argument to a function.
+\item Breakpoints
+
 A breakpoint is a bookmark set in a certain location of a program, such as a function or specific line, which tells the debugger to stop the execution.
 We make use of breakpoints for:
 \begin{itemize}
@@ -133,7 +141,8 @@ We make use of breakpoints for:
 A breakpoint has an attribute named \emph{commands}, which is executed when it is reached, and if the method stop returns false.
 
 We make use of these commands to store the information of the current frame.
-\subsubsection{Final breakpoints}
+\item Final breakpoints
+
 A final breakpoint is a breakpoint that is triggered when the current frame returns. Final breakpoints are used to gather the pertaining information when the function or method returns, which includes:
 \begin{itemize}
     \item The return value.
@@ -141,7 +150,7 @@ A final breakpoint is a breakpoint that is triggered when the current frame retu
     \item The global variables.
     \item The arguments passed as reference or pointer.
 \end{itemize}
-
+\end{itemize}
 \subsection{rr: Record and Replay Framework}
 
 rr \cite{rr} enhances GDB, providing support for record and replay functionality, as well as for reverse execution.
