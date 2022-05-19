@@ -207,10 +207,13 @@ When our debugger returns a buggy node \(n_{buggy} = f(I) \to O\), an error in t
 
 \end{definition}
 \begin{definition}[Navigation strategy]
-%A navigation strategy is a function that given a WMDT \(T = (N,E,W,M)\), it returns a node \(n'\in N\) as output.
+A navigation strategy is a traversal of the WMDT in which the debugger asks an oracle to answer questions about the correctness of certain nodes, the possible answers being correct or wrong.  
 \end{definition}
 \begin{definition}[Top-down strategy]
-%The top-down strategy is a navigation strategy top-down, left-to-right traversal of the DT
+The top-down strategy is a navigation strategy in which when a node is deemed wrong, one of its children is asked; if it is deemed
+correct, one of its siblings is asked \cite{surveyStrategies}.
+%3.0.2. Top-Down Search (Av-Ron, 1984)
+%http://personales.upv.es/josilga/papers/SurveyADS.pdf
 \end{definition}
 \newtheorem{theorem}{Theorem}
 \begin{theorem}[Completeness]
@@ -229,7 +232,7 @@ Let:
     \item the root of T a wrong node,
     \item F a total function such that for every node \(n\in N\) there is a function or method \(f\) such that \(F:n\to f\),
     \item \(\mathit{II}\) a total function such that for every function or method \(f\in F\) there is an intended interpretation \(\mathit{II}_f\) such that \(\mathit{II}:f\to \mathit{II}_f\),
-    \item G\todo[color=green]{No se que letra elegir aqui. Lo que quiero conseguir es la tupla de entrada a la funcion} a total function such that for every node \(n\in N\) there is 3-tuple of inputs \(I\) such that \(G:n\to I\),
+    \item G\todo[color=green]{No se que letra elegir aqui. Lo que quiero conseguir es la tupla de entrada a la funcion} a total function such that for every node \(n\in N\) there is 3-tuple of inputs \(I\) such that \(G:n\to I\)
     \item and S the top down strategy.
 \end{itemize}
 
@@ -239,7 +242,7 @@ If \(S\) receives \(T\) as input, then:
     \item \(n'\in N\),
     \item \(F(n') = f'\),
     \item \(\mathit{II}(f') = II_{f'}\),
-    \item \(G(n') = I\),
+    \item \(G(n') = I\)
     \item and \(II_{f'}(I)\neq f'(I)\).
 \end{itemize}
 \end{theorem}\todo{Si esto es corrección debes decir que si se detecta un nodo buggy entonces corresponde a una función que realmente contiene un bug, ¿es eso lo que dices?}\todo[color=green]{Sí, en el segundo caso quiero decir que si no encuentra nada, (porque el nodo raiz es correcto), significa que todos las funciones se adecuan a sus respectivas interpretaciones pretendidas con los inputs dados}

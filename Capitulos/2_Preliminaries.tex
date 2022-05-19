@@ -31,7 +31,13 @@ For formal definitions, please see Chapter \ref{cap:definiciones}.
 
 \subsection{Transforming the debugging tree}
 
-Since the number of questions depends on the size of the tree (number of nodes, width, and depth of the tree),\todo{Dos cosas importantes, que habría que ver si poner o no: se puede reducir el número de nodos y aumentar el número de preguntas y el número de preguntas no solo depende del árbol, también de la estrategia de navegación} most DDs provide certain functionality to reduce the DT size.
+The number of questions asked to the user depends on a combination of:
+\begin{itemize}
+    \item the size of the tree (number of nodes, width, and depth of the tree) 
+    \item and the navigation strategy.
+\end{itemize}
+\todo{Dos cosas importantes, que habría que ver si poner o no: se puede reducir el número de nodos y aumentar el número de preguntas y el número de preguntas no solo depende del árbol, también de la estrategia de navegación}
+Although reducing the size of the debugging tree does not always lead to a reduction in the number of questions \cite{LoopExpansionTreeCompression}, most DDs provide certain functionality to reduce the DT size.
 
 \subsubsection{Trusting or suspecting computations}
 
