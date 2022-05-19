@@ -24,9 +24,7 @@ This need to debug C++ programs is what lead to this Master's thesis.
 Debugging is one of the most expensive part of developing software.
 It is estimated that between 35 and 50 percent of development effort is spent on validation and debugging tasks \cite{debuggingMindset}.
 
-%Debugging is important because the developer can make mistakes, that is, her objectives in writing a certain program do not match the computer interpretation of it. Strategies like rising the level of abstraction in the program can help the developer reason about it, but there are always opportunities for a mismatch between the developer and the computer's interpretation to arise.
-
-There are many debugging approaches, ranging from the fully manual to the almost fully automatic, like delta debugging or program slicing \cite{WhyProgramsFail}. In this Master's thesis we focus on declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, which is a semi automatic approach in which the debugger builds an execution tree of the program and guides the user through it by asking questions about the correctness of sub-computations until a buggy function is found. We expand the definition of declarative debugging in Chapter \ref{cap:preliminares}.
+There are many debugging approaches, ranging from the fully manual to the almost fully automatic, like delta debugging or program slicing \cite{WhyProgramsFail}. In this Master's thesis we focus on declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, which is a semi automatic approach in which the debugger builds a debugging tree of the program and guides the user through it by asking questions about the correctness of sub-computations until a buggy function is found. We expand the definition of declarative debugging in Chapter \ref{cap:preliminares}.
 
 Several declarative debuggers have been developed, including for object-oriented languages such as Java \cite{DDJ}, but to the best of our knowledge, there is no declarative debugger for C++. We review the State of the Art of declarative debuggers in Chapter \ref{cap:estadoDeLaCuestion}.
 
@@ -36,7 +34,7 @@ This debugger should have the following features:
 \begin{enumerate}
   \item Integrated in workflow: it has to be integrated in the existing debugging workflow of the developer. \label{goal1}
   \item No changes to program: the user has to be able to debug a program with no or few changes the program and its compilation (at most setting some compilation flags). \label{goal2}
-  \item Tree transformations: it has to perform tree transformations to reduce the size of the execution tree. \label{goal3}
+  \item Tree transformations: it has to perform tree transformations to reduce the size of the debugging tree. \label{goal3}
   \item Test cases as oracles: it has to use test cases to reduce the number of questions posed to the user. \label{goal4}
 \end{enumerate}
 

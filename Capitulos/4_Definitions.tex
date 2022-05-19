@@ -113,12 +113,12 @@ We can make the following observations:
     \item Nodes that share the same parent node are siblings.
 \end{itemize}
 \end{remark}
-We here expand the definition of Marked Execution Tree (MET in \citep{optimal_strategy}) to Weighted Marked Execution Tree (WMET).
-\begin{definition}[Weighted marked execution tree]
-A weighted marked execution tree is a tree, denoted \(T=(N,E,W,M)\), where N is a set of nodes, \(E\subseteq N \times N\) is the set of edges, \(M:N\to V\) is a total function that assigns to all the nodes in N a value in the domain \(D=\{\mathit{Wrong},\mathit{Undefined}\}\), and W is a total function that assigns to all the nodes in N a value which is the weight of the sub-tree rooted at node n in N, \(w_n\), which is defined recursively as its number of descendants including itself (i.e.,\(1 + \sum {w_{n^\prime}\mid n \to n^{\prime}) \in E}\)).
+We here expand the definition of Marked Execution Tree (MET in \citep{optimal_strategy}) to Weighted Marked Debugging Tree (WMDT).
+\begin{definition}[Weighted marked debugging tree]
+A weighted marked debugging tree is a tree, denoted \(T=(N,E,W,M)\), where N is a set of nodes, \(E\subseteq N \times N\) is the set of edges, \(M:N\to V\) is a total function that assigns to all the nodes in N a value in the domain \(D=\{\mathit{Wrong},\mathit{Undefined}\}\), and W is a total function that assigns to all the nodes in N a value which is the weight of the sub-tree rooted at node n in N, \(w_n\), which is defined recursively as its number of descendants including itself (i.e.,\(1 + \sum {w_{n^\prime}\mid n \to n^{\prime}) \in E}\)).
 \theoremstyle{definition}
 \begin{exmp}
-Figure \ref{fig:partitionTree} is an example tree representing the  WMET of partition (see Listing~\ref{lst:quicksortFunctions} for the corresponding code) called with \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\). In this case we have the following three nodes:
+Figure \ref{fig:partitionTree} is an example tree representing the  WMDT of partition (see Listing~\ref{lst:quicksortFunctions} for the corresponding code) called with \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\). In this case we have the following three nodes:
 \begin{itemize}
     \item Function partition called with arguments \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\) (\(n_0\)).
     \item Function swap called with arguments pointer a to 10 and pointer b to 1 (\(n_1\)).
@@ -145,7 +145,7 @@ We can make the following remarks:
 
 \begin{figure}[p]
 \centering
-    \caption{WMET of partition (see \ref{lst:quicksortFunctions} for the corresponding code) called with \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\)}
+    \caption{WMDT of partition (see \ref{lst:quicksortFunctions} for the corresponding code) called with \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\)}
     \label{fig:partitionTree}
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/partitionTree.pdf}
 \end{figure}
@@ -206,10 +206,16 @@ swap(int*, int*)
 When our debugger returns a buggy node \(n_{buggy} = f(I) \to O\), an error in the definition of \(f\) has been detected. 
 
 \end{definition}
+\begin{definition}[Navigation strategy]
+%A navigation strategy is a function that given a WMDT \(T = (N,E,W,M)\), it returns a node \(n'\in N\) as output.
+\end{definition}
+\begin{definition}[Top-down strategy]
+%The top-down strategy is a navigation strategy top-down, left-to-right traversal of the DT
+\end{definition}
 \newtheorem{theorem}{Theorem}
 \begin{theorem}[Completeness]
 %Completion theorem
-Let \(T = (N,E,W,M)\) be a weighted marked execution tree and \(S\) the top-down strategy\todo{Se ha definido esta estrategia antes?} and the root node of \(T\) a wrong node.
+Let \(T = (N,E,W,M)\) be a weighted marked debugging tree and \(S\) the top-down strategy\todo{Se ha definido esta estrategia antes?} and the root node of \(T\) a wrong node.
 If \(S\) receives T as input, it always terminates, producing \todo{Yo creo que lo más sencillo es decir que la raíz de T es errónea y que entonces existe al menos un nodo buggy}a node \(n'\in N\) as output.
 \end{theorem}
 \begin{proof}
@@ -219,7 +225,7 @@ See \cite{DeclarativeErrorDiagnosis}.
 %Soundness theorem
 Let:
 \begin{itemize}
-    \item \(T = (N,E,W,M)\) be a weighted marked execution tree,
+    \item \(T = (N,E,W,M)\) be a weighted marked debugging tree,
     \item the root of T a wrong node,
     \item F a total function such that for every node \(n\in N\) there is a function or method \(f\) such that \(F:n\to f\),
     \item \(\mathit{II}\) a total function such that for every function or method \(f\in F\) there is an intended interpretation \(\mathit{II}_f\) such that \(\mathit{II}:f\to \mathit{II}_f\),
