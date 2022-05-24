@@ -26,7 +26,7 @@ It is estimated that between 35 and 50 percent of development effort is spent on
 
 There are many debugging approaches, ranging from the fully manual to the almost fully automatic, like delta debugging or program slicing \cite{WhyProgramsFail}. In this Master's thesis we focus on declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, which is a semi automatic approach in which the debugger builds a debugging tree of the program and guides the user through it by asking questions about the correctness of sub-computations until a buggy function is found. We expand the definition of declarative debugging in Chapter \ref{cap:preliminares}.
 
-Several declarative debuggers have been developed, including for object-oriented languages such as Java \cite{DDJ}, but to the best of our knowledge, there is no declarative debugger for C++. We review the State of the Art of declarative debuggers in Chapter \ref{cap:estadoDeLaCuestion}.
+Several declarative debuggers have been developed, including for object-oriented languages such as Java \cite{DDJ}, but to the best of our knowledge, there is no declarative debugger for C++. We review the State of the Art of declarative debugging and its implementations in Chapter \ref{cap:estadoDeLaCuestion}.
 
 \section{Goals}
 The goal of this Master's thesis is to develop a declarative debugger for the C++ language.
@@ -43,14 +43,14 @@ This debugger should have the following features:
 The main contribution of this Master's thesis is the development of a declarative debugger for C++, called DDC.
 %
 The most notable characteristics of DDC are the following:
-\begin{itemize}
+\begin{enumerate}
 \item Support for several programming languages, by means of using GDB.
 \item Non terminating programs can be debugged.
 \item Test cases can be used as oracles to reduce the tree size.
 \item Three navigation strategies have been developed.
 \item One tree transformation has been developed.
-\item It can be easily extended (more strategies, more tree transformations).\todo{No hay verbo}
-\end{itemize}
+\item It can be easily extended with more strategies and more tree transformations.\todo{No hay verbo}
+\end{enumerate}
 
 The source code of the project is available at \url{https://github.com/RCoeurjoly/DDC} 
 and its license is AGPL-3.0 License.

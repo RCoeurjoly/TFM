@@ -1,38 +1,127 @@
 \chapter{State of the Art}
 \label{cap:estadoDeLaCuestion}
 
+In this chapter we will summarize the state of the art in declarative debugging.
+
+The identification of issues and solutions comes from the 2017 survey \cite{Survey}. Latter research is included when appropriate.
 \section{Issues of algorithmic debugging}
-Lol
+The following issues were identified in the 2017 survey \cite{Survey}. They are divided into three categories:
+\begin{itemize}
+    \item The Scalability Problem
+    \item User Experience and Effectiveness
+    \item Completeness
+\end{itemize}
 \subsection{The Scalability Problem}
-\subsubsection{Time Needed to Generate the Debugging Tree}
-\subsubsection{Memory Needed to Store the Debugging Tree}
+Scalability has been the main issue blocking adoption of declarative debugging in industry.
+\begin{itemize}
+    \item Issue-1: Time Needed to Generate the Debugging Tree
+    
+The theoretical minimum amount of time needed to generate the DT is the time needed to execute the program. In practice, some instrumentation is needed to monitor the execution.
+    \item Issue-2: Memory Needed to Store the Debugging Tree
+
+A large debugging tree size may be gigabytes, which does not fit in main memory. Also displaying such a large tree may pose problems.
+\end{itemize}
 \subsection{User Experience and Effectiveness}
-\subsubsection{Amount and Difficulty of the Questions}
-\subsubsection{Rigidity and Loss of Control During the Navigation Phase}
-\subsubsection{Integration with Other Debugging Tools}
-\subsubsection{Bug Granularity}
+\begin{itemize}
+    \item Issue-3: Amount and Difficulty of the Questions
+
+The optimal navigation strategy, Optimal Divide and Query \cite{optimal_strategy}, has a query complexity of \(O(N\cdot log N)\), which is unpractical for large executions.
+    \item Issue-4: Rigidity and Loss of Control During the Navigation Phase
+    \item Issue-5: Integration with Other Debugging Tools
+If a declarative debugger is not integrated into the other debugging tools used by the user, it creates the burden of context switching and learning a new environment.
+    \item Issue-6: Bug Granularity 
+
+Usually, the bug granularity of declarative debuggers is a function or method. Ideally it should be smaller, such as loop or even line.
+\end{itemize}
 \subsection{Completeness}
-\subsubsection{Termination}
-\subsubsection{Concurrency}
-\subsubsection{I/O}
+The following are some features that cannot be handled by declarative debuggers.
+\begin{itemize}
+    \item Issue-7: Termination
+
+Non terminating programs cannot be debugged by DDs.
+    \item Issue-8: Concurrency
+
+The standard debugging tree is not prepared to store concurrent computations.
+    \item Issue-9: I/O
+
+Programs that make use of the file system, a database cannot be handled by declarative debuggers.
+\end{itemize}
 \section{Solutions of algorithmic debuggers}
-\subsection{Scalability}
-\subsection{Trusting Modules, Routines and Arguments}
-\subsection{Multiple Navigation Strategies}
-\subsection{Accepted Answers}
-\subsection{Tracing Subexpressions}
-\subsection{Debugging Tree Transformations}
-\subsection{Memoization}
-\subsection{Debugging Tree Exploration}
-\subsection{Undo Capabilities}
-\subsection{Communication with an IDE}
-\subsection{Different Levels of Errors}
-\subsection{Program Slicing}
-This alleviates certain issue pointed in the survey \cite{unifiedFrameworkDeclarativeDebuggingTesting}.
+\begin{enumerate}
+    \item Scalability [deals with Issue-1 and Issue-2]
+    
+The following solutions to alliviate Issue-1 and Issue-2 have been proposed:
+\begin{itemize}
+    \item Generate the debugging tree on demand.
+    \item Store the debugging tree in secondary memory, like in the file system or on a database.
+    \item Start the debugging session with an incomplete debugging tree.
+\end{itemize}
+    \item Trusting Modules, Routines and Arguments [deals with Issue-1, Issue-2 and Issue-3]
+    
+By trusting third party code, the debugging tree is reduced and the debugger has the ability to focus its questions on the user code.
+    \item Multiple Navigation Strategies [deals with Issue-3]
+    
+Although an optimal navigation strategy with respect to the number of questions has been developed \cite{optimal_strategy}, it is advisable for declarative debuggers to implement more strategies.
+Also, the navigation strategy can change to adapt to the debugging tree.
 
+\item Accepted Answers [deals with Issue-3]
 
-This solves the granularity issue \cite{AlgorithmicDebuggingGeneralized}
-\section{Features vs Issues}
+The oracle should have the following options available when answering a debugger correctness question:
+\begin{itemize}
+    \item Yes: the node should be removed from the tree.
+    \item No: the subtree rooted in this node should be the new debugging tree.
+    \item Inadmissible: this computation should have not happened, therefore the problem lays in the caller of this node.
+    \item I don't know: this question is too difficult, therefore continue asking question about other nodes.
+    \item Trusted: this function or method is correct, therefore all other nodes that have this function signature should be pruned from the debugging tree.
+\end{itemize}
+\item Tracing Subexpressions [deals with Issue-3 and Issue-4]
+
+If the user knows which part of the node is incorrect, the debugger should provide the option to indicate it.
+\item Debugging Tree Transformations [deals with Issue-3 and Issue-6]
+
+\begin{itemize}
+    \item Loop expansion: consists in a source code transformation from iterative loops to recursive functions to achieve a deep debugging tree, which is easier to debug than a wide debugging tree.
+    \item Tree compression: removes redundant nodes from the debugging tree preserving completeness.
+    \item Simplified tree compression: this transformation is contribution of this Master's thesis. It has the same objectives as tree compression but can only be applied to nodes with one child.
+%    \item Node simplification
+    \item Tree balancing: tries to transform the debugging tree into a binomial tree to make the navigation logarithmic in time and groups nodes so a single answer deals with several function executions at the same time.
+\end{itemize}
+
+    \item Memoization [deals with Issue-3 and Issue-5]
+
+By memoizing answers, when a node that has already been answered appears in the navigation phase, the debugger can avoid asking the oracle again.
+\item Debugging Tree Exploration [deals with Issue-4]
+
+Instead of being limited to view the current node being questioned, the user should have the freedom to explore the debugging tree, selecting which subtree seems most suspicious of being buggy.
+\item Undo Capabilities [deals with Issue-4]
+
+If the user makes a mistake when answering a question, it should be possible to undo the answer so that the debugger asks again.
+\item Communication with an IDE [deals with Issue-5 and Issue-6]
+
+By communicating with an IDE, the declarative debugger can leverage those usability and tools. Also the learning curve gets reduced.
+\item Different Levels of Errors [deals with Issue-6, worsens Issue-3]
+
+Some debuggers give the user the option of debugging loop or conditional branches once the buggy function has been identified.
+\item Program Slicing [deals with Issue-6]
+
+By performing program slicing, the debugger extracts only the portion of code that executed in the session, discarding the rest.
+\item Record and replay [deals with Issue-7, worsens Issue-1]
+
+With this technique, instead of dealing with a program execution, the debugger deals with a recording of a program execution. This allows the user to send the termination signal to the non-terminating program being recorded, therefore transforming a non-terminating program into a terminating one, which can be dealt as a regular program. 
+The downside of this technique is that it requires the execution of the buggy program twice, once for recording purposes and another for building the debugging tree, therefore doubling the time needed to build the debugging tree (Issue-1).
+
+This feature is a contribution of this Master's thesis. A demonstration can be found in Chapter \ref{cap:toolDescription}.
+\item Unified debugging and testing [deals with Issue-3 and Issue-3
+
+This technique was proposed in \cite{unifiedFrameworkDeclarativeDebuggingTesting}. Its purpose is to "integrate debugging and testing within a single unified framework where each phase generates useful information for the other and the outcomes of each phase are reused".
+This reduces the number of questions asked to the user (Issue-3), since it answers some with an external oracle, namely test cases.
+\item Generalized algorithmic debugging
+
+In the generalization proposed in \cite{AlgorithmicDebuggingGeneralized}, a node does not correspond to a function call, but can represent the execution of any amount of code. Also, it contains only code that has been executed in the execution passed to the declarative debugger. This improves the granularity of detected bugs (Issue-6).
+However, this generalization has not been incorporated in a declarative debugger, so the benefits remain unrealized.
+\end{enumerate}
+\subsection{Conclusions}
+Table \ref{table:problemsVsFeatures} is an updated version of Table 1. Relation Between Issues and Solutions in \cite{Survey}. We have added in green those new features proposed after the publication of the survey. Like in \cite{Survey}, the symbol \(\checkmark\) indicates that the feature solves or at least alleviates the issue, while \ding{55} indicates that the feature worsens it.
 \begin{table}
 \caption{Relation Between Issues and Solutions}
 \label{table:problemsVsFeatures}
@@ -51,9 +140,13 @@ Scalability &\checkmark&\checkmark&&&&&&&\\\hline
 Levels of errors &&&\ding{55}&&&\checkmark&&&\\\hline
 Program slicing &&&&&&\checkmark&&&\\\hline
 IDE &&&&&\checkmark&\checkmark&&&\\\hline
+\colorbox{green}{Record and Replay} &\ding{55}&&&&&&\checkmark&&\\\hline
+\colorbox{green}{Unified debugging and testing} &&&\checkmark&&\checkmark&&&&\\\hline
+\colorbox{green}{Generalized algorithmic debugging} &&&&&&\checkmark&&&\\\hline
 \end{tabular}
 \end{table}
-\section{DDs Features}
+\section{Current state of the art algorithmic debuggers}
+Table \ref{table:debuggerFeatures} is an updated version of Table 2. Comparison of Algorithmic Debuggers in \cite{Survey}. Apart from adding DDC to the table, we have included the debuggers that have been updated since \cite{Survey}, marking in green those features that have been updated.
 \begin{sidewaystable}
 \caption{Comparison of Algorithmic Debuggers}
 \label{table:debuggerFeatures}
@@ -68,12 +161,12 @@ Debugging tree &Main memory&File&Main memory&Main memory on demand&External data
 Accepted answers &YES NO DK TR&YES NO DK&YES NO DK IN TR&YES NO DK IN TR&YES NO TR DK\\\hline
 Tracing subexpressions? &NO&NO&YES&YES&NO\\\hline
 Granularity &NO&YES&YES&NO&YES\\\hline
-DT exploration &YES&YES&YES&NO&NO\\\hline
+DT exploration &YES&YES&YES&\colorbox{green}{YES}&NO\\\hline
 Transformations &STC&TC&-&-&-\\\hline
 Early start &NO&NO&NO&YES&NO\\\hline
 Undo &NO&YES&YES&YES&YES\\\hline
 Trusting &Fun&Mod&Fun&Mod Fun&Mod\\\hline
-External oracle &YES&NO&YES&NO&NO\\\hline
+External oracle &YES&NO&YES&\colorbox{green}{YES}&\colorbox{green}{YES}\\\hline
 GUI &NO&YES&YES&NO&YES\\\hline
 Version &0.0.1 (May 2022)&Hat 2.9.4 (November 2017)&July 2020&Mercury 22.01.1 (April 2022)&DES 6.7 (September 2021)\\\hline
 \end{tabular}

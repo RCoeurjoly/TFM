@@ -4,26 +4,27 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Node representing the execution of a method\relax }}{11}{figure.caption.81}% 
-\contentsline {figure}{\numberline {4.2}{\ignorespaces WMET of partition (see \ref {lst:quicksortFunctions} for the corresponding code) called with \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\)\relax }}{13}{figure.caption.89}% 
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Intended interpretation of swap function given pointer a to 10 and pointer b to 1\relax }}{14}{figure.caption.101}% 
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Buggy node representing the execution of swap\relax }}{14}{figure.caption.102}% 
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Node representing the execution of a method\relax }}{19}{figure.caption.102}% 
+\contentsline {figure}{\numberline {4.2}{\ignorespaces WMDT of partition (see \ref {lst:quicksortFunctions} for the corresponding code) called with \(my\_vector = \{10, 7, 8, 9, 1, 5\}\), \(low = 0\) and \(high = 5\)\relax }}{21}{figure.caption.108}% 
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Intended interpretation of swap function given pointer a to 10 and pointer b to 1\relax }}{22}{figure.caption.114}% 
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Buggy node representing the execution of swap\relax }}{22}{figure.caption.115}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Setting the suspect functions\relax }}{17}{figure.caption.169}% 
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Choosing the navigation strategy\relax }}{17}{figure.caption.170}% 
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Correctness question of root node\relax }}{22}{figure.caption.171}% 
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Options to correctness question of non root node\relax }}{22}{figure.caption.172}% 
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Buggy node found\relax }}{23}{figure.caption.173}% 
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Setting the functions from which to gather correct nodes\relax }}{23}{figure.caption.201}% 
-\contentsline {figure}{\numberline {5.7}{\ignorespaces Starting an interactive Python shell inside rr\relax }}{23}{figure.caption.202}% 
-\contentsline {figure}{\numberline {5.8}{\ignorespaces Length lists\relax }}{23}{figure.caption.203}% 
-\contentsline {figure}{\numberline {5.9}{\ignorespaces Printing a correct node\relax }}{24}{figure.caption.204}% 
-\contentsline {figure}{\numberline {5.10}{\ignorespaces Sending nodes to client\relax }}{24}{figure.caption.205}% 
-\contentsline {figure}{\numberline {5.11}{\ignorespaces Receiving nodes from server\relax }}{24}{figure.caption.206}% 
-\contentsline {figure}{\numberline {5.12}{\ignorespaces Tree of buggy quickSort before correct node elimination\relax }}{25}{figure.caption.207}% 
-\contentsline {figure}{\numberline {5.13}{\ignorespaces Tree of buggy quickSort after correct node elimination\relax }}{26}{figure.caption.208}% 
-\contentsline {figure}{\numberline {5.14}{\ignorespaces Correct node removed from execution tree\relax }}{27}{figure.caption.209}% 
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Setting the suspect functions\relax }}{30}{figure.caption.208}% 
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Choosing the navigation strategy\relax }}{30}{figure.caption.209}% 
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Correctness question of root node\relax }}{34}{figure.caption.210}% 
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Options to correctness question of non root node\relax }}{34}{figure.caption.211}% 
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Buggy node found\relax }}{35}{figure.caption.212}% 
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Setting the functions from which to gather correct nodes\relax }}{35}{figure.caption.240}% 
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Starting an interactive Python shell inside rr\relax }}{35}{figure.caption.241}% 
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Length lists\relax }}{35}{figure.caption.242}% 
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Printing a correct node\relax }}{36}{figure.caption.243}% 
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Sending nodes to client\relax }}{36}{figure.caption.244}% 
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Receiving nodes from server\relax }}{36}{figure.caption.245}% 
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Zoomable tree of buggy quickSort after correct node elimination\relax }}{37}{figure.caption.246}% 
+\contentsline {figure}{\numberline {5.13}{\ignorespaces Prueba\relax }}{38}{figure.caption.247}% 
+\contentsline {figure}{\numberline {5.14}{\ignorespaces Plot\relax }}{38}{figure.caption.250}% 
+\contentsline {figure}{\numberline {5.15}{\ignorespaces Plot\relax }}{39}{figure.caption.251}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Setting, checking, disabling and deleting a suspect function\relax }}{30}{figure.caption.245}% 
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Integer array variable changes to integer pointer upon entry to function\relax }}{31}{figure.caption.252}% 
-\contentsline {figure}{\numberline {6.3}{\ignorespaces quicksort tree\relax }}{32}{figure.caption.259}% 
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Setting, checking, disabling and deleting a suspect function\relax }}{42}{figure.caption.269}% 
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Integer array variable changes to integer pointer upon entry to function\relax }}{43}{figure.caption.276}% 
+\contentsline {figure}{\numberline {6.3}{\ignorespaces quicksort tree\relax }}{44}{figure.caption.283}% 

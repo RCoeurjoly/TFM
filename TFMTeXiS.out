@@ -3,79 +3,66 @@
 \BOOKMARK [1][-]{tabla de contenidos.1}{Table of Contents}{indices.0}% 3
 \BOOKMARK [1][-]{indice de figuras.1}{List of Figures}{indices.0}% 4
 \BOOKMARK [1][-]{indice de tablas.1}{List of Tables}{indices.0}% 5
-\BOOKMARK [0][-]{chapter.9}{Introduction}{}% 6
-\BOOKMARK [1][-]{section.10}{Motivation}{chapter.9}% 7
-\BOOKMARK [1][-]{section.14}{Goals}{chapter.9}% 8
-\BOOKMARK [1][-]{section.19}{Main contributions}{chapter.9}% 9
-\BOOKMARK [1][-]{section.20}{Structure of the document}{chapter.9}% 10
-\BOOKMARK [0][-]{chapter.21}{Preliminaries}{}% 11
-\BOOKMARK [1][-]{section.22}{Declarative debugging}{chapter.21}% 12
-\BOOKMARK [2][-]{subsection.26}{Building the execution tree}{section.22}% 13
-\BOOKMARK [2][-]{subsection.27}{Simplifying the execution tree}{section.22}% 14
-\BOOKMARK [3][-]{subsubsection.28}{Trusting computations}{subsection.27}% 15
-\BOOKMARK [3][-]{subsubsection.29}{Suspecting computations}{subsection.27}% 16
-\BOOKMARK [3][-]{subsubsection.30}{Using test cases as oracles}{subsection.27}% 17
-\BOOKMARK [3][-]{subsubsection.31}{Tree transformations}{subsection.27}% 18
-\BOOKMARK [2][-]{subsection.32}{Navigating the execution tree}{section.22}% 19
-\BOOKMARK [1][-]{section.33}{C++ programming language}{chapter.21}% 20
-\BOOKMARK [1][-]{section.34}{Technologies used}{chapter.21}% 21
-\BOOKMARK [2][-]{subsection.35}{GDB: The GNU Project Debugger}{section.34}% 22
-\BOOKMARK [3][-]{subsubsection.36}{Frames}{subsection.35}% 23
-\BOOKMARK [3][-]{subsubsection.37}{Breakpoints}{subsection.35}% 24
-\BOOKMARK [3][-]{subsubsection.38}{Final breakpoints}{subsection.35}% 25
-\BOOKMARK [3][-]{subsubsection.39}{Values}{subsection.35}% 26
-\BOOKMARK [3][-]{subsubsection.40}{Symbols}{subsection.35}% 27
-\BOOKMARK [2][-]{subsection.41}{rr: Record and Replay Framework}{section.34}% 28
-\BOOKMARK [2][-]{subsection.42}{Nix: the purely functional package manager}{section.34}% 29
-\BOOKMARK [0][-]{chapter.43}{State of the art}{}% 30
-\BOOKMARK [1][-]{section.44}{}{chapter.43}% 31
-\BOOKMARK [0][-]{chapter.45}{Definitions}{}% 32
-\BOOKMARK [0][-]{chapter.107}{Tool description}{}% 33
-\BOOKMARK [1][-]{section.108}{Usage scenarios}{chapter.107}% 34
-\BOOKMARK [2][-]{subsection.109}{Bug finding}{section.108}% 35
-\BOOKMARK [2][-]{subsection.174}{Using test cases as oracles to reduce tree size}{section.108}% 36
-\BOOKMARK [1][-]{section.210}{Implementation}{chapter.107}% 37
-\BOOKMARK [2][-]{subsection.211}{Tree building}{section.210}% 38
-\BOOKMARK [3][-]{subsubsection.212}{Adding a node to the tree}{subsection.211}% 39
-\BOOKMARK [3][-]{subsubsection.213}{Finishing a node}{subsection.211}% 40
-\BOOKMARK [3][-]{subsubsection.214}{Finishing the tree building process}{subsection.211}% 41
-\BOOKMARK [2][-]{subsection.215}{Tree transformation}{section.210}% 42
-\BOOKMARK [3][-]{subsubsection.216}{Simplified tree compression}{subsection.215}% 43
-\BOOKMARK [2][-]{subsection.217}{General debugging algorithm}{section.210}% 44
-\BOOKMARK [2][-]{subsection.218}{Strategies}{section.210}% 45
-\BOOKMARK [3][-]{subsubsection.219}{Top-down}{subsection.218}% 46
-\BOOKMARK [3][-]{subsubsection.220}{Divide and Query \(Shapiro\)}{subsection.218}% 47
-\BOOKMARK [3][-]{subsubsection.221}{Heaviest first}{subsection.218}% 48
-\BOOKMARK [2][-]{subsection.222}{User answers to correctness questions}{section.210}% 49
-\BOOKMARK [3][-]{subsubsection.223}{I don't know}{subsection.222}% 50
-\BOOKMARK [3][-]{subsubsection.224}{Yes}{subsection.222}% 51
-\BOOKMARK [3][-]{subsubsection.225}{No}{subsection.222}% 52
-\BOOKMARK [3][-]{subsubsection.226}{Trusted}{subsection.222}% 53
-\BOOKMARK [2][-]{subsection.227}{Test cases as oracles}{section.210}% 54
-\BOOKMARK [1][-]{section.228}{Commands}{chapter.107}% 55
-\BOOKMARK [2][-]{subsection.229}{suspect-function}{section.228}% 56
-\BOOKMARK [2][-]{subsection.230}{add-node-to-session}{section.228}% 57
-\BOOKMARK [2][-]{subsection.231}{save-returning-node}{section.228}% 58
-\BOOKMARK [2][-]{subsection.232}{final-point}{section.228}% 59
-\BOOKMARK [2][-]{subsection.233}{finish-debugging-session}{section.228}% 60
-\BOOKMARK [2][-]{subsection.234}{start-declarative-debugging-session}{section.228}% 61
-\BOOKMARK [2][-]{subsection.235}{save-correct-function}{section.228}% 62
-\BOOKMARK [2][-]{subsection.236}{add-node-to-correct-list}{section.228}% 63
-\BOOKMARK [2][-]{subsection.237}{save-returning-correct-node}{section.228}% 64
-\BOOKMARK [2][-]{subsection.238}{til-the-end}{section.228}% 65
-\BOOKMARK [2][-]{subsection.239}{listen-for-correct-nodes}{section.228}% 66
-\BOOKMARK [2][-]{subsection.240}{send-correct-nodes}{section.228}% 67
-\BOOKMARK [2][-]{subsection.241}{print-tree}{section.228}% 68
-\BOOKMARK [0][-]{chapter.242}{Conclusions and Future Work}{}% 69
-\BOOKMARK [1][-]{section.243}{Conclusions}{chapter.242}% 70
-\BOOKMARK [1][-]{section.246}{Future work}{chapter.242}% 71
-\BOOKMARK [2][-]{subsection.247}{Support building tree without suspecting a function or method}{section.246}% 72
-\BOOKMARK [2][-]{subsection.248}{Benchmarking overhead of building execution tree}{section.246}% 73
-\BOOKMARK [2][-]{subsection.249}{Formally verify all algorithms}{section.246}% 74
-\BOOKMARK [2][-]{subsection.251}{Support for C-style arrays}{section.246}% 75
-\BOOKMARK [2][-]{subsection.253}{Test programming languages other than C++}{section.246}% 76
-\BOOKMARK [2][-]{subsection.267}{Support concurrent programs}{section.246}% 77
-\BOOKMARK [2][-]{subsection.268}{Implement more strategies}{section.246}% 78
-\BOOKMARK [2][-]{subsection.269}{Generate test cases from correct nodes}{section.246}% 79
-\BOOKMARK [0][-]{chapter*.270}{Bibliography}{}% 80
-\BOOKMARK [0][-]{fin.0}{End}{}% 81
+\BOOKMARK [0][-]{chapter.10}{Introduction}{}% 6
+\BOOKMARK [1][-]{section.11}{Motivation}{chapter.10}% 7
+\BOOKMARK [1][-]{section.12}{Goals}{chapter.10}% 8
+\BOOKMARK [1][-]{section.17}{Main contributions}{chapter.10}% 9
+\BOOKMARK [1][-]{section.25}{Structure of the document}{chapter.10}% 10
+\BOOKMARK [0][-]{chapter.26}{Preliminaries}{}% 11
+\BOOKMARK [1][-]{section.28}{Declarative debugging}{chapter.26}% 12
+\BOOKMARK [2][-]{subsection.31}{Building the debugging tree}{section.28}% 13
+\BOOKMARK [2][-]{subsection.32}{Transforming the debugging tree}{section.28}% 14
+\BOOKMARK [3][-]{subsubsection.34}{Trusting or suspecting computations}{subsection.32}% 15
+\BOOKMARK [3][-]{subsubsection.37}{Using test cases as oracles}{subsection.32}% 16
+\BOOKMARK [3][-]{subsubsection.38}{Tree transformations}{subsection.32}% 17
+\BOOKMARK [2][-]{subsection.40}{Navigating the debugging tree}{section.28}% 18
+\BOOKMARK [1][-]{section.41}{C++ programming language}{chapter.26}% 19
+\BOOKMARK [1][-]{section.42}{Technologies used}{chapter.26}% 20
+\BOOKMARK [2][-]{subsection.44}{GDB: The GNU Project Debugger}{section.42}% 21
+\BOOKMARK [2][-]{subsection.46}{rr: Record and Replay Framework}{section.42}% 22
+\BOOKMARK [0][-]{chapter.47}{State of the Art}{}% 23
+\BOOKMARK [1][-]{section.48}{Issues of algorithmic debugging}{chapter.47}% 24
+\BOOKMARK [2][-]{subsection.49}{The Scalability Problem}{section.48}% 25
+\BOOKMARK [2][-]{subsection.50}{User Experience and Effectiveness}{section.48}% 26
+\BOOKMARK [2][-]{subsection.51}{Completeness}{section.48}% 27
+\BOOKMARK [1][-]{section.52}{Solutions of algorithmic debuggers}{chapter.47}% 28
+\BOOKMARK [2][-]{subsection.68}{Conclusions}{section.52}% 29
+\BOOKMARK [1][-]{section.70}{Current state of the art algorithmic debuggers}{chapter.47}% 30
+\BOOKMARK [0][-]{chapter.72}{Definitions}{}% 31
+\BOOKMARK [0][-]{chapter.127}{Tool description}{}% 32
+\BOOKMARK [1][-]{section.128}{Architecture}{chapter.127}% 33
+\BOOKMARK [2][-]{subsection.129}{Tree building}{section.128}% 34
+\BOOKMARK [3][-]{subsubsection.130}{Adding a node to the tree}{subsection.129}% 35
+\BOOKMARK [3][-]{subsubsection.131}{Finishing a node}{subsection.129}% 36
+\BOOKMARK [3][-]{subsubsection.132}{Finishing the tree building process}{subsection.129}% 37
+\BOOKMARK [2][-]{subsection.133}{Tree transformations}{section.128}% 38
+\BOOKMARK [3][-]{subsubsection.134}{Simplified tree compression}{subsection.133}% 39
+\BOOKMARK [2][-]{subsection.135}{General debugging algorithm}{section.128}% 40
+\BOOKMARK [2][-]{subsection.136}{Navigation strategies}{section.128}% 41
+\BOOKMARK [3][-]{subsubsection.137}{Top-down}{subsection.136}% 42
+\BOOKMARK [3][-]{subsubsection.138}{Divide and Query \(Hirunkitti\)}{subsection.136}% 43
+\BOOKMARK [3][-]{subsubsection.139}{Heaviest first}{subsection.136}% 44
+\BOOKMARK [2][-]{subsection.140}{User answers to correctness questions}{section.128}% 45
+\BOOKMARK [3][-]{subsubsection.141}{I don't know}{subsection.140}% 46
+\BOOKMARK [3][-]{subsubsection.142}{Yes}{subsection.140}% 47
+\BOOKMARK [3][-]{subsubsection.143}{No}{subsection.140}% 48
+\BOOKMARK [3][-]{subsubsection.144}{Trusted}{subsection.140}% 49
+\BOOKMARK [2][-]{subsection.145}{Test cases as oracles}{section.128}% 50
+\BOOKMARK [1][-]{section.146}{Usage scenarios}{chapter.127}% 51
+\BOOKMARK [2][-]{subsection.147}{Bug finding}{section.146}% 52
+\BOOKMARK [2][-]{subsection.213}{Using test cases as oracles to reduce tree size}{section.146}% 53
+\BOOKMARK [1][-]{section.249}{Benchmarking}{chapter.127}% 54
+\BOOKMARK [1][-]{section.252}{Commands}{chapter.127}% 55
+\BOOKMARK [0][-]{chapter.266}{Conclusions and Future Work}{}% 56
+\BOOKMARK [1][-]{section.267}{Conclusions}{chapter.266}% 57
+\BOOKMARK [1][-]{section.270}{Future work}{chapter.266}% 58
+\BOOKMARK [2][-]{subsection.271}{Support building tree without suspecting a function or method}{section.270}% 59
+\BOOKMARK [2][-]{subsection.272}{Benchmarking overhead of building debugging tree}{section.270}% 60
+\BOOKMARK [2][-]{subsection.273}{Formally verify all algorithms}{section.270}% 61
+\BOOKMARK [2][-]{subsection.275}{Support for C-style arrays}{section.270}% 62
+\BOOKMARK [2][-]{subsection.277}{Test programming languages other than C++}{section.270}% 63
+\BOOKMARK [2][-]{subsection.291}{Support concurrent programs}{section.270}% 64
+\BOOKMARK [2][-]{subsection.292}{Implement more strategies}{section.270}% 65
+\BOOKMARK [2][-]{subsection.293}{Generate test cases from correct nodes}{section.270}% 66
+\BOOKMARK [0][-]{chapter*.294}{Bibliography}{}% 67
+\BOOKMARK [0][-]{fin.0}{End}{}% 68
