@@ -3,7 +3,7 @@
 
 In this chapter we will summarize the state of the art in declarative debugging.
 %
-The identification of issues and solutions comes from the 2017 survey \cite{Survey}. Latter research is included when appropriate.\todo{Estaría bien si a lo largo de la sección cuentas si tu depurador aporta algo nuevo a este estado del arte.}
+The identification of issues and solutions comes from the 2017 survey \cite{Survey}. Latter research is included when appropriate. Also, we also mention where DDC contributes to the state of the art: a new tree transformation called simplified tree compression and the support for non terminating programs. \todo{Estaría bien si a lo largo de la sección cuentas si tu depurador aporta algo nuevo a este estado del arte.}
 
 \section{Issues of algorithmic debugging}
 The following issues were identified in the 2017 survey \cite{Survey}. They are divided into three categories:
@@ -122,7 +122,7 @@ In the generalization proposed in \cite{AlgorithmicDebuggingGeneralized}, a node
 However, this generalization has not been incorporated in a declarative debugger, so the benefits remain unrealized.
 \end{enumerate}
 \subsection{Conclusions}
-Table \ref{table:problemsVsFeatures} is an updated version of Table 1\todo{From...}. Relation Between Issues and Solutions in \cite{Survey}. We have added in green those new features proposed after the publication of the survey. Like in \cite{Survey}, the symbol \(\checkmark\) indicates that the feature solves or at least alleviates the issue, while \ding{55} indicates that the feature worsens it.
+Table \ref{table:problemsVsFeatures} is an updated version of Table 1\todo{From...}: Relation Between Issues and Solutions from \cite{Survey}. We have added in green those new features proposed after the publication of the survey. Like in \cite{Survey}, the symbol \(\checkmark\) indicates that the feature solves or at least alleviates the issue, while \ding{55} indicates that the feature worsens it.
 \begin{table}
 \caption{Relation Between Issues and Solutions}
 \label{table:problemsVsFeatures}
