@@ -112,7 +112,7 @@ To make this information available for the debugger, the C++ program must be com
 \section{Technologies used}
 There are two main dependencies in this project:
 \begin{itemize}
-    \item GDB, used as the general framework on which to build DDC.\todo{Una breve frase para cada uno}
+    \item GDB, used as the general framework on which to build DDC.
     \item rr, used for its reverse execution features.
 \end{itemize}
 \subsection{GDB: The GNU Project Debugger}
@@ -120,14 +120,12 @@ GDB \cite{gdb} is a general purpose debugger for C and C++, with partial support
 %
 We make extensive use of its Python API, especially of the following classes:
 
-\begin{itemize}
+\begin{description}
 
-\item Values
+\item[Values.]
+Values from the the program being debugged represent the content of the program variables.
 
-Values from the the program being debugged represent the content of the program variables.\todo{Estas subsecciones son cortísimas, igual sería mejor un itemize.}
-
-\item Types
-
+\item[Types.]
 The type of a certain value is needed in two occasions: when displaying the value and to check whether arguments are passed as reference or as pointers.
 \item Frames
 
@@ -136,8 +134,7 @@ Frames are organized hierarchically in a call stack, the frame \(n+1\) being the
 \item Symbols
 
 A symbol is a variable or a function. We use symbols to determine the variable names. Symbols also provide the scope they belong to. This is needed to mark a variable as a global one or an argument to a function.
-\item Breakpoints
-
+\item[Breakpoints.]
 A breakpoint is a bookmark set in a certain location of a program, such as a function or specific line, which tells the debugger to stop the execution.
 We make use of breakpoints for:
 \begin{itemize}
@@ -148,8 +145,7 @@ We make use of breakpoints for:
 A breakpoint has an attribute named \emph{commands}, which is executed when it is reached, and if the method stop returns false.
 
 We make use of these commands to store the information of the current frame.
-\item Final breakpoints
-
+\item[Final breakpoints.]
 A final breakpoint is a breakpoint that is triggered when the current frame returns. Final breakpoints are used to gather the pertaining information when the function or method returns, which includes:
 \begin{itemize}
     \item The return value.
@@ -157,7 +153,7 @@ A final breakpoint is a breakpoint that is triggered when the current frame retu
     \item The global variables.
     \item The arguments passed as reference or pointer.
 \end{itemize}
-\end{itemize}
+\end{description}
 \subsection{rr: Record and Replay Framework}
 
 rr \cite{rr} enhances GDB, providing support for record and replay functionality, as well as for reverse execution.
