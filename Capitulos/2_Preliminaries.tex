@@ -2,7 +2,6 @@
 \label{cap:preliminares}
 
 In this chapter we will introduce declarative debugging, the C++ programming language and the technologies used to develop DDC.
-\todo{Empezar diciendo ``En este capítulo...''}
 
 \section{Declarative debugging}
 Declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, is a debugging technique that consists in (i) taking a program execution which the user deems incorrect, (ii) building an debugging tree (DT)\todo{Fíjate que siempre hablas de execution tree pero lo interesante es el Debugging Tree, que es una abstracción del execution tree. Puede explicar en algún lugar que en este caso se corresponden, pero si no si hay algún experto en el tribunal se va a quejar.} of the execution of this program and (iii) asking questions about the correctness of computations to an oracle (usually the user, but other sources such as tests can be used) until a certain computation is narrowed down as buggy.

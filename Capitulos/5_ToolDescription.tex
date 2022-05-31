@@ -480,7 +480,7 @@ This node has been removed from the debugging tree because it appeared in a test
     set ylabel "Time (nanoseconds)"
     set xrange [1:200000]
     set yrange [1000000:200000000000]
-    plot 'Datos/executing_quicksort.dat' using 1:2 title "Execution", 'Datos/recording_quicksort.dat' using 1:2 title "Recording", 'Datos/tree_building_quicksort.dat' using 1:2 title "Tree building"
+    plot 'Datos/executing_quicksort.dat' using 1:2 title "Execution", 'Datos/recording_quicksort.dat' using 1:2 title "Recording", 'Datos/tree_building_quicksort.dat' using 1:2 title "Tree building", 'Datos/tree_building_database.dat' using 1:2 title "Tree building database"
     \end{gnuplot}
     \caption{Quicksort execution vs record vs tree building}
 \end{figure}
@@ -492,22 +492,14 @@ This node has been removed from the debugging tree because it appeared in a test
     set xlabel "Number of nodes"
     set logscale y
     set ylabel "Time (nanoseconds)"
-    set xrange [1:1000]
-    set yrange [100000000:100000000000]
-    plot 'Datos/nodes_vs_time.dat' using 1:2
+    set xrange [200:2000]
+    set yrange [10000000000:100000000000]
+    plot 'Datos/nodes_vs_time_3_suspect.dat' using 1:2 title "3 suspect functions", 'Datos/nodes_vs_time_2_suspect.dat' using 1:2 title "2 suspect functions", 'Datos/nodes_vs_time_1_suspect.dat' using 1:2 title "1 suspect functions",
     \end{gnuplot}
     \caption{Nodes vs time}
 \end{figure}
 %2 2258950
 %131072 259707785
-2 360308717 
-4 718401324 
-8 1408922217 
-16 2730037241 
-32 6156850321 
-64 13337290712 
-128 32220226111 
-256 87456416294 
 
 \section{Commands}
 We now list and describe all the available commands. These can be issued inside rr. Completion for these commands is enabled, that is, if you type \verb|sus| and then \verb|TAB|, \verb|suspect-function| should appear.
