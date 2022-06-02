@@ -48,9 +48,6 @@ So far, the user has to suspect at least one function or method before DDC can b
 Ideally, DDC would be able to build the DT without any suspect breakpoints, by creating a node every time it enters a new function.
 Since we already have functionality to prune the DT of excess nodes (by trusting functions and using test cases as oracles, for example), the user could them reduce the size of the DT.
 
-\subsection{Benchmarking overhead of building debugging tree}
-As mentioned in \cite{Survey}, the speed and memory footprint of building the debugging tree is one of the most important metrics in the development of algorithmic debuggers.
-We should collect a sample of real, large C++ programs and measure the time and memory needed to build their respective debugging trees.
 \subsection{Formally verify all algorithms}
 We made an effort to formally verify all algorithms used in DDC.
 In Nagini \cite{nagini}, the tool we selected to perform the verification, we identified a bug\footnote{https://github.com/marcoeilers/nagini/issues/150}, which was confirmed by Nagini main author, that blocked further work. 

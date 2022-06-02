@@ -2,7 +2,7 @@
 \label{cap:toolDescription}
 DDC consists of approximately 900 lines of mostly statically typed Python, which can be found in \url{https://github.com/RCoeurjoly/DDC/blob/main/declarative_debugger.py}.
 %
-It is loaded into rr through the source command, which itself can be put inside a \verb|.gdbinit| file.
+It is loaded into rr through the \verb|source| command, which itself can be put inside a \verb|.gdbinit| file.
 %
 In this chapter we will explain the architecture of the tool.
 Then, we will go through two usage scenarios:
@@ -10,6 +10,7 @@ Then, we will go through two usage scenarios:
     \item Bug finding.
     \item Using test cases as oracles to reduce tree size.
 \end{itemize}
+In the third section, we will present some benchmarks of the execution of DDC.
 Lastly, we will list all commands provided by the tool.
 
 \section{Architecture}
@@ -197,7 +198,7 @@ rr replay
 \end{lstlisting}
 Once inside the \verb|rr| command prompt, we have to tell DDC in which functions we suspect the bug to reside.
 To do this, we use the \verb|suspect-function| command described in command \hyperref[command:suspect-function]{suspect-function}\todo{A menudo pones ref pero no Figure o lo que sea, revisar. Además, Figure va con mayúscula (ha cambiado varias, pero revisar)}. In this case, we suspect the functions we defined, that is, \verb|quickSort|, \verb|partition|, and \verb|swap|. We execute the commands shown in Figure \ref{fig:suspecting-functions} in \verb|rr|.
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Setting the suspect functions}
     \label{fig:suspecting-functions}
@@ -220,7 +221,7 @@ Num Type       Disp Enb Address         What
 \end{figure}
 Note that the results of the command \verb|info breakpoints| have been simplified for display purposes.
 Now we can choose the navigation strategy.
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Choosing the navigation strategy}
     \label{fig:navigationsStrategyPrompt}
@@ -233,7 +234,7 @@ Please choose navigation strategy
 \end{figure}
 Then, as shown in Figure \ref{fig:correctnessQuestion}, the debugger asks us about the correctness of the root node of the debugging tree. This question does not have the option to change the navigation strategy, as opposed to all other correctness questions, where the options are shown in Figure \ref{fig:correctnessQuestionNonRootOptions}.
 
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Correctness question of root node}
     \label{fig:correctnessQuestion}
@@ -272,7 +273,7 @@ quickSort(std::vector<int, std::allocator<int> >&, int, int)
     \end{verbatim}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Options to correctness question of non root node}
     \label{fig:correctnessQuestionNonRootOptions}
@@ -286,7 +287,7 @@ quickSort(std::vector<int, std::allocator<int> >&, int, int)
 \end{figure}
 
 The debugging session ends when the buggy node is found, as shown in Figure \ref{fig:buggyNodeFound}. Although we only have the granularity to say which function is buggy, we also display with what inputs the buggy function misbehaves, so that the user can create a test case that reproduces the failure.
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Buggy node found}
     \label{fig:buggyNodeFound}
@@ -338,7 +339,7 @@ rr replay
 \end{lstlisting}
 Once inside the \verb|rr| command prompt, we have to tell DDC from which functions should the correct nodes be gathered.
 This can be done with the \verb|save-correct-function| command described in the command \hyperref{command:save-returning-correct-node}[save-returning-correct-node]. In our example, we want to save correct nodes gathered from the functions we defined, that is, \verb|quickSort|, \verb|partition| and \verb|swap|. Therefore, we execute the commands shown in Figure \ref{fig:saving-correct-functions} in \verb|rr|. Again, the results of the command \verb|info breakpoints| have been simplified.
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Setting the functions from which to gather correct nodes}
     \label{fig:saving-correct-functions}
@@ -363,7 +364,7 @@ Num Type       Disp Enb Address         What
 At this point, we can use the \verb|GDB| commands \verb|start| and \verb|continue| (this last one repeatedly) to reach the end of the program.
 Alternatively, we have provided the convenience command \verb|til-the-end| (see command \hyperref{command:til-the-end}[til-the-end]) that has the exact same functionality.
 Once we have reached the end of the program, all nodes have been collected. This can be checked by dropping into an interactive Python shell inside \verb|rr| like is shown in Figure \ref{fig:python-interactive}. To exit the Python shell, use \verb|Ctrl-D|.
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Starting an interactive Python shell inside rr}
     \label{fig:python-interactive}
@@ -373,7 +374,7 @@ Once we have reached the end of the program, all nodes have been collected. This
     \end{verbatim}
 \end{figure}
 Once inside the shell, we can examine the set of correct nodes. For example, we can check how many correct nodes we have gathered (see Figure~\ref{fig:lengthLists}) or display any of those nodes (see Figure \ref{fig:printCorrectNode}).
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Length lists}
     \label{fig:lengthLists}
@@ -385,7 +386,7 @@ Once inside the shell, we can examine the set of correct nodes. For example, we 
     \end{verbatim}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Printing a correct node}
     \label{fig:printCorrectNode}
@@ -420,7 +421,7 @@ Once all correct nodes have been collected, we have to start the debugging sessi
 
 Now we are ready to send the correct nodes from \(rr_{server}\) to \(rr_{client}\). This is done with the command \verb|send-correct-nodes| (see command \hyperref{command:send-correct-nodes}[send-correct-nodes]).
 In \(rr_{server}\) we can see that nodes are being sent, like shown in Figure \ref{fig:sendingNode}.
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Sending nodes to client}
     \label{fig:sendingNode}
@@ -429,7 +430,7 @@ In \(rr_{server}\) we can see that nodes are being sent, like shown in Figure \r
     \end{verbatim}
 \end{figure}
 Likewise, in \(rr_{client}\) we can see that nodes are being received, like shown in Figure \ref{fig:receivingNode}.
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Receiving nodes from server}
     \label{fig:receivingNode}
@@ -438,40 +439,49 @@ Likewise, in \(rr_{client}\) we can see that nodes are being received, like show
     \end{verbatim}
 \end{figure}
 
-\begin{figure}[p]
+\begin{figure}
 \centering
-    \caption{Zoomable tree of buggy quickSort after correct node elimination}
-    \label{fig:buggyTreeAfter}
-\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggySwapRemoved.pdf}
+\caption{Correct node removed from debugging tree}
+\label{fig:removedNode}
+\begin{verbatim}
+swap(int*, int*)
+├── arguments on entry
+│   ├── a = 7
+│   └── b = 1
+└── arguments when returning
+    ├── a = 1
+    └── b = 7
+\end{verbatim}
 \end{figure}
-
-%\begin{figure}
-%\centering
-%\caption{Correct node removed from debugging tree}
-%\label{fig:removedNode}
-%\begin{verbatim}
-%swap(int*, int*)
-%├── arguments on entry
-%│   ├── a = 7
-%│   └── b = 1
-%└── arguments when returning
-%    ├── a = 1
-%    └── b = 7
-%\end{verbatim}
-%\end{figure}
-\begin{figure}[p]
+\begin{figure}
 \centering
-    \caption{Prueba}
-    \label{fig:correctNodeRemoved}
+    \caption{Zoomable tree of buggy quickSort before correct node elimination}
+    \label{fig:buggyTreeBefore}
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggy.pdf}
 \end{figure}
-If we now start the debugging session (after setting the suspect functions like demonstrated in Figure \ref{fig:suspecting-functions}\todo{Ojo}), we see that the WMDT has 8 nodes (see Figure \ref{fig:buggyTreeAfter}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:correctNodeRemoved}.
 
+\begin{figure}
+\centering
+    \caption{Zoomable tree of buggy quickSort after correct node elimination}
+    \label{fig:treeAfterRemoval}
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggySwapRemoved.pdf}
+\end{figure}
+If we now start the debugging session (after setting the suspect functions like demonstrated in Figure \ref{fig:suspecting-functions}\todo{Ojo}), we see that the WMDT has 8 nodes (see Figure \ref{fig:treeAfterRemoval}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:removedNode}.
 
 This node has been removed from the debugging tree because it appeared in a test case, therefore the debugger has deduced that this computation is correct.
 \section{Benchmarking}
+In this section we will present different time benchmarks of the execution of DDC.
 
-\begin{figure}
+\subsection{Quicksort benchmarks}
+To gather benchmarks easily, we provide a quicksort implementation that gets its input vector from the command line.
+Then, we generate random lists of different lengths and pipe these lists to quicksort.
+
+In Figure \ref{fig:vector_length_vs_time} we plot the different execution times.
+
+To reduce the time needed to build the debugging tree, we created a branch in DDC (called \verb|database|) in which we stored the debugging tree in a database, as proposed in \cite{DDJ}.
+However, this did not improve the time significantly, as can be seen in \ref{fig:vector_length_vs_time}.
+
+\begin{figure}[htbp]
     \centering
     \begin{gnuplot}[terminal=pdf]
     set logscale x
@@ -480,12 +490,21 @@ This node has been removed from the debugging tree because it appeared in a test
     set ylabel "Time (nanoseconds)"
     set xrange [1:200000]
     set yrange [1000000:200000000000]
-    plot 'Datos/executing_quicksort.dat' using 1:2 title "Execution", 'Datos/recording_quicksort.dat' using 1:2 title "Recording", 'Datos/tree_building_quicksort.dat' using 1:2 title "Tree building", 'Datos/tree_building_database.dat' using 1:2 title "Tree building database"
+    plot 'Datos/executing_quicksort.dat' using 1:2 title "Execution", 'Datos/recording_quicksort.dat' using 1:2 title "Recording", 'Datos/tree_building_quicksort.dat' using 1:2 title "Tree building (main memory)", 'Datos/tree_building_database.dat' using 1:2 title "Tree building (database)", 'Datos/gdb_quicksort.dat' using 1:2 title "Trace debugging (GDB)", 'Datos/rr_quicksort.dat' using 1:2 title "Trace debugging (rr)"
     \end{gnuplot}
     \caption{Quicksort execution vs record vs tree building}
+    \label{fig:vector_length_vs_time}
 \end{figure}
 
-\begin{figure}
+In figure \ref{fig:node_vs_time_quicksort} we plot the debugging tree building time depending on the number of suspect functions set, for the same input list, which in this case is a list of length 256.
+As we can see, the tree building time increases with the number of suspect functions set.
+The three data points correspond to the following:
+\begin{itemize}
+    \item 3 suspect functions: quicksort, partition and swap.
+    \item 2 suspect functions: quicksort and partition.
+    \item 1 suspect function: quicksort.
+\end{itemize}
+\begin{figure}[htbp]
     \centering
     \begin{gnuplot}[terminal=pdf]
     set logscale x
@@ -494,12 +513,93 @@ This node has been removed from the debugging tree because it appeared in a test
     set ylabel "Time (nanoseconds)"
     set xrange [200:2000]
     set yrange [10000000000:100000000000]
-    plot 'Datos/nodes_vs_time_3_suspect.dat' using 1:2 title "3 suspect functions", 'Datos/nodes_vs_time_2_suspect.dat' using 1:2 title "2 suspect functions", 'Datos/nodes_vs_time_1_suspect.dat' using 1:2 title "1 suspect functions",
+    plot 'Datos/nodes_vs_time_3_suspect.dat' using 1:2 title "3 suspect functions", 'Datos/nodes_vs_time_2_suspect.dat' using 1:2 title "2 suspect functions", 'Datos/nodes_vs_time_1_suspect.dat' using 1:2 title "1 suspect function",
     \end{gnuplot}
     \caption{Nodes vs time}
+    \label{fig:node_vs_time_quicksort}
 \end{figure}
-%2 2258950
-%131072 259707785
+
+In table \ref{table:DDC_profile} we can see the profile results of building a debugging tree with DDC. In this case, the program input is a quicksort execution with input vector length 256, and three suspect functions set (quicksort, partition and swap). 
+ 
+The two bottlenecks identified are:
+\begin{itemize}
+    \item Reverse stepping into a returning function (24.926 seconds).
+    
+    This is needed to gather the object state, output arguments and global variables, denoted \(O_o\), \(O_a\) and \(O_g\) respectively in chapter \ref{cap:definiciones}.
+    
+    \item Getting the string representation of a value (16.063 seconds).
+    
+    This is needed to store the value (argument, object, global variable or return value) into the database.
+\end{itemize}
+This two bottlenecks constitute around 75 percent of total execution time.
+ 
+\begin{table}
+\caption{DDC (database) profiling for quicksort with input list length 256}
+\label{table:DDC_profile}
+\begin{tabular}{rl}
+cumtime & filename:lineno(function)\\
+\hline
+54.184 & \{built-in method builtins.exec\}\\
+54.184 & <string>:1(<module>)\\
+54.184 & \{built-in method \_gdb.execute\}\\
+54.184 & \{declarative\_debugger\}.py:505(invoke)\\
+38.693 & \{declarative\_debugger\}.py:282(invoke)\\
+24.926 & \{declarative\_debugger\}.py:272(\{reverse\_stepi\})\\
+16.078 & \{declarative\_debugger\}.py:847(\{print\_value\})\\
+16.063 & \{method 'format\_string'  of 'gdb.Value'  objects\}\\
+9.641 & \{declarative\_debugger\}.py:352(invoke)\\
+8.281 & \{declarative\_debugger\}.py:374(<listcomp>)\\
+7.804 & \{declarative\_debugger\}.py:299(<listcomp>)\\
+\end{tabular}
+\end{table}
+
+\subsection{Z3 benchmarks}
+To test DDC with a industrial grade program, we chose the theorem prover Z3 \cite{z3}.
+
+The execution used for these benchmarks is the simplest execution possible.
+We pass the following SMT file to Z3:
+\begin{figure}[htbp]
+    \centering
+    \caption{SMT file passed to Z3 for benchmarking}
+    \label{fig:SMT_file}
+    \begin{verbatim}
+(assert true)
+(check-sat)
+    \end{verbatim}
+\end{figure}
+All the following data points represent the Z3 execution.
+
+In figure \ref{fig:node_vs_time_z3} we see the relationship between number of nodes versus execution time. We get the same relationship as in with quicksort data.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{gnuplot}[terminal=pdf]
+    set logscale x
+    set xlabel "Number of nodes"
+    set logscale y
+    set ylabel "Time (nanoseconds)"
+    set xrange [1:400]
+    set yrange [1000000000:500000000000]
+    plot 'Datos/z3_nodes_vs_time.dat' using 1:2 notitle
+    \end{gnuplot}
+    \caption{Nodes vs time (Z3)}
+    \label{fig:node_vs_time_z3}
+\end{figure}
+In figure \ref{fig:bp_vs_time_z3} we plot the number of breakpoints set versus execution time. We compare stopping at breakpoints without doing anything (data labeled \verb|Plain breakpoints|) with creating a node each time a breakpoint is hit (data labeled \verb|Tree building|).
+\begin{figure}[htbp]
+    \centering
+    \begin{gnuplot}[terminal=pdf]
+    set logscale x
+    set xlabel "Number of breakpoints"
+    set logscale y
+    set ylabel "Time (nanoseconds)"
+    set xrange [2:30]
+    set yrange [100000000:1000000000000]
+    plot 'Datos/z3_bp_vs_time_ddc.dat' using 1:2 title "Tree building", 'Datos/z3_bp_vs_time_rr.dat' using 1:2 title "Plain breakpoints"
+    \end{gnuplot}
+    \caption{Breakpoints vs time (Z3)}
+    \label{fig:bp_vs_time_z3}
+\end{figure}
 
 \section{Commands}
 We now list and describe all the available commands. These can be issued inside rr. Completion for these commands is enabled, that is, if you type \verb|sus| and then \verb|TAB|, \verb|suspect-function| should appear.
