@@ -51,9 +51,10 @@ Given a WMDT, we can compress nodes if:
 To check if a node can be compressed we use a recursive function, which takes a node as an argument and returns a 2-tuple, whose elements are:
 \begin{itemize}
     \item bool: True if the node can be compressed. False otherwise.
-    \item int: If the node can be compressed, number of nodes to compress. Zero Otherwise.
+    \item int: If the node can be compressed, it stands for number of nodes to compress. Its value is zero otherwise.
 \end{itemize}
-This algorithm searches for the longest compression possible.
+
+This algorithm searches for the largest possible compression.
 
 Given a WMDT and a number of nodes to compress \(n\), the compress node is composed of:
 \begin{itemize}
@@ -82,10 +83,10 @@ If no change in strategy is required, we execute the adequate action correspondi
 A navigation strategy is an algorithm that takes a WMDT and returns a node.
 In the implementation we also need to keep track of the position of the current node, since Top-down is a recursive algorithm.
 
-To ease the task of adding more strategies to DDC, we implemented a wrapper to the strategies.
+To ease the task of adding more strategies to DDC, we implemented a wrapper to the strategies.\todo{En algún lugar (preliminares?) habría que contar que si respondemos que sí a algo podemos eliminar el subárbol que tiene ese nodo como raíz; si se contesta que no se puede elegir ese subárbol como actual. Creo que en preliminares no hay posibles respuestas y en algún lado tendría que estar. Veo que está después, habría que hacer referencia entonces diciendo que a continuación se explica. El caso es que esto es necesario para entender las estrategias, quizás lo contaría antes.}
 
 \subsubsection{Top-down}
-Top-down is a recursive algorithm, which searches for the first node whose correctness is unknown.
+Top-down is a recursive algorithm, which searches for the first node whose correctness is unknown.\todo{Explicar un poco más, que va desde la raíz preguntando por los hijos de izquierda a derecha o algo así.}
 
 \subsubsection{Divide and Query (Hirunkitti)}
 In Divide and Query (Hirunkitti), we select the child node whose weight is the closest to half of the root node weight.
@@ -98,7 +99,8 @@ In heaviest first, we select the child node whose weight is the heaviest.
 When asked about the correctness of a node, the user has the possibility of answering (i) I don't know, (ii) Yes, (iii) No or (iv) Trusted.
 We choose the next node and/or prune the debugging tree depending on the answer
 \subsubsection{I don't know}
-If the user does not know if the node is correct, we remove it from the WMDT and continue the debugging session.
+If the user does not know if the node is correct, we remove it from the WMDT and continue the debugging session.\todo{Contar que puede introducir incompletitud y que hay
+estrategias para paliarlo (volver a preguntar al final, por ejemplo).}
 \subsubsection{Yes}
 If the node is deemed correct by the user, we remove it from the WMDT and all other nodes equal to the correct node.
 
@@ -197,7 +199,7 @@ rr record ./result/bin/quicksort
 rr replay
 \end{lstlisting}
 Once inside the \verb|rr| command prompt, we have to tell DDC in which functions we suspect the bug to reside.
-To do this, we use the \verb|suspect-function| command described in command \hyperref[command:suspect-function]{suspect-function}\todo{A menudo pones ref pero no Figure o lo que sea, revisar. Además, Figure va con mayúscula (ha cambiado varias, pero revisar)}. In this case, we suspect the functions we defined, that is, \verb|quickSort|, \verb|partition|, and \verb|swap|. We execute the commands shown in Figure \ref{fig:suspecting-functions} in \verb|rr|.
+To do this, we use the \verb|suspect-function| command described in command \hyperref[command:suspect-function]{suspect-function}. In this case, we suspect the functions we defined, that is, \verb|quickSort|, \verb|partition|, and \verb|swap|. We execute the commands shown in Figure \ref{fig:suspecting-functions} in \verb|rr|.
 \begin{figure}
     \centering
     \caption{Setting the suspect functions}
@@ -272,6 +274,8 @@ quickSort(std::vector<int, std::allocator<int> >&, int, int)
   Trusted
     \end{verbatim}
 \end{figure}
+
+\todo{Se llega a hablar de la figura 5.5?}
 
 \begin{figure}
     \centering
@@ -466,11 +470,11 @@ swap(int*, int*)
     \label{fig:treeAfterRemoval}
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Imagenes/Vectorial/buggySwapRemoved.pdf}
 \end{figure}
-If we now start the debugging session (after setting the suspect functions like demonstrated in Figure \ref{fig:suspecting-functions}\todo{Ojo}), we see that the WMDT has 8 nodes (see Figure \ref{fig:treeAfterRemoval}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:removedNode}.
+If we now start the debugging session (after setting the suspect functions like demonstrated in Figure~\ref{fig:suspecting-functions}), we see that the WMDT has 8 nodes (see Figure \ref{fig:treeAfterRemoval}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:removedNode}.
 
 This node has been removed from the debugging tree because it appeared in a test case, therefore the debugger has deduced that this computation is correct.
 \section{Benchmarking}
-In this section we will present different time benchmarks of the execution of DDC.
+In this section we will present different time benchmarks of the execution of DDC.\todo{Contar que se buscan las limitaciones y los cuellos de botella}
 
 \subsection{Quicksort benchmarks}
 To gather benchmarks easily, we provide a quicksort implementation that gets its input vector from the command line.
@@ -479,7 +483,7 @@ Then, we generate random lists of different lengths and pipe these lists to quic
 In Figure \ref{fig:vector_length_vs_time} we plot the different execution times.
 
 To reduce the time needed to build the debugging tree, we created a branch in DDC (called \verb|database|) in which we stored the debugging tree in a database, as proposed in \cite{DDJ}.
-However, this did not improve the time significantly, as can be seen in \ref{fig:vector_length_vs_time}.
+However, this did not improve the time significantly, as can be seen in Figure~\ref{fig:vector_length_vs_time}.
 
 \begin{figure}[htbp]
     \centering
@@ -496,11 +500,11 @@ However, this did not improve the time significantly, as can be seen in \ref{fig
     \label{fig:vector_length_vs_time}
 \end{figure}
 
-In figure \ref{fig:node_vs_time_quicksort} we plot the debugging tree building time depending on the number of suspect functions set, for the same input list, which in this case is a list of length 256.
+In Figure \ref{fig:node_vs_time_quicksort} we plot the debugging tree building time depending on the number of suspect functions set, for the same input list, which in this case is a list of length 256.
 As we can see, the tree building time increases with the number of suspect functions set.
 The three data points correspond to the following:
 \begin{itemize}
-    \item 3 suspect functions: quicksort, partition and swap.
+    \item 3 suspect functions: quicksort, partition, and swap.
     \item 2 suspect functions: quicksort and partition.
     \item 1 suspect function: quicksort.
 \end{itemize}
@@ -519,7 +523,7 @@ The three data points correspond to the following:
     \label{fig:node_vs_time_quicksort}
 \end{figure}
 
-In table \ref{table:DDC_profile} we can see the profile results of building a debugging tree with DDC. In this case, the program input is a quicksort execution with input vector length 256, and three suspect functions set (quicksort, partition and swap). 
+In Table \ref{table:DDC_profile} we can see the profile results of building a debugging tree with DDC. In this case, the program input is a quicksort execution with input vector length 256, and three suspect functions set (quicksort, partition and swap). 
  
 The two bottlenecks identified are:
 \begin{itemize}
