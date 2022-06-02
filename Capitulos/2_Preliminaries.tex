@@ -4,18 +4,19 @@
 In this chapter we will introduce declarative debugging, the C++ programming language and the technologies used to develop DDC.
 
 \section{Declarative debugging}
-Declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, is a debugging technique that consists in (i) taking a program execution which the user deems incorrect, (ii) building an debugging tree (DT)\todo{Fíjate que siempre hablas de execution tree pero lo interesante es el Debugging Tree, que es una abstracción del execution tree. Puede explicar en algún lugar que en este caso se corresponden, pero si no si hay algún experto en el tribunal se va a quejar.} of the execution of this program and (iii) asking questions about the correctness of computations to an oracle (usually the user, but other sources such as tests can be used) until a certain computation is narrowed down as buggy.
-A debugging tree is an abstraction of the execution tree of a program. The abstraction may consist in omitting certain function or method executions or transforming it for better navigation. 
+Declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, is a debugging technique that consists in (i) taking a program execution which the user deems incorrect, (ii) building an debugging tree (DT) abstracting the execution of this program, and (iii) asking questions about the correctness of computations to an oracle (usually the user, but other sources such as test cases can be used) until a certain computation is narrowed down as buggy.
+A debugging tree is an abstraction of the execution tree of a program. The abstraction may consist in omitting certain function or method executions or transforming it for improving how it can be traversed, which is called \emph{navigation}. 
 
 In the following subsections we will discuss the most important stages in a declarative debugging session, namely:
 \begin{itemize}
     \item Building the debugging tree.
-    \item Transforming the debugging tree.\todo{Aquí tiene sentido que sea el debugging tree, porque la ejecución es única y no tiene sentido modificarla.}
+    \item Transforming the debugging tree.
     \item Navigating the debugging tree.
 \end{itemize}
+
 \subsection{Building the debugging tree}
 
-Building the debugging tree (DT) is the central, critical stage of the debugging process.
+Building the debugging tree is the central, critical stage of the debugging process.
 
 To build the DT, the DD must have access to the following information:
 \begin{itemize}
@@ -32,27 +33,25 @@ For formal definitions, please see Chapter \ref{cap:definiciones}.
 
 The number of questions asked to the user depends on a combination of:
 \begin{itemize}
-    \item the size of the tree (number of nodes, width, and depth of the tree) 
-    \item and the navigation strategy.
+    \item the size of the tree (number of nodes, width, and depth of the tree) and
+    \item the navigation strategy.
 \end{itemize}
-\todo{Dos cosas importantes, que habría que ver si poner o no: se puede reducir el número de nodos y aumentar el número de preguntas y el número de preguntas no solo depende del árbol, también de la estrategia de navegación}
+
 Although reducing the size of the debugging tree does not always lead to a reduction in the number of questions \cite{LoopExpansionTreeCompression}, most DDs provide certain functionality to reduce the DT size.
 
 \subsubsection{Trusting or suspecting computations}
 
 Most DDs built the DT assuming all functions or methods are suspicious of being wrong.
 However, this is hardly ever the case.
-
-In the case of debugging a C++ program, one option would be to trust all functions and methods provided by the language implementation, which are located under the \verb|std| namespace, or trusting everything provided by a reputable third party, like Boost \cite{TheBoostLibraries}.
+%
+In the case of debugging a C++ program, one option to reduce the size of the DT would be to trust all functions and methods provided by the language implementation, which are located under the \verb|std| namespace, or trusting everything provided by a reputable third party, like Boost \cite{TheBoostLibraries}.
 This process happens before starting to build the DT, and therefore it reduces the building time and memory footprint. Also, it requires manual input from the user for selecting those computations that can be trusted.
 
-\todo{El punto anterior de trusting y este de suspecting no vienen a ser lo mismo?}
-\todo[color=green]{He unido las dos subsubsecciones en 1}
 Another perspective is that when debugging a program, it is usually the case that the user believes the problem lays in the parts she developed, not in the external functions she calls.
-
+%
 By suspecting only the functions and methods developed by the user (and implicitly trusting all other functions), the debugger can ignore all other functions, like those provided by the standard or by external libraries.
 This is the approach used in developing DDC.
-This process also happens before starting to build the DT. Also, it requires manual input from the user in selecting those computations that should be suspected.
+This process also happens before starting to build the DT: it requires manual input from the user in selecting those computations that should be suspected.
 
 \subsubsection{Using test cases as oracles}
 
@@ -73,8 +72,12 @@ lo aumentan para mejorar el funcionamiento de las estrategias.}
 \subsection{Navigating the debugging tree}
 Navigating the debugging tree is the phase when the debugger asks an external oracle questions about the correctness of certain nodes, with the purpose of finding a buggy one.
 The goal is to minimize the number of questions, to make the process as fast as possible.
+
+\todo{Contar algo más, que queda muy corto. En plan que se puede analizar para la estrategia el tamaño del subarbol, el número de funciones distintas, etc.}
+
 \section{C++ programming language}
-The C++ programming language is a general-purpose, statically typed, compiled language \cite{cppHistory}.
+
+The C++ programming language is a general-purpose, statically typed, compiled language~\cite{cppHistory}.
 %
 C++ supports several programming paradigms, including:
 
