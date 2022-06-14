@@ -1,0 +1,135 @@
+\chapter{Verification and testing}
+\label{cap:verificationAndTesting}
+\section{Verification}
+\section{Metamorphic testing}
+\section{Benchmarks}
+In this section we will present different time benchmarks of the execution of DDC.\todo{Contar que se buscan las limitaciones y los cuellos de botella}
+
+\subsection{Quicksort benchmarks}
+To gather benchmarks easily, we provide a quicksort implementation that gets its input vector from the command line.
+Then, we generate random lists of different lengths and pipe these lists to quicksort.
+
+In Figure \ref{fig:vector_length_vs_time} we plot the different execution times.\todo{Explicar mucho más qué se ve en la figura}
+
+To reduce the time needed to build the debugging tree, we have created a branch in DDC (called \verb|database|) in which we stored the debugging tree in a database, as proposed in \cite{DDJ}.\todo{Hay que explicar que viene motivado por los resultados anteriores.}
+However, this did not improve the time significantly, as can be seen in Figure~\ref{fig:vector_length_vs_time}.\todo{Explicar mucho más. O si se explica después decir explícitamente}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{gnuplot}[terminal=pdf]
+    set logscale x
+    set xlabel "Input vector length (elements)"
+    set logscale y
+    set ylabel "Time (nanoseconds)"
+    set xrange [1:200000]
+    set yrange [1000000:200000000000]
+    plot 'Datos/executing_quicksort.dat' using 1:2 title "Execution", 'Datos/recording_quicksort.dat' using 1:2 title "Recording", 'Datos/tree_building_quicksort.dat' using 1:2 title "Tree building (main memory)", 'Datos/tree_building_database.dat' using 1:2 title "Tree building (database)", 'Datos/gdb_quicksort.dat' using 1:2 title "Trace debugging (GDB)", 'Datos/rr_quicksort.dat' using 1:2 title "Trace debugging (rr)"
+    \end{gnuplot}
+    \caption{Quicksort execution vs record vs tree building}
+    \label{fig:vector_length_vs_time}
+\end{figure}
+
+In Figure \ref{fig:node_vs_time_quicksort} we plot the debugging tree building time depending on the number of suspect functions set, for the same input list, which in this case is a list of length 256.
+As we can see, the time required for building the tree increases with the number of suspect functions set.
+The three data points correspond to the following:
+\begin{itemize}
+    \item 3 suspect functions: quicksort, partition, and swap.
+    \item 2 suspect functions: quicksort and partition.
+    \item 1 suspect function: quicksort.
+\end{itemize}
+\begin{figure}[htbp]
+    \centering
+    \begin{gnuplot}[terminal=pdf]
+    set logscale x
+    set xlabel "Number of nodes"
+    set logscale y
+    set ylabel "Time (nanoseconds)"
+    set xrange [200:2000]
+    set yrange [10000000000:100000000000]
+    plot 'Datos/nodes_vs_time_3_suspect.dat' using 1:2 title "3 suspect functions", 'Datos/nodes_vs_time_2_suspect.dat' using 1:2 title "2 suspect functions", 'Datos/nodes_vs_time_1_suspect.dat' using 1:2 title "1 suspect function",
+    \end{gnuplot}
+    \caption{Nodes vs time}
+    \label{fig:node_vs_time_quicksort}
+\end{figure}
+
+In Table \ref{table:DDC_profile} we can see the profile results of building a debugging tree with DDC. In this case, the program input is a quicksort execution with input vector length 256, and three suspect functions set (quicksort, partition and swap). 
+ 
+The two bottlenecks identified are:
+\begin{itemize}
+    \item Reverse stepping into a returning function (24.926 seconds).
+    
+    This is needed to gather the object state, output arguments and global variables, denoted \(O_o\), \(O_a\), and \(O_g\) respectively in Chapter \ref{cap:definitions}.
+    
+    \item Getting the string representation of a value (16.063 seconds).
+    
+    This is needed to store the value (argument, object, global variable, or return value) into the database.
+\end{itemize}
+This two bottlenecks constitute around 75 percent of total execution time.
+ 
+\begin{table}
+\caption{DDC (database) profiling for quicksort with input list length 256}
+\label{table:DDC_profile}
+\begin{tabular}{rl}
+cumtime & filename:lineno(function)\\
+\hline
+54.184 & \{built-in method builtins.exec\}\\
+54.184 & <string>:1(<module>)\\
+54.184 & \{built-in method \_gdb.execute\}\\
+54.184 & \{declarative\_debugger\}.py:505(invoke)\\
+38.693 & \{declarative\_debugger\}.py:282(invoke)\\
+24.926 & \{declarative\_debugger\}.py:272(\{reverse\_stepi\})\\
+16.078 & \{declarative\_debugger\}.py:847(\{print\_value\})\\
+16.063 & \{method 'format\_string'  of 'gdb.Value'  objects\}\\
+9.641 & \{declarative\_debugger\}.py:352(invoke)\\
+8.281 & \{declarative\_debugger\}.py:374(<listcomp>)\\
+7.804 & \{declarative\_debugger\}.py:299(<listcomp>)\\
+\end{tabular}
+\end{table}
+
+\subsection{Z3 benchmarks}
+To test DDC with a industrial grade program, we chose the theorem prover Z3 \cite{z3}.
+
+The execution used for these benchmarks is the simplest execution possible.
+We pass the following SMT file to Z3:
+\begin{figure}[htbp]
+    \centering
+    \caption{SMT file passed to Z3 for benchmarking}
+    \label{fig:SMT_file}
+    \begin{verbatim}
+(assert true)
+(check-sat)
+    \end{verbatim}
+\end{figure}
+All the following data points represent the Z3 execution.
+
+In figure \ref{fig:node_vs_time_z3} we see the relationship between number of nodes versus execution time. We get the same relationship as in with quicksort data.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{gnuplot}[terminal=pdf]
+    set logscale x
+    set xlabel "Number of nodes"
+    set logscale y
+    set ylabel "Time (nanoseconds)"
+    set xrange [1:400]
+    set yrange [1000000000:500000000000]
+    plot 'Datos/z3_nodes_vs_time.dat' using 1:2 notitle
+    \end{gnuplot}
+    \caption{Nodes vs time (Z3)}
+    \label{fig:node_vs_time_z3}
+\end{figure}
+In figure \ref{fig:bp_vs_time_z3} we plot the number of breakpoints set versus execution time. We compare stopping at breakpoints without doing anything (data labeled \verb|Plain breakpoints|) with creating a node each time a breakpoint is hit (data labeled \verb|Tree building|).
+\begin{figure}[htbp]
+    \centering
+    \begin{gnuplot}[terminal=pdf]
+    set logscale x
+    set xlabel "Number of breakpoints"
+    set logscale y
+    set ylabel "Time (nanoseconds)"
+    set xrange [2:30]
+    set yrange [100000000:1000000000000]
+    plot 'Datos/z3_bp_vs_time_ddc.dat' using 1:2 title "Tree building", 'Datos/z3_bp_vs_time_rr.dat' using 1:2 title "Plain breakpoints"
+    \end{gnuplot}
+    \caption{Breakpoints vs time (Z3)}
+    \label{fig:bp_vs_time_z3}
+\end{figure}

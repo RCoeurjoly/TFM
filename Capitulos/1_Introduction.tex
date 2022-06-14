@@ -1,5 +1,5 @@
 \chapter{Introduction}
-\label{cap:introduccion}
+\label{cap:introduction}
 
 \chapterquote{If debugging is the process of removing software bugs, then programming must be the process of putting them in.}{Edsger Dijkstra}
 
@@ -24,9 +24,9 @@ This need to debug C++ programs is what lead to this Master's thesis.
 Debugging is one of the most expensive part of developing software.
 It is estimated that between 35 and 50 percent of development effort is spent on validation and debugging tasks \cite{debuggingMindset}.
 
-There are many debugging approaches, ranging from the fully manual to the almost fully automatic, like delta debugging or program slicing \cite{WhyProgramsFail}. In this Master's thesis we focus on declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, which is a semi automatic approach in which the debugger builds a debugging tree of the program and guides the user through it by asking questions about the correctness of sub-computations until a buggy function is found. We expand the definition of declarative debugging in Chapter \ref{cap:preliminares}.
+There are many debugging approaches, ranging from the fully manual to the almost fully automatic, like delta debugging or program slicing \cite{WhyProgramsFail}. In this Master's thesis we focus on declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, which is a semi automatic approach in which the debugger builds a debugging tree of the program and guides the user through it by asking questions about the correctness of sub-computations until a buggy function is found. We expand the definition of declarative debugging in Chapter \ref{cap:preliminaries}.
 
-Several declarative debuggers have been developed, including for object-oriented languages such as Java \cite{DDJ}, but to the best of our knowledge, there is no declarative debugger for C++. We review the State of the Art of declarative debugging and its implementations in Chapter \ref{cap:estadoDeLaCuestion}.
+Several declarative debuggers have been developed, including for object-oriented languages such as Java \cite{DDJ}, but to the best of our knowledge, there is no declarative debugger for C++. We review the State of the Art of declarative debugging and its implementations in Chapter \ref{cap:stateOfTheArt}.
 
 \section{Goals}
 The goal of this Master's thesis is to develop a declarative debugger for the C++ language.
@@ -58,9 +58,10 @@ and its license is AGPL-3.0 License.
 \section{Structure of the document}
 The rest of the thesis is organized as follows:
 \begin{itemize}
-    \item In Chapter \ref{cap:preliminares} we introduce declarative debugging and the different tools needed to implement DDC.
-    \item  In Chapter \ref{cap:estadoDeLaCuestion} we review the state of the art in declarative debugging. 
-    \item Chapter \ref{cap:definiciones} contains the definitions and proofs that form the theoretical basis of DDC. 
-    \item Chapter \ref{cap:toolDescription} presents the most important usage scenarios of the tool, describes how the debugger was implemented, lists its commands, and compares its features to other declarative debuggers. 
+    \item In Chapter \ref{cap:preliminaries} we introduce declarative debugging and the different tools needed to implement DDC.
+    \item  In Chapter \ref{cap:stateOfTheArt} we review the state of the art in declarative debugging and compares DDC's features to other declarative debuggers.
+    \item Chapter \ref{cap:definitions} contains the definitions and proofs that form the theoretical basis of DDC. 
+    \item Chapter \ref{cap:toolDescription} presents the most important usage scenarios of the tool, describes how the debugger was implemented and lists its commands.
+    \item Chapter \ref{cap:verificationAndTesting} reviews the verification and testing results, including time benchmarks.
     \item Chapter \ref{cap:conclusions} discusses the achievements and the future lines of work that can be followed.
 \end{itemize}
