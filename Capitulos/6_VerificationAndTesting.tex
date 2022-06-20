@@ -1,9 +1,13 @@
-\chapter{Verification and testing}
+\chapter{Verification and benchmarks}
 \label{cap:verificationAndTesting}
+In this chapter, we present the formal verification of some algorithms, a metamorphic relation found and implemented, and time benchmarks.
 \section{Verification}
+To help with the verification effort, we have chosen the Coq proof assistant \cite{coq}. The proofs can be found in the following file:  \url{https://github.com/RCoeurjoly/DDC/blob/database/proofs.v}.
+
+We have proven that the general debugging algorithm, defined in \cite{optimal_strategy}, terminates when the navigation strategy is Top-down and the user answers in the negative to all correction questions.
 \section{Metamorphic testing}
 \section{Benchmarks}
-In this section we will present different time benchmarks of the execution of DDC.\todo{Contar que se buscan las limitaciones y los cuellos de botella}
+In this section we present and discuss different time benchmarks of the execution of DDC. We also list the performance bottlenecks found.\todo{Contar que se buscan las limitaciones y los cuellos de botella}
 
 \subsection{Quicksort benchmarks}
 To gather benchmarks easily, we provide a quicksort implementation that gets its input vector from the command line.
