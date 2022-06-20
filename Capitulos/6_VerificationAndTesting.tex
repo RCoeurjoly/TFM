@@ -1,10 +1,17 @@
 \chapter{Verification and benchmarks}
 \label{cap:verificationAndTesting}
-In this chapter, we present the formal verification of some algorithms and time benchmarks.
+
+In this chapter, we present the formal verification of some algorithms and time benchmarks.\todo{Contar algo de Coq en los preliminares}
+
 \section{Verification}
 To help with the verification effort, we have chosen the Coq proof assistant \cite{coq}. The proofs can be found in the following file:  \url{https://github.com/RCoeurjoly/DDC/blob/database/proofs.v}.
 
-We have proven that the general debugging algorithm, defined in \cite{optimal_strategy}, terminates when the navigation strategy is Top-down and the user answers in the negative to all correction questions. We have also proven that the algorithm returns an incorrect node without children nodes.
+We have proven that the general debugging algorithm, defined in \cite{optimal_strategy}, terminates when the navigation strategy is Top-down and the user answers in the negative to all correction questions.\todo{Esta frase no se entiende} We have also proven that this navigation strategy returns an incorrect node without children nodes.
+
+\todo{Esta sección es exageradamente corta, tiene que desarrollarse
+mucho más, dando ideas intuitivas. Si la sección son 2 párrafos parece
+que no tiene mucho valor}
+
 \section{Benchmarks}
 In this section we present and discuss different time benchmarks of the execution of DDC. We also list the performance bottlenecks found.
 
@@ -30,8 +37,8 @@ In Figure \ref{fig:vector_length_vs_time} we plot the different execution times.
     \item \verb|Trace debugging (rr)| represents the time \verb|rr| needs to, after setting the three breakpoints, navigate until the end.
 \end{itemize}
 
-To reduce the time needed to build the debugging tree, we have created a branch in DDC (called \verb|database|) in which we stored the debugging tree in a database, as proposed in \cite{DDJ}.\todo{Hay que explicar que viene motivado por los resultados anteriores.}
-However, this did not improve the time significantly, as can be seen in Figure~\ref{fig:vector_length_vs_time}. Storing the debugging tree in a database is 43 percent  faster than storing it in main memory (50 seconds versus 87 seconds for a input vector length of 256).\todo{Explicar mucho más. O si se explica después decir explícitamente}
+To reduce the time needed to build the debugging tree, we have created a branch in DDC (called \verb|database|) in which we stored the debugging tree in a database, as proposed in \cite{DDJ}.
+However, this did not improve the time significantly, as can be seen in Figure~\ref{fig:vector_length_vs_time}. Storing the debugging tree in a database is 43 percent  faster than storing it in main memory (50 seconds versus 87 seconds for a input vector length of 256).
 
 \begin{figure}[htbp]
     \centering
@@ -71,9 +78,9 @@ The three data points correspond to the following:
     \label{fig:node_vs_time_quicksort}
 \end{figure}
 
-In Table \ref{table:DDC_profile} we can see the profile results of building a debugging tree with DDC. In this case, the program input is a quicksort execution with input vector length 256, and three suspect functions set (quicksort, partition and swap). 
+In Table \ref{table:DDC_profile} we can see the profile results of building a debugging tree with DDC. In this case, the program input is a quicksort execution with input vector length 256, and three suspect functions set (quicksort, partition, and swap). 
  
-The two bottlenecks identified are:
+We have identified two bottlenecks:
 \begin{itemize}
     \item Reverse stepping into a returning function (24.926 seconds).
     
@@ -106,8 +113,7 @@ cumtime & filename:lineno(function)\\
 \end{table}
 
 \subsection{Z3 benchmarks}
-To test DDC with a industrial grade program, we chose the theorem prover Z3 \cite{z3}.
-
+To test DDC with a industrial grade program, we chose the SMT solver Z3 \cite{z3}.
 The execution used for these benchmarks is the simplest execution possible.
 We pass the SMT file shown in Figure \ref{fig:SMT_file} to Z3:
 \begin{figure}[htbp]
@@ -120,7 +126,7 @@ We pass the SMT file shown in Figure \ref{fig:SMT_file} to Z3:
     \end{verbatim}
 \end{figure}
 
-In figure \ref{fig:node_vs_time_z3} we see the relationship between number of nodes versus execution time. We get the same relationship as in with quicksort data.
+In Figure \ref{fig:node_vs_time_z3} we see the relationship between number of nodes versus execution time. We get the same relationship as in with quicksort data.
 
 \begin{figure}[htbp]
     \centering
@@ -136,7 +142,7 @@ In figure \ref{fig:node_vs_time_z3} we see the relationship between number of no
     \caption{Nodes vs time (Z3)}
     \label{fig:node_vs_time_z3}
 \end{figure}
-In figure \ref{fig:bp_vs_time_z3} we plot the number of breakpoints set versus execution time. We compare stopping at breakpoints without doing anything (data labeled \verb|Plain breakpoints|) with creating a node each time a breakpoint is hit (data labeled \verb|Tree building|).
+In Figure \ref{fig:bp_vs_time_z3} we plot the number of breakpoints set versus execution time. We compare stopping at breakpoints without doing anything (data labeled \verb|Plain breakpoints|) with creating a node each time a breakpoint is reached (data labeled \verb|Tree building|).
 \begin{figure}[htbp]
     \centering
     \begin{gnuplot}[terminal=pdf]
