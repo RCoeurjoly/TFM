@@ -18,7 +18,7 @@ In the following subsections we will discuss the most important stages in a decl
 
 Building the debugging tree is the central, critical stage of the debugging process.
 
-To build the DT, the DD must have access to the following information:
+To build the DT, the declarative debugger (DD) must have access to the following information:
 \begin{itemize}
     \item When a new function or method begins its execution, taking into account the state of the variables at that point.
     \item When a new function or method returns a value, and the state of variables at that point.
@@ -33,7 +33,7 @@ For formal definitions, please see Chapter \ref{cap:definitions}.
 
 The number of questions asked to the user depends on a combination of:
 \begin{itemize}
-    \item the size of the tree (number of nodes, width, and depth of the tree) and
+    \item the size of the tree (number of nodes, width and depth of the tree) and
     \item the navigation strategy.
 \end{itemize}
 
@@ -41,7 +41,7 @@ Although reducing the size of the debugging tree does not always lead to a reduc
 
 \subsubsection{Trusting or suspecting computations}
 
-Most DDs built the DT assuming all functions or methods are suspicious of being wrong.
+Most DDs build the DT assuming all functions or methods are suspicious of being wrong.
 However, this is hardly ever the case.
 %
 In the case of debugging a C++ program, one option to reduce the size of the DT would be to trust all functions and methods provided by the language implementation, which are located under the \verb|std| namespace, or trusting everything provided by a reputable third party, like Boost \cite{TheBoostLibraries}.
@@ -50,13 +50,13 @@ This process happens before starting to build the DT, and therefore it reduces t
 Another perspective is that when debugging a program, it is usually the case that the user believes the problem lays in the parts she developed, not in the external functions she calls.
 %
 By suspecting only the functions and methods developed by the user (and implicitly trusting all other functions), the debugger can ignore all other functions, like those provided by the standard or by external libraries.
-This is the approach used in developing DDC.
+This is the approach used by DDC.
 This process also happens before starting to build the DT: it requires manual input from the user in selecting those computations that should be suspected.
 
 \subsubsection{Using test cases as oracles}
 
 Another method to reduce the size of the DT is to have an external oracle mark computations as correct.
-This oracle might be the set of tests that use some of the suspect functions or methods. By collecting these test executions, which we assume are correct, we can discard the same executions if present in the DT of the program being debugged.
+This oracle might be the set of tests that use some of the suspect functions or methods. By collecting these test executions, which we assume are correct, we can discard the same executions if they are present in the DT of the program being debugged.
 
 This functionality, provided by DDC, requires manual input from the user for selecting the test cases to be executed.
 
@@ -66,14 +66,30 @@ This functionality, provided by DDC, requires manual input from the user for sel
 Tree transformations happen once the DT has been built, so the improvement happens in terms of navigation time, not in building time or memory footprint.
 
 There are several transformations proposed in the literature, like loop expansion and tree compression \cite{LoopExpansionTreeCompression}.
-These processes are fully automatic, so they do not need any input from the user.\todo{Se podría explicar que estas transformaciones a veces reducen el número de nodos y otros
-lo aumentan para mejorar el funcionamiento de las estrategias.}
+These processes are fully automatic, so they do not need any input from the user. A tree transformation can reduce or increase the number of nodes in the tree. The latter is done to make the tree more balanced and therefore increasing the efficiency of the navigation strategies.
 
 \subsection{Navigating the debugging tree}
 Navigating the debugging tree is the phase when the debugger asks an external oracle questions about the correctness of certain nodes, with the purpose of finding a buggy one.
-The goal is to minimize the number of questions, to make the process as fast as possible.
+The goal of this phase is to minimize the number of questions, to make the process as fast as possible.
 
-\todo{Contar algo más, que queda muy corto. En plan que se puede analizar para la estrategia el tamaño del subarbol, el número de funciones distintas, etc.}
+\subsection{Correctness answers}
+When asked about the correctness of a certain node, the user usually has the following possible answers at her disposal, with the corresponding effect on the debugging tree:
+\begin{itemize}
+    \item Yes: the node has produced a correct set of outputs with the given inputs.
+    
+    The subtree rooted in this node can be eliminated from the debugging tree.
+    Also, all nodes that have the same inputs and outputs can be removed from the debugging tree.
+    \item No: the node has not produced a correct set of outputs with the given inputs.
+    
+    The subtree rooted in this node becomes the debugging tree.
+    \item Trusted: this function or method is deemed correct for all inputs.
+    
+    All nodes representing an execution of this function or method can be removed from the debugging tree, no matter the inputs received.
+    \item I don't know: the user cannot evaluate the correctness of this sub computation. 
+    
+    The node can be removed from the debugging tree or the navigation strategy can choose another node, leaving this node in the tree.\todo{Contar que puede introducir incompletitud y que hay
+estrategias para paliarlo (volver a preguntar al final, por ejemplo).}
+\end{itemize}
 
 \section{C++ programming language}
 
@@ -105,16 +121,16 @@ On the other hand, in OOP, apart from the arguments and return value, we have to
 \end{itemize}
 Therefore, support for OOP implies support for functional programming.
 
-Being statically typed gives the advantage of providing type information for functions arguments and return values, variables, and classes. This is important for the debugger to be able to display information adequately to the user, making the debugging experience better.
+Being statically typed gives the advantage of providing type information for functions arguments, return values, variables, and classes. This is important for the debugger to be able to display information adequately to the user, making the debugging experience better.
 
 The process of compilation usually removes a lot of information about the source code, with the purpose of creating a faster and smaller binary file.
-However, source code information is necessary to make the debugging session user friendly. This information includes class, function, and variable names, among others.
+However, source code information is necessary to make the debugging session user friendly. This information includes class, function and variable names, among others.
 To make this information available for the debugger, the C++ program must be compiled with the debug information flag set to true.
 
 \section{Technologies used}
 There are two main dependencies in this project:
 \begin{itemize}
-    \item GDB, used as the general framework on which to build DDC.
+    \item GDB, used as the general framework on DDC is built.
     \item rr, used for its reverse execution features.
 \end{itemize}
 
@@ -134,7 +150,7 @@ The type of a certain value is needed in two occasions: when displaying the valu
 \item[Frames.] 
 A frame contains the data relevant to a function call.
 Frames are organized hierarchically in a call stack, the frame \(n+1\) being the caller of frame \(n\), the callee.
-\item[Symbols.] A symbol is a variable or a function. We use symbols to determine the variable names. Symbols also provide the scope they belong to. This is needed to mark a variable as a global one or an argument to a function.
+\item[Symbols.] A symbol is a variable or a function. We use symbols to determine the variable names. Symbols also provide the scope they belong to. This is needed to check if a variable is a global one or an argument to a function.
 
 \item[Breakpoints.]
 A breakpoint is a bookmark set in a certain location of a program, such as a function or specific line, which tells the debugger to stop the execution.
@@ -149,7 +165,7 @@ A breakpoint has an attribute named \emph{commands}, which is executed when it i
 We make use of these commands to store the information of the current frame.
 
 \item[Final breakpoints.]
-A final breakpoint is a breakpoint that is triggered when the current frame returns. Final breakpoints are used to gather the pertaining information when the function or method returns, which includes:
+A final breakpoint is a breakpoint that is triggered when a function or method returns. Final breakpoints are used to gather the following information:
 \begin{itemize}
     \item The return value.
     \item The state of the object.

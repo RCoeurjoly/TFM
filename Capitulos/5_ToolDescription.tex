@@ -4,28 +4,29 @@ DDC consists of approximately 900 lines of mostly statically typed Python, which
 %
 It is loaded into rr through the \verb|source| command, which itself can be put inside a \verb|.gdbinit| file.
 %
+
 In this chapter we will explain the architecture of the tool.
-Then, we will go through two usage scenarios:
+Then, we will go through three usage scenarios:
 \begin{itemize}
-    \item Bug finding.
+    \item Finding bugs in terminating programs.
     \item Using test cases as oracles to reduce tree size.
+    \item Finding bugs in non terminating programs.
 \end{itemize}
-In the third section, we will present some benchmarks of the execution of DDC.
 Lastly, we will list all commands provided by the tool.
 
 \section{Architecture}
 In this section we detail and justify the most important design decisions made while developing DDC.
 \subsection{Tree building}
-To represent the debugging tree, we use the \verb|Node| class. The \verb|Node| class is a recursive data structure, since it has an attribute called \verb|children| which is a list of \verb|Node|s. This list of children nodes are sorted by execution time, that is, children node in position \(n\) has executed before than children node in position \(n+1\).
+To represent the debugging tree, we use the \verb|Node| class. The \verb|Node| class is a recursive data structure, since it has an attribute called \verb|children| which is a list of \verb|Node|s. This list of children nodes are sorted by execution time, that is, a child node in position \(n\) has executed before than a child node in position \(n+1\).
 
 The \verb|DebuggingSession| class has attribute of type \verb|Node| to store the debugging tree. It also tracks if the debugging session has begun and if the tree has been built.
 
 \subsubsection{Adding a node to the tree}
 We add a node to the debugging tree once we hit a breakpoint.
 The node is added to the last position of the tree.
-At that moment we add the 3-tuple of inputs to the node.
+At that moment we add the 3-tuple of inputs, denoted \(I\) in Chapter \ref{cap:definitions}, to the node.
 \subsubsection{Finishing a node}
-When the finish breakpoint of a certain function it hit, we add the 4-tuple of outputs.
+When the finish breakpoint of a certain function it hit, we add the 4-tuple of outputs, denoted \(O\) in Chapter \ref{cap:definitions}, to the node.
 \subsubsection{Finishing the tree building process}
 The tree is considered built if one of the following happens:
 \begin{itemize}
@@ -36,9 +37,9 @@ The tree is considered built if one of the following happens:
 \subsection{Tree transformations}
 After having the WMDT built, we apply all tree transformations available.
 A tree transformation is an algorithm that receives a WMDT an returns another WMDT.
-DDC implements for the simplified tree compression algorithm, which is described next.
+DDC implements the simplified tree compression algorithm, which is described next.
 \subsubsection{Simplified tree compression}
-The simplified tree compression algorithm consists in two steps:
+The simplified tree compression algorithm consists of two steps:
 \begin{itemize}
     \item Compressing the root of the WMDT if it can be compressed.
     \item Compressing each of the children nodes of the root of the WMDT if they can be compressed.
@@ -51,7 +52,7 @@ Given a WMDT, we can compress nodes if:
 To check if a node can be compressed we use a recursive function, which takes a node as an argument and returns a 2-tuple, whose elements are:
 \begin{itemize}
     \item bool: True if the node can be compressed. False otherwise.
-    \item int: If the node can be compressed, it stands for number of nodes to compress. Its value is zero otherwise.
+    \item int: If the node can be compressed, it stands for the number of nodes to compress. Its value is zero otherwise.
 \end{itemize}
 
 This algorithm searches for the largest possible compression.
@@ -70,37 +71,35 @@ The general debugging algorithm takes two arguments:
     \item A navigation strategy.
 \end{itemize}
 It returns either a buggy node or \(\bot\).
-It consists of loop, from which we exit if the WMDT is empty or a buggy node has been found.
-To determine if a node has been found we have to check that the WMDT consists of an unique incorrect node.
+It consists of a loop, from which we exit if the WMDT is empty or a buggy node has been found.
+To determine if a node has been found we have to check that the WMDT consists of an incorrect node without children nodes.
 
-Once inside the loop, first we select the node to be asked about by means of the strategies, which are explained in \hyperref[implementation:Strategies]{Section Strategies}.
+Once inside the loop, first we select the node to be evaluated by means of the strategies, which are explained in \hyperref[architecture:Strategies]{Section Strategies}.
 We then ask the user about the node. One of the options available to the user is to change strategy. If this is chosen, we ask the user her preferred strategy and continue the execution of the loop.
 
-If no change in strategy is required, we execute the adequate action corresponding to the correctness answer (see \hyperref[implementation:correctnessAnswers]{Section User answers to correctness questions}) and continue the execution of the loop.
+If no change in strategy is required, we execute the adequate action corresponding to the correctness answer (see \hyperref[architecture:correctnessAnswers]{Section User answers to correctness questions}) and continue the execution of the loop.
 
 \subsection{Navigation strategies}
-\label{implementation:Strategies}
+\label{architecture:Strategies}
 A navigation strategy is an algorithm that takes a WMDT and returns a node.
-In the implementation we also need to keep track of the position of the current node, since Top-down is a recursive algorithm.
 
-To ease the task of adding more strategies to DDC, we implemented a wrapper to the strategies.\todo{En algún lugar (preliminares?) habría que contar que si respondemos que sí a algo podemos eliminar el subárbol que tiene ese nodo como raíz; si se contesta que no se puede elegir ese subárbol como actual. Creo que en preliminares no hay posibles respuestas y en algún lado tendría que estar. Veo que está después, habría que hacer referencia entonces diciendo que a continuación se explica. El caso es que esto es necesario para entender las estrategias, quizás lo contaría antes.}
+To ease the task of adding more strategies to DDC, we implemented a wrapper to the strategies.
 
 \subsubsection{Top-down}
-Top-down is a recursive algorithm, which searches for the first node whose correctness is unknown.\todo{Explicar un poco más, que va desde la raíz preguntando por los hijos de izquierda a derecha o algo así.}
+Top-down is a recursive algorithm, which searches for the first node whose correctness is unknown. It chooses the first child of the root node whose correctness is unknown.
 
 \subsubsection{Divide and Query (Hirunkitti)}
 In Divide and Query (Hirunkitti), we select the child node whose weight is the closest to half of the root node weight.
 
 \subsubsection{Heaviest first}
-In heaviest first, we select the child node whose weight is the heaviest.
+In heaviest first, we select the child node whose weight is the heaviest among all the children nodes.
 
 \subsection{User answers to correctness questions}
-\label{implementation:correctnessAnswers}
-When asked about the correctness of a node, the user has the possibility of answering (i) I don't know, (ii) Yes, (iii) No or (iv) Trusted.
+\label{architecture:correctnessAnswers}
+When asked about the correctness of a node, the user has the option of answering (i) I don't know, (ii) Yes, (iii) No, and (iv) Trusted.
 We choose the next node and/or prune the debugging tree depending on the answer
 \subsubsection{I don't know}
-If the user does not know if the node is correct, we remove it from the WMDT and continue the debugging session.\todo{Contar que puede introducir incompletitud y que hay
-estrategias para paliarlo (volver a preguntar al final, por ejemplo).}
+If the user does not know if the node is correct, we remove it from the WMDT and continue the debugging session.
 \subsubsection{Yes}
 If the node is deemed correct by the user, we remove it from the WMDT and all other nodes equal to the correct node.
 
@@ -118,20 +117,20 @@ DDC implements the functionality of test cases as oracles with two global variab
     \item In \verb|PENDING_CORRECT_NODES| we store a list of all nodes that have started but not finished.
 \end{itemize}
 
-To compare the gathered correct nodes with those within the debugging tree, we implement the \verb|ComparableTree| class that derives from \verb|rich.tree|, which is the class used to present the information to the user.
+To compare the gathered correct nodes with those within the debugging tree, we implement the \verb|ComparableTree| class that derives from \verb|rich.tree|, which is the class used to present the information to the user. 
 
 The \verb|Node| class has a member function \verb|get_tree|, which returns a \verb|ComparableTree|.
-For comparison with elements in the \verb|CORRECT_NODES| list, the node gets stripped of its correctness value, children and weight.
+For comparison with elements in the \verb|CORRECT_NODES| list, the node gets stripped of its correctness value, children and weight, comparing only inputs and outputs, denoted \(I\) and \(O\) respectively in Chapter \ref{cap:definitions}.
 
 Once a node finishes, we search for it in the \verb|CORRECT_NODES| list. If found, we remove it from the debugging tree.
 
 \section{Usage scenarios}
-This section describes two usage scenarios with DDC.
+This section describes three usage scenarios with DDC.
 We will explain which commands should be executed and the expected output.
 
-\subsection{Bug finding}
-The execution of the code in Figure~\ref{lst:unexpectedQuicksortSource} results in an unexpected output, \(\{10, 5, 1, 7, 8, 9\}\), which is not sorted.
-It uses the implementations of functions \verb|quickSort|, \verb|partition|, and \verb|swap| defined in Figure~\ref{lst:quicksortFunctions}.
+\subsection{Finding bugs in terminating programs}
+The execution of the code in Listing~\ref{lst:unexpectedQuicksortSource} results in an unexpected output, \(\{10, 5, 1, 7, 8, 9\}\), which is not sorted.
+It uses the implementations of functions \verb|quickSort|, \verb|partition|, and \verb|swap| defined in Listing~\ref{lst:quicksortFunctions}.
 \begin{lstlisting}[language=C++, caption={Code that results in unexpected output}, frame=tb, label={lst:unexpectedQuicksortSource}]
 #include <quicksort.h>
 
@@ -192,7 +191,7 @@ void print_vector(const std::vector<int> &my_vector)
 \end{lstlisting}
 
 To begin a debugging session with the purpose of finding the cause of the error, we first have to record and replay the buggy program with \verb|rr|. This is shown in
-Figure~\ref{lst:compileRecordReplayQuicksort}.
+Listing~\ref{lst:compileRecordReplayQuicksort}.
 \begin{lstlisting}[language=bash, caption={Compiling, recording and replaying quickSort}, frame=tb, label={lst:compileRecordReplayQuicksort}]
 nix build
 rr record ./result/bin/quicksort
@@ -222,7 +221,8 @@ Num Type       Disp Enb Address         What
     \end{verbatim}
 \end{figure}
 Note that the results of the command \verb|info breakpoints| have been simplified for display purposes.
-Now we can choose the navigation strategy.
+To build the debugging tree, we have to issue the \verb|start-declarative-debugging-session|.
+Once the debugging tree has been built, we can choose the navigation strategy.
 \begin{figure}
     \centering
     \caption{Choosing the navigation strategy}
@@ -234,7 +234,7 @@ Please choose navigation strategy
   Heaviest first
     \end{verbatim}
 \end{figure}
-Then, as shown in Figure \ref{fig:correctnessQuestion}, the debugger asks us about the correctness of the root node of the debugging tree. This question does not have the option to change the navigation strategy, as opposed to all other correctness questions, where the options are shown in Figure \ref{fig:correctnessQuestionNonRootOptions}.
+Then, as shown in Figure \ref{fig:correctnessQuestion}, the debugger asks us about the correctness of the root node of the debugging tree. This question does not have the option to change the navigation strategy, as opposed to all other correctness questions, where the options are shown in Figure~\ref{fig:correctnessQuestionNonRootOptions}.
 
 \begin{figure}
     \centering
@@ -275,8 +275,6 @@ quickSort(std::vector<int, std::allocator<int> >&, int, int)
     \end{verbatim}
 \end{figure}
 
-\todo{Se llega a hablar de la figura 5.5?}
-
 \begin{figure}
     \centering
     \caption{Options to correctness question of non root node}
@@ -290,7 +288,8 @@ quickSort(std::vector<int, std::allocator<int> >&, int, int)
     \end{verbatim}
 \end{figure}
 
-The debugging session ends when the buggy node is found, as shown in Figure \ref{fig:buggyNodeFound}. Although we only have the granularity to say which function is buggy, we also display with what inputs the buggy function misbehaves, so that the user can create a test case that reproduces the failure.
+The debugging session ends when the buggy node is found, as shown in Figure \ref{fig:buggyNodeFound}. Although we only have the granularity to say which function is buggy, we also display with what inputs the buggy function misbehaves, so that the user can create a test case that reproduces the failure.\todo{Asegurarse de que todos los listings se comentan explícitamente, explicando qué se hace en ellos}
+
 \begin{figure}
     \centering
     \caption{Buggy node found}
@@ -306,11 +305,13 @@ swap(int*, int*)
     └── b = 1
     \end{verbatim}
 \end{figure}
-
 \subsection{Using test cases as oracles to reduce tree size}
 Now, using the same buggy program as in the previous section, we are going to gather correct nodes by executing test cases.
-To do this, we first have to develop a C++ executable which uses the functions with suspect to be buggy, which we display in Figure \ref{lst:quicksortTests}.
-\begin{lstlisting}[language=C++, caption=Test cases for quickSort, frame=tb, label={lst:quicksortTests}]
+To do this, we first have to develop a C++ executable which uses the functions with suspect to be buggy, which we display in Listing \ref{lst:quicksortTests}.
+
+In this listing, we test ten vectors composed of random numbers from 0 to 9. When executing these test cases, the return code is 0, so we know that our \verb|quickSort| implementation at least works for some vectors.
+
+\begin{lstlisting}[language=C++, caption={Test cases for quickSort}, frame=p, label={lst:quicksortTests}]
 #include <quicksort.h>
 #include <algorithm>
 #include <cassert>
@@ -333,7 +334,6 @@ int main()
   return 0;
 }
 \end{lstlisting}
-In this listing, we see that we test ten vectors composed of random numbers from 0 to 9. When executing these test cases, the return code is 0, so we know that our \verb|quickSort| implementation at least works for some vectors.
 
 Like with a buggy program, we first have to record the execution with \verb|rr|. This shell will be named \(rr_{server}\), to differentiate it from the debugging shell.
 \begin{lstlisting}[language=bash, caption={Compiling, recording and replaying quickSort test cases}, frame=tb, label={lst:compileRecordReplayQuicksortTests}]
@@ -342,7 +342,7 @@ rr record ./result/tests/test_quicksort
 rr replay
 \end{lstlisting}
 Once inside the \verb|rr| command prompt, we have to tell DDC from which functions should the correct nodes be gathered.
-This can be done with the \verb|save-correct-function| command described in the command \hyperref{command:save-returning-correct-node}[save-returning-correct-node]. In our example, we want to save correct nodes gathered from the functions we defined, that is, \verb|quickSort|, \verb|partition| and \verb|swap|. Therefore, we execute the commands shown in Figure \ref{fig:saving-correct-functions} in \verb|rr|. Again, the results of the command \verb|info breakpoints| have been simplified.
+This can be done with the \verb|save-correct-function| command described in the command \hyperref[command:save-returning-correct-node]{save-returning-correct-node}. In our example, we want to save correct nodes gathered from the functions we defined, that is, \verb|quickSort|, \verb|partition| and \verb|swap|. Therefore, we execute the commands shown in Figure \ref{fig:saving-correct-functions} in \verb|rr|. Again, the results of the command \verb|info breakpoints| have been simplified.
 \begin{figure}
     \centering
     \caption{Setting the functions from which to gather correct nodes}
@@ -366,7 +366,7 @@ Num Type       Disp Enb Address         What
 \end{figure}
 
 At this point, we can use the \verb|GDB| commands \verb|start| and \verb|continue| (this last one repeatedly) to reach the end of the program.
-Alternatively, we have provided the convenience command \verb|til-the-end| (see command \hyperref{command:til-the-end}[til-the-end]) that has the exact same functionality.
+Alternatively, we have provided the convenience command \verb|until-the-end| (see command \hyperref[command:until-the-end]{until-the-end}) that has the exact same functionality.
 Once we have reached the end of the program, all nodes have been collected. This can be checked by dropping into an interactive Python shell inside \verb|rr| like is shown in Figure \ref{fig:python-interactive}. To exit the Python shell, use \verb|Ctrl-D|.
 \begin{figure}
     \centering
@@ -421,9 +421,9 @@ partition(std::vector<int, std::allocator<int> >&, int, int)
     └── 5
     \end{verbatim}
 \end{figure}
-Once all correct nodes have been collected, we have to start the debugging session of our buggy program with a separate \verb|rr| execution (see Figure \ref{lst:compileRecordReplayQuicksort}), which we will call \(rr_{client}\), and collect the correct nodes already gathered from \(rr_{server}\). This has to be done with the command \verb|listen-for-correct-nodes}| (see command \hyperref{command:listen-for-correct-nodes}[listen-for-correct-nodes]).
+Once all correct nodes have been collected, we have to start the debugging session of our buggy program with a separate \verb|rr| execution (see Listing \ref{lst:compileRecordReplayQuicksort}), which we will call \(rr_{client}\), and collect the correct nodes already gathered from \(rr_{server}\). This has to be done with the command \verb|listen-for-correct-nodes}| (see command \hyperref[command:listen-for-correct-nodes]{listen-for-correct-nodes}).
 
-Now we are ready to send the correct nodes from \(rr_{server}\) to \(rr_{client}\). This is done with the command \verb|send-correct-nodes| (see command \hyperref{command:send-correct-nodes}[send-correct-nodes]).
+Now we are ready to send the correct nodes from \(rr_{server}\) to \(rr_{client}\). This is done with the command \verb|send-correct-nodes| (see command \hyperref[command:send-correct-nodes]{send-correct-nodes}).
 In \(rr_{server}\) we can see that nodes are being sent, like shown in Figure \ref{fig:sendingNode}.
 \begin{figure}
     \centering
@@ -473,6 +473,63 @@ swap(int*, int*)
 If we now start the debugging session (after setting the suspect functions like demonstrated in Figure~\ref{fig:suspecting-functions}), we see that the WMDT has 8 nodes (see Figure \ref{fig:treeAfterRemoval}) instead of 9 (see Figure \ref{fig:buggyTreeBefore}). This is because a swap node has been removed, more specifically, the node in Figure \ref{fig:removedNode}.
 
 This node has been removed from the debugging tree because it appeared in a test case, therefore the debugger has deduced that this computation is correct.
+\subsection{Finding bugs in non terminating programs}
+As the main contribution of DDC, we present the process of debugging a non terminating program.
+
+In Listing~\ref{lst:nonTerminatingPartition} we can see a non terminating implementation of the \verb|partition| function. This is because the loop does not terminate, since we forgot to increment \verb|j| after each iteration.
+\begin{lstlisting}[language=C++, caption={Non terminating partition implementation}, frame=p, label={lst:nonTerminatingPartition}]
+int partition(std::vector<int> &my_vector, int low, int high)
+{
+  int pivot = my_vector[high];
+  int i = (low - 1);
+  for (int j = low; j <= high - 1; j)
+    {
+      if (my_vector[j] <= pivot)
+        {
+          i++;
+          if (i != j)
+            swap(&my_vector[i], &my_vector[j]);
+        }
+    }
+  if ((i + 1) != high)
+    swap(&my_vector[i + 1], &my_vector[high]);
+  return (i + 1);
+}
+\end{lstlisting}
+The rest of the functions are unchanged from Listing~\ref{lst:quicksortFunctions} and the main function is the same as in Listing~\ref{lst:unexpectedQuicksortSource}.
+First, we have to record this program execution, as shown in Listing \ref{lst:recordAndStopQuicksort}.
+\begin{lstlisting}[language=bash, caption={Starting and stoping the recording of non terminating quickSort}, frame=tb, label={lst:recordAndStopQuicksort}]
+rr record ./result/bin/quicksort
+^C
+\end{lstlisting}
+The \verb|^C| command represents sending the \verb|SIGINT| signal to rr, with stops the recording.
+
+Now we can replay the recording, by executing \verb|rr replay|.
+After, some questions, we find the node of partition in Figure~\ref{fig:nonTerminatingPartitionNode}. Note that the \verb|return value| and the \verb|arguments when returning| branches are missing, indicating that this function did not return. 
+\begin{figure}
+\centering
+\caption{Buggy node of non terminating partition}
+\label{fig:nonTerminatingPartitionNode}
+\begin{verbatim}
+partition(std::vector<int, std::allocator<int> >&, int, int)                                                                                          
+├── correctness                                                                                                                                       
+│   └── I don't know                                                                                                                                  
+├── weight                                                                                                                                            
+│   └── 1                                                                                                                                             
+└── arguments on entry                                                                                                                                
+    ├── my_vector = std::vector of length 6, capacity 6 = {                                                                                           
+    │     [0] = 10,                                                                                                                                   
+    │     [1] = 7,                                                                                                                                    
+    │     [2] = 8,                                                                                                                                    
+    │     [3] = 9,                                                                                                                                    
+    │     [4] = 1,                                                                                                                                    
+    │     [5] = 5                                                                                                                                     
+    │   }                                                                                                                                             
+    ├── low = 0                                                                                                                                       
+    └── high = 5
+\end{verbatim}
+\end{figure}
+
 
 \section{Commands}
 We now list and describe all the available commands. These can be issued inside rr. Completion for these commands is enabled, that is, if you type \verb|sus| and then \verb|TAB|, \verb|suspect-function| should appear.
@@ -484,13 +541,12 @@ The following information can also be found with \verb|help <command>|, where \v
 
 Mandatory command used in a debugging session.
 
-Sets a breakpoint on the location provided as argument. It also adds the command \hyperref[command:add-node-to-session]{add-node-to-session} to it.
+Sets a breakpoint on the location provided as argument. It also adds the command \hyperref[command:add-node-to-session]{add-node-to-session} to the breakpoint created.
 It should be used at least once before starting the debugging session.
 
 Arguments: location.
 
 Location completion is enabled.
-
 
 \item add-node-to-session
 \label{command:add-node-to-session}
@@ -508,7 +564,7 @@ Arguments: none.
 \item save-returning-node
 \label{command:save-returning-node}
 
-It saves the arguments of the function or method that just returned.
+It saves the return value of the function or method that just returned.
 This is the command attached to finish breakpoints created with \hyperref[command:add-node-to-session]{add-node-to-session}.
 
 For internal use only.
@@ -562,13 +618,13 @@ For internal use only.
 \item save-returning-correct-node
 \label{command:save-returning-correct-node}
 
-It saves the arguments of the function or method that just returned into the appropriate node.
+It saves the return value of the function or method that just returned into the appropriate node.
 
 Arguments: none.
 
 For internal use only.
-\item til-the-end
-\label{command:til-the-end}
+\item until-the-end
+\label{command:until-the-end}
 
 Continues the execution of the inferior until the program is not being run.
 
@@ -590,7 +646,7 @@ Arguments: none.
 
 Send all the correct nodes gathered from tests to the client.
 Executed by the server.
-The client has to have issued the \hyperref[command:listen-for-correct-nodes]{listen-for-correct-nodes} before, otherwise a ConnectionRefusedError exception is thrown.
+The client has to have issued the \hyperref[command:listen-for-correct-nodes]{listen-for-correct-nodes} before, otherwise a \verb|ConnectionRefusedError| exception is thrown.
 
 Mandatory command used in gathering correct nodes.
 

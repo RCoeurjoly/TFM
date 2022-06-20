@@ -3,7 +3,7 @@
 
 In this chapter we will summarize the state of the art in declarative debugging.
 %
-The identification of issues and solutions comes from the 2017 survey \cite{Survey}. Latter research is included when appropriate. Also, we also mention where DDC contributes to the state of the art: a new tree transformation called simplified tree compression and the support for non-terminating programs.
+The identification of issues and solutions comes from the 2017 survey \cite{Survey}. Latter research is included when appropriate. We also mention where DDC contributes to the state of the art: a new tree transformation called simplified tree compression and support for debugging non-terminating programs.
 
 \section{Issues of algorithmic debugging}
 The following issues were identified in the 2017 survey \cite{Survey}. They are divided into three categories:
@@ -35,17 +35,17 @@ If a declarative debugger is not integrated into the other debugging tools used 
 Usually, the bug granularity of declarative debuggers is a function or method. Ideally it should be smaller, such as loop or even line.
 \end{itemize}
 \subsection{Completeness}
-The following are some features that cannot be handled by declarative debuggers.
+The following are some features that pose problems to declarative debuggers.
 \begin{itemize}
     \item Issue-7: Termination
 
-Non terminating programs cannot be debugged by DDs.
+Non terminating programs usually cannot be debugged by DDs, apart from DDC.
     \item Issue-8: Concurrency
 
 The standard debugging tree is not prepared to store concurrent computations.
     \item Issue-9: I/O
 
-Programs that make use of the file system, a database cannot be handled by declarative debuggers.
+Programs that make use of the file system or a database cannot be handled by declarative debuggers.
 \end{itemize}
 \section{Solutions of algorithmic debuggers}
 \begin{enumerate}
@@ -67,7 +67,7 @@ Also, the navigation strategy can change to adapt to the debugging tree.
 
 \item Accepted Answers [deals with Issue-3]
 
-The oracle should have the following options available when answering a debugger correctness question:
+The oracle should have the following options available when answering a correctness question posed by the debugger:
 \begin{itemize}
     \item Yes: the node should be removed from the tree.
     \item No: the subtree rooted in this node should be the new debugging tree.
@@ -90,7 +90,7 @@ If the user knows which part of the node is incorrect, the debugger should provi
 
     \item Memoization [deals with Issue-3 and Issue-5]
 
-By memoizing answers, when a node that has already been answered appears in the navigation phase, the debugger can avoid asking the oracle again.
+By memoizing answers, the debugger can avoid asking the oracle again when a node that has already been answered appears in the navigation phase.
 \item Debugging Tree Exploration [deals with Issue-4]
 
 Instead of being limited to view the current node being questioned, the user should have the freedom to explore the debugging tree, selecting which subtree seems most suspicious of being buggy.
@@ -99,7 +99,7 @@ Instead of being limited to view the current node being questioned, the user sho
 If the user makes a mistake when answering a question, it should be possible to undo the answer so that the debugger asks again.
 \item Communication with an IDE [deals with Issue-5 and Issue-6]
 
-By communicating with an IDE, the declarative debugger can leverage those usability and tools. Also the learning curve gets reduced.
+By communicating with an IDE, the declarative debugger can leverage the usability features and tools present in the IDE. Also, the learning curve gets reduced.
 \item Different Levels of Errors [deals with Issue-6, worsens Issue-3]
 
 Some debuggers give the user the option of debugging loop or conditional branches once the buggy function has been identified.
@@ -108,22 +108,23 @@ Some debuggers give the user the option of debugging loop or conditional branche
 By performing program slicing, the debugger extracts only the portion of code that executed in the session, discarding the rest.
 \item Record and replay [deals with Issue-7, worsens Issue-1]
 
-With this technique, instead of dealing with a program execution, the debugger deals with a recording of a program execution. This allows the user to send the termination signal to the non-terminating program being recorded, therefore transforming a non-terminating program into a terminating one, which can be dealt as a regular program. 
+With this technique, instead of dealing with a program execution, the debugger deals with a recording of a program execution. This allows the user to send the termination signal to the non-terminating program being recorded, therefore transforming a non-terminating program into a terminating one.
 The downside of this technique is that it requires the execution of the buggy program twice, once for recording purposes and another for building the debugging tree, therefore doubling the time needed to build the debugging tree (Issue-1).
 
 This feature is a novel contribution of this Master's thesis. A demonstration can be found in Chapter \ref{cap:toolDescription}.
 \item Unified debugging and testing [deals with Issue-3 and Issue-3]
 
 This technique was proposed in \cite{unifiedFrameworkDeclarativeDebuggingTesting}. Its purpose is to ``integrate debugging and testing within a single unified framework where each phase generates useful information for the other and the outcomes of each phase are reused''.
-This reduces the number of questions asked to the user (Issue-3), since it answers some with an external oracle, namely test cases.
+This reduces the number of questions asked to the user (Issue-3), since it answers some with an external oracle, namely a test suite.
 \item Generalized algorithmic debugging
 
 In the generalization proposed in \cite{AlgorithmicDebuggingGeneralized}, a node does not correspond to a function call, but can represent the execution of any amount of code. Also, it contains only code that has been executed in the execution passed to the declarative debugger. This improves the granularity of detected bugs (Issue-6).
-However, this generalization has not been incorporated in a declarative debugger, so the benefits remain unrealized.
+However, this generalization has not been incorporated into a declarative debugger, so the benefits remain unrealized.
 \end{enumerate}
 \subsection{Conclusions}
-Table \ref{table:problemsVsFeatures} is an updated version of Table 1: Relation Between Issues and Solutions from \cite{Survey}. We have added in green those new features proposed after the publication of the survey. Like in \cite{Survey}, the symbol \(\checkmark\) indicates that the feature solves or at least alleviates the issue, while \ding{55} indicates that the feature worsens it.
-\todo{Saca alguna conclusión sobre tu depurador}
+Table \ref{table:problemsVsFeatures} is an updated version of Table 1: Relation Between Issues and Solutions in~\cite{Survey}. We have added in green those new features proposed after the publication of the survey. Like in~\cite{Survey}, the symbol \(\checkmark\) indicates that the feature solves or at least alleviates the issue, while \ding{55} indicates that the feature worsens it. 
+
+DDC supports debugging non terminating programs by means of record and replay debugging. This feature is not found in other declarative debuggers. However, by using record and replay, the debugging time is increased. This time penalty is explored more in depth in Chapter \ref{cap:verificationAndTesting}.
 
 \begin{table}
 \caption{Relation Between Issues and Solutions}
@@ -149,7 +150,8 @@ IDE &&&&&\checkmark&\checkmark&&&\\\hline
 \end{tabular}
 \end{table}
 \section{Current state of the art algorithmic debuggers}
-Table \ref{table:debuggerFeatures} is an updated version of Table 2. Comparison of Algorithmic Debuggers in \cite{Survey}. Apart from adding DDC to the table, we have included the debuggers that have been updated since \cite{Survey}, marking in green those features that have been updated.\todo{Saca alguna conclusión de tu depurador}
+Table \ref{table:debuggerFeatures} is an updated version of Table 2. Comparison of Algorithmic Debuggers in~\cite{Survey}. Apart from adding DDC to the table, we have included the debuggers that have been updated since \cite{Survey}, marking in green those features that have been updated.\todo{Saca alguna conclusión de tu depurador}
+
 \begin{sidewaystable}
 \caption{Comparison of Algorithmic Debuggers}
 \label{table:debuggerFeatures}

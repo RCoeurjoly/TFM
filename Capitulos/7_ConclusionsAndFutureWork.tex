@@ -28,16 +28,16 @@ No breakpoints or watchpoints.
     \end{verbatim}
 \end{figure}
 
-During the navigation phase, DDC provides the user with a intuitive command line interface, avoiding a context switch, which can be as disruptive as an interruption \cite{taskSwitching}.
+During the navigation phase, DDC provides the user with an intuitive command line interface, avoiding a context switch, which can be as disruptive as an interruption \cite{taskSwitching}.
 More importantly, an algorithmic debugging session can be intertwined with a generic debugging session in any way, that is, the user can start the algorithmic debugging session after inspecting the program and vice versa. With this functionality, we address Issue-6 raised in the survey \cite{Survey} by \begin{quote}
     allowing the user to switch from a trace debugger to the algorithmic debugger easily
 \end{quote}.
 
-We also consider Goal \ref{goal2} (no changes to program) as achieved. No code instrumentation, such as \verb|# include| or \verb|# define| directives, is needed to debug a program with DDC. Only compiling with debug symbols is required.
+We also consider Goal \ref{goal2} (no changes to program) achieved. No code instrumentation, such as adding \verb|# include| or \verb|# define| directives, is needed to debug a program with DDC. Only compiling with debug symbols is required.
 
-Goal \ref{goal3} (tree transformations) has been fulfilled by implementing the simplified tree compression algorithm. These tree transformation reduces the tree size of recursive programs, therefore reducing the amount of questions the user has to answer. Also, we have build the necessary infrastructure to integrate other tree transformation painlessly in the future.
+Goal \ref{goal3} (tree transformations) has been fulfilled by implementing the simplified tree compression algorithm. This tree transformation reduces the tree size of recursive programs, therefore reducing the amount of questions the user has to answer. Also, we have built the necessary infrastructure to integrate other tree transformation painlessly in the future.
 
-The final goal, Goal \ref{goal4} (test cases as oracles), has also been accomplished. Although another debugging session has to be started to send the correct nodes to the client, we consider that this is convenient enough not to deter its usage. The collection of the correct nodes directly, without starting another debugging session, would be possible if rr supported changing the executable in a running session (analog to the \verb|run| command in GDB), or if we removed rr as a dependency. However, we find it unlikely to remove the rr dependency since GDB support for reverse-stepping \cite{ReverseExecution_GDB}, needed to gather arguments when returning, is much less robust than in rr.
+The final goal, Goal \ref{goal4} (test cases as oracles), has also been accomplished. Although another debugging session has to be started to send the correct nodes to the client, we consider that this is convenient enough not to deter its usage. The collection of the correct nodes directly, without starting another debugging session, would be possible if rr supported changing the executable in a running session (analog to the \verb|run| command in GDB), or if we removed rr as a dependency. However, we find it unlikely to remove the rr dependency since GDB support for reverse-stepping \cite{ReverseExecution_GDB}, needed to gather \(O_o\), \(O_a\) and \(O_g\) (defined in Chapter \ref{cap:definitions}), is much less robust than in \verb|rr|.
 
 Lastly, a notable feature of DDC not included in the initial set of goals is the ability to support several languages \cite{SupportedLanguaged_GDB}, not only C++. This has been accomplished by the use of the GDB Python API, which uses abstractions like frames, symbols and variables that are common to all languages supported by GDB. Although more work is needed to fully support languages other than C++ (see Future work below), we estimate that the effort to do so is comparatively small.
 \section{Future work}
@@ -46,19 +46,24 @@ During the research, development and use of DDC, we have found the following res
 \subsection{Support building tree without suspecting a function or method}
 So far, the user has to suspect at least one function or method before DDC can build the debugging tree.
 Ideally, DDC would be able to build the DT without any suspect breakpoints, by creating a node every time it enters a new function.
-Since we already have functionality to prune the DT of excess nodes (by trusting functions and using test cases as oracles, for example), the user could them reduce the size of the DT.
+Since we already have functionality to prune the DT of excess nodes (by trusting functions and using test cases as oracles, for example), the user could then reduce the size of the DT.
 
-\subsection{Formally verify all algorithms}
-We made an effort to formally verify all algorithms used in DDC.
-In Nagini \cite{nagini}, the tool we selected to perform the verification, we identified a bug\footnote{https://github.com/marcoeilers/nagini/issues/150}, which was confirmed by Nagini main author, that blocked further work. 
-Another option worth considering would be to develop the algorithms in a programming language such as Lean \cite{lean}, which is also a theorem prover in which you can prove programs correct.
-Lean can generate code in C, which could be call from Python.
+\subsection{Complete the formal verification of all algorithms}
+The following verifications remain to be done:
+\begin{itemize}
+    \item The generic debugging algorithm returns a node that was in the initial debugging tree.
+    \item The generic algorithm is correct and complete for all possible navigation strategies and user answers.
+    
+    For this, we would need to model the user as a probability distribution of all the possible answers. We could use a Coq library such as ALEA \cite{ALEA_Coq}. 
+\end{itemize}
+Also, it would advisable to use the program extraction facility of Coq \cite{coqExtraction} and use the verified algorithms from Python, limiting the use of Python code to the user interface (UI).
+In Nagini \cite{nagini}, the tool we initially selected to perform the verification, we identified a bug\footnote{https://github.com/marcoeilers/nagini/issues/150}, which was confirmed by Nagini main author, that blocked further work with Nagini.
 \subsection{Support for C-style arrays}
 C++ arrays are inherited from C to maintain backward compatibility.
-As illustrated by figure \ref{fig:array_to_pointer}, when entering a function, an array changes its type to become a pointer to the type of the elements of the array.
+As illustrated in Figure \ref{fig:array_to_pointer}, when entering a function, an array changes its type to become a pointer to the type of the elements of the array.
 In this example, \verb|arr| is of type \verb|int [6]| before entering \verb|quickSort| and becomes \verb|int *| on entry.
 This makes it impossible to display an array to the user safely, since we do not know its size.
-To avoid dealing with this issue, the examples programs provided with DDC use std::vector instead of C-style arrays.
+To avoid dealing with this issue, the example programs provided with DDC use \verb|std::vector| instead of C-style arrays.
 \begin{figure}[h]
     \centering
     \caption{Integer array variable changes to integer pointer upon entry to function}
@@ -98,7 +103,7 @@ quicksort::quick_sort<i32>
 \end{figure}
 This tree has two problems:
 \begin{itemize}
-    \item Although it has already returned and the argument arr is mutable, the tree has no \verb|args when returning| branch.
+    \item Although it has already returned and the argument \verb|arr| is mutable, the tree has no \verb|args when returning| branch.
     \item The representation of arr is not very helpful to the user, especially \verb|data_ptr|.
 \end{itemize}
 The \verb|args when returning| branch is created when the following function returns a non empty list:
@@ -113,19 +118,19 @@ def get_pointer_or_ref(arguments, frame):
 Therefore, we must deduce that the argument \verb|arr| is neither a pointer nor a reference. We should find out which type it is to support this Rust program.
 \subsection{Support concurrent programs}
 Currently, DDC does not support the debugging of concurrent programs.
-This is mainly due to the fact that rr does not support multi threaded programs \cite{rr}.
-We could remove the rr dependency to support concurrency, but reverse execution in GDB \cite{ReverseExecution_GDB} is more limited than in rr.
+This is mainly due to the fact that \verb|rr| does not support multi threaded programs \cite{rr}.
+We could remove the rr dependency to support concurrency, but reverse execution in \verb|GDB| \cite{ReverseExecution_GDB} is more limited than in \verb|rr|.
 \subsection{Implement more strategies}
 As mentioned in the survey \cite{Survey}, several navigation strategies have been developed.
 Of special interest is Optimal Divide and Query \cite{optimal_strategy}, which has been proven correct and optimal.
-One difficulty we may face when developing this strategy is that another weight marking has to be created for the debugging tree.
+One difficulty we may face when developing this strategy is that the debugging tree has to be marked with different weights.
 \subsection{Generate test cases from correct nodes}
 When the user confirms the correctness of a certain node, a test case should be generated.
 This presents us with several challenges:
 \begin{itemize}
-    \item Once the test case is create, should we present them via terminal to the user or insert them in a file? If inserting them is desired, should we create a new test file or insert them in an existing one?
+    \item Once the test case is created, should we present them via terminal to the user or insert them in a file? If inserting them is desired, should we create a new test file or insert them in an existing one?
     \item Creating the objects and variables requires a deep understanding of C++. Using the Clang Python API from LLVM \cite{llvm} may be needed.
-    \item Testing private methods require creating a friend class to access them. Another option would be to skip them altogether.
+    \item Testing private methods requires creating a friend class to access them. Another option would be to skip them altogether and only provide test cases for public methods.
 \end{itemize}
 
 

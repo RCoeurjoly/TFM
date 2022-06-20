@@ -28,7 +28,8 @@ A node n is a function/method execution, denoted \(f(I) \to O\), where:
 \item \(O_r\) is the return value (if any).
 \end{itemize}
 \end{itemize}
-
+\todo[color=green]{Se podrian quitar los (if any)? al final un set puede ser vacio}
+\todo{Yo los quitaría, sí.}
 \begin{exmp}
 Figure \ref{fig:carNode} is the node extracted from the execution of the method \verb|Car::move| with arguments 10 and 5, called from \verb|main| in Listing~\ref{lst:carClass}. This listing consists of a \verb|Car| class, which only has one method, \verb|Car::move| and the \verb|main| function, from which we instantiate a \verb|Car| object and move it. Note that it has no children nodes. It is composed of:
 
@@ -131,7 +132,7 @@ We can make the following remarks:
     \item \(n_1\) and \(n_2\) are leaf nodes, since they do not have any edges leading to children. Note the lack of \verb|children| branch in both nodes.
     \item Leaf nodes (\(n_1\) and \(n_2\)) have weight 1 each, denoted \(w_{n_1}\) and \(w_{n_0}\) respectively.
     \item The root node (\(n_0\)) has a weight \(w_{n_0} = w_{n_1} + w_{n_2} + 1 = 1 + 1 + 1 = 3\).  
-    \item All three nodes are undefined, that is, \(M(n_0) = M(n_1) = M(n_2) = \mathit{Undefined}\)
+    \item All three nodes are undefined, that is, \(M(n_0) = M(n_1) = M(n_2) = \mathit{Undefined}\). This is denoted by the \verb|correctness| branch having the value \verb|I don't know|.
 \end{itemize}
 
 \begin{figure}[ht]

@@ -433,3 +433,34 @@ abstract = {Algorithmic debugging is a debugging technique that has been extende
   year={2013},
   publisher={Springer Science \& Business Media}
 }
+
+@article{ALEA_Coq,
+title = {Proofs of randomized algorithms in Coq},
+journal = {Science of Computer Programming},
+volume = {74},
+number = {8},
+pages = {568-589},
+year = {2009},
+note = {Special Issue on Mathematics of Program Construction (MPC 2006)},
+issn = {0167-6423},
+doi = {https://doi.org/10.1016/j.scico.2007.09.002},
+url = {https://www.sciencedirect.com/science/article/pii/S0167642309000240},
+author = {Philippe Audebaud and Christine Paulin-Mohring},
+keywords = {Randomized algorithms, Proof of partial and total correctness, Functional language, Axiomatic semantics, Probability framing, Call-by-value, Monadic interpretation},
+abstract = {Randomized algorithms are widely used for finding efficiently approximated solutions to complex problems, for instance primality testing and for obtaining good average behavior. Proving properties of such algorithms requires subtle reasoning both on algorithmic and probabilistic aspects of programs. Thus, providing tools for the mechanization of reasoning is an important issue. This paper presents a new method for proving properties of randomized algorithms in a proof assistant based on higher-order logic. It is based on the monadic interpretation of randomized programs as probabilistic distributions (Giry, Ramsey and Pfeffer). It does not require the definition of an operational semantics for the language nor the development of a complex formalization of measure theory. Instead it uses functional and algebraic properties of unit interval. Using this model, we show the validity of general rules for estimating the probability for a randomized algorithm to satisfy specified properties. This approach addresses only discrete distributions and gives rules for analyzing general recursive functions. We apply this theory to the formal proof of a program implementing a Bernoulli distribution from a coin flip and to the (partial) termination of several programs. All the theories and results presented in this paper have been fully formalized and proved in the Coq proof assistant.}
+}
+
+@InProceedings{coqExtraction,
+author="Letouzey, Pierre",
+editor="Geuvers, Herman
+and Wiedijk, Freek",
+title="A New Extraction for Coq",
+booktitle="Types for Proofs and Programs",
+year="2003",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="200--219",
+abstract="We present here a new extraction mechanism for the Coq proof assistant [17]. By extraction, we mean automatic generation of functional code from Coq proofs, in order to produce certified programs. In former versions of Coq, the extraction mechanism suffered several limitations and in particular worked only with a subset of the language. We first discuss difficulties encountered and solutions proposed to remove these limitations. Then we give a proof of correctness for a theoretical model of the new extraction. Finally we describe the actual implementation distributed in Coq version 7.3 and further.",
+isbn="978-3-540-39185-2"
+}
+

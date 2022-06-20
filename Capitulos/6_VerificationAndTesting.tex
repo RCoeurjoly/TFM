@@ -1,22 +1,37 @@
 \chapter{Verification and benchmarks}
 \label{cap:verificationAndTesting}
-In this chapter, we present the formal verification of some algorithms, a metamorphic relation found and implemented, and time benchmarks.
+In this chapter, we present the formal verification of some algorithms and time benchmarks.
 \section{Verification}
 To help with the verification effort, we have chosen the Coq proof assistant \cite{coq}. The proofs can be found in the following file:  \url{https://github.com/RCoeurjoly/DDC/blob/database/proofs.v}.
 
-We have proven that the general debugging algorithm, defined in \cite{optimal_strategy}, terminates when the navigation strategy is Top-down and the user answers in the negative to all correction questions.
-\section{Metamorphic testing}
+We have proven that the general debugging algorithm, defined in \cite{optimal_strategy}, terminates when the navigation strategy is Top-down and the user answers in the negative to all correction questions. We have also proven that the algorithm returns an incorrect node without children nodes.
 \section{Benchmarks}
-In this section we present and discuss different time benchmarks of the execution of DDC. We also list the performance bottlenecks found.\todo{Contar que se buscan las limitaciones y los cuellos de botella}
+In this section we present and discuss different time benchmarks of the execution of DDC. We also list the performance bottlenecks found.
 
 \subsection{Quicksort benchmarks}
 To gather benchmarks easily, we provide a quicksort implementation that gets its input vector from the command line.
-Then, we generate random lists of different lengths and pipe these lists to quicksort.
+Then, we generate random lists of different lengths and pipe these lists to quicksort. All data was gathered with an Intel Core i5-4570 CPU @ 3.20GHz, with 4 cores and 16Gb of RAM computer.
 
-In Figure \ref{fig:vector_length_vs_time} we plot the different execution times.\todo{Explicar mucho más qué se ve en la figura}
+In Figure \ref{fig:vector_length_vs_time} we plot the different execution times.
+
+\begin{itemize}
+    \item \verb|Execution| represents the native execution of the quicksort program.
+    \item \verb|Recording| represents the recording of the quicksort program with \verb|rr|.
+    \item \verb|Tree building (main memory)| represents the building of the debugging tree with DDC, storing the tree in main memory.
+    \item \verb|Tree building (database)| represents the building of the debugging tree with DDC, storing the tree in a \verb|MySql| database.
+    \item \verb|Trace debugging (GDB)| represents the time \verb|GDB| needs to, after setting the three breakpoints, navigate until the end.
+    
+    The three breakpoints are set in:
+    \begin{itemize}
+        \item quicksort,
+        \item partition, and
+        \item swap.
+    \end{itemize}
+    \item \verb|Trace debugging (rr)| represents the time \verb|rr| needs to, after setting the three breakpoints, navigate until the end.
+\end{itemize}
 
 To reduce the time needed to build the debugging tree, we have created a branch in DDC (called \verb|database|) in which we stored the debugging tree in a database, as proposed in \cite{DDJ}.\todo{Hay que explicar que viene motivado por los resultados anteriores.}
-However, this did not improve the time significantly, as can be seen in Figure~\ref{fig:vector_length_vs_time}.\todo{Explicar mucho más. O si se explica después decir explícitamente}
+However, this did not improve the time significantly, as can be seen in Figure~\ref{fig:vector_length_vs_time}. Storing the debugging tree in a database is 43 percent  faster than storing it in main memory (50 seconds versus 87 seconds for a input vector length of 256).\todo{Explicar mucho más. O si se explica después decir explícitamente}
 
 \begin{figure}[htbp]
     \centering
@@ -71,7 +86,7 @@ The two bottlenecks identified are:
 This two bottlenecks constitute around 75 percent of total execution time.
  
 \begin{table}
-\caption{DDC (database) profiling for quicksort with input list length 256}
+\caption{DDC (database) profiling for quicksort with input vector length 256}
 \label{table:DDC_profile}
 \begin{tabular}{rl}
 cumtime & filename:lineno(function)\\
@@ -94,7 +109,7 @@ cumtime & filename:lineno(function)\\
 To test DDC with a industrial grade program, we chose the theorem prover Z3 \cite{z3}.
 
 The execution used for these benchmarks is the simplest execution possible.
-We pass the following SMT file to Z3:
+We pass the SMT file shown in Figure \ref{fig:SMT_file} to Z3:
 \begin{figure}[htbp]
     \centering
     \caption{SMT file passed to Z3 for benchmarking}
@@ -104,7 +119,6 @@ We pass the following SMT file to Z3:
 (check-sat)
     \end{verbatim}
 \end{figure}
-All the following data points represent the Z3 execution.
 
 In figure \ref{fig:node_vs_time_z3} we see the relationship between number of nodes versus execution time. We get the same relationship as in with quicksort data.
 

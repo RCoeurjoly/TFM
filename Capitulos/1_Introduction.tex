@@ -4,7 +4,7 @@
 \chapterquote{If debugging is the process of removing software bugs, then programming must be the process of putting them in.}{Edsger Dijkstra}
 
 
-In this section, we present the motivation of the project, its goals, contributions, and the structure of the rest of the document.\todo{Falta la cita al principio, poner o quitar.}
+In this chapter, we present the motivation of the project, its goals, contributions, and the structure of the rest of the document.
 
 \section{Motivation}
 C++ is a programming language that dates back to 1979 \cite{cppHistory}, and one of its goals is to maintain backward compatibility with C \cite{cCompat}. As such, C++ has inherited the defects of C, such as lack of memory safety \cite{practicalmemorysafety}.
@@ -33,7 +33,7 @@ The goal of this Master's thesis is to develop a declarative debugger for the C+
 This debugger should have the following features:
 \begin{enumerate}
   \item Integrated in workflow: it has to be integrated in the existing debugging workflow of the developer. \label{goal1}
-  \item No changes to program: the user has to be able to debug a program with no or few changes the program and its compilation (at most setting some compilation flags). \label{goal2}
+  \item No changes to the program being debugged: the user has to be able to debug a program with no or few changes the program and its compilation (at most setting some compilation flags). \label{goal2}
   \item Tree transformations: it has to perform tree transformations to reduce the size of the debugging tree. \label{goal3}
   \item Test cases as oracles: it has to use test cases to reduce the number of questions posed to the user. \label{goal4}
 \end{enumerate}
@@ -49,7 +49,7 @@ The most notable characteristics of DDC are the following:
 \item Test cases can be used as oracles to reduce the tree size.
 \item Three navigation strategies have been developed.
 \item One tree transformation has been developed.
-\item It can be easily extended with more strategies and more tree transformations.
+\item It can be easily extended with more strategies and tree transformations.
 \end{enumerate}
 
 The source code of the project is available at \url{https://github.com/RCoeurjoly/DDC} 
@@ -59,9 +59,9 @@ and its license is AGPL-3.0 License.
 The rest of the thesis is organized as follows:
 \begin{itemize}
     \item In Chapter \ref{cap:preliminaries} we introduce declarative debugging and the different tools needed to implement DDC.
-    \item  In Chapter \ref{cap:stateOfTheArt} we review the state of the art in declarative debugging and compares DDC's features to other declarative debuggers.
+    \item  In Chapter \ref{cap:stateOfTheArt} we review the state of the art in declarative debugging and compare DDC's features to other declarative debuggers.
     \item Chapter \ref{cap:definitions} contains the definitions and proofs that form the theoretical basis of DDC. 
-    \item Chapter \ref{cap:toolDescription} presents the most important usage scenarios of the tool, describes how the debugger was implemented and lists its commands.
-    \item Chapter \ref{cap:verificationAndTesting} reviews the verification and testing results, including time benchmarks.
+    \item Chapter \ref{cap:toolDescription} describes the architecture of the debugger, presents the most important usage scenarios of the tool and lists its commands.
+    \item Chapter \ref{cap:verificationAndTesting} reviews the verification and benchmarks done for DDC.
     \item Chapter \ref{cap:conclusions} discusses the achievements and the future lines of work that can be followed.
 \end{itemize}
