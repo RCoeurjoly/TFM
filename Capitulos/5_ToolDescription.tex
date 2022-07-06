@@ -129,7 +129,7 @@ This section describes three usage scenarios with DDC.
 We will explain which commands should be executed and the expected output.
 
 \subsection{Finding bugs in terminating programs}
-The execution of the code in Listing~\ref{lst:unexpectedQuicksortSource} results in an unexpected output, \(\{10, 5, 1, 7, 8, 9\}\), which is not sorted.
+The execution of the code in Listing \ref{lst:unexpectedQuicksortSource} results in an unexpected output, \(\{10, 5, 1, 7, 8, 9\}\), which is not sorted.
 It uses the implementations of functions \verb|quickSort|, \verb|partition|, and \verb|swap| defined in Listing~\ref{lst:quicksortFunctions}.
 \begin{lstlisting}[language=C++, caption={Code that results in unexpected output}, frame=tb, label={lst:unexpectedQuicksortSource}]
 #include <quicksort.h>
@@ -335,7 +335,7 @@ int main()
 }
 \end{lstlisting}
 
-Like with a buggy program, we first have to record the execution with \verb|rr|. This shell will be named \(rr_{server}\), to differentiate it from the debugging shell.
+Like with a buggy program, we first have to record the execution with \verb|rr|. This shell will be named \(rr_{server}\), to differentiate it from the debugging shell. This is shown in Listing \ref{lst:compileRecordReplayQuicksortTests}.
 \begin{lstlisting}[language=bash, caption={Compiling, recording and replaying quickSort test cases}, frame=tb, label={lst:compileRecordReplayQuicksortTests}]
 nix build .#test_quicksort
 rr record ./result/tests/test_quicksort

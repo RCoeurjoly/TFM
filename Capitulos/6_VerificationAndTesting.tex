@@ -1,12 +1,187 @@
 \chapter{Verification and benchmarks}
 \label{cap:verificationAndTesting}
 
-In this chapter, we present the formal verification of some algorithms and time benchmarks.\todo{Contar algo de Coq en los preliminares}
+In this chapter, we present the formal verification done in Coq and time benchmarks of the execution of DDC.\todo{Contar algo de Coq en los preliminares}
 
 \section{Verification}
-To help with the verification effort, we have chosen the Coq proof assistant \cite{coq}. The proofs can be found in the following file:  \url{https://github.com/RCoeurjoly/DDC/blob/database/proofs.v}.
+To help with the verification effort, we have chosen the Coq proof assistant \cite{coq}. The proofs can be found in the following file: \url{https://github.com/RCoeurjoly/DDC/blob/database/proofs.v}.
 
-We have proven that the general debugging algorithm, defined in \cite{optimal_strategy}, terminates when the navigation strategy is Top-down and the user answers in the negative to all correction questions.\todo{Esta frase no se entiende} We have also proven that this navigation strategy returns an incorrect node without children nodes.
+We now present the types, functions, and lemmas defined in Coq.
+
+\subsection{Types}
+We have defined two inductive types:
+\begin{itemize}
+    \item Correctness (see Figure \ref{fig:correctnessType}): a simple inductive type, with the possible values presented in Chapter \ref{cap:preliminaries}.
+    \item Node: an inductive recursive type, whose constructor, \verb|mkNode|, takes as arguments:
+    \begin{itemize}
+        \item a string to represent the content (\(f\), \(I\) and \(O\) in Chapter \ref{cap:definitions}) of the node,
+        \item a \verb|Correctness| value and
+        \item a list of \verb|Node|s.
+    \end{itemize}
+     
+\end{itemize}
+\begin{figure}
+    \centering
+    \caption{Correctness type}
+    \label{fig:correctnessType}
+\begin{minted}{coq}
+Inductive Correctness : Type :=
+| yes : Correctness
+| no : Correctness
+| trusted : Correctness
+| idk : Correctness.
+\end{minted}
+\end{figure}
+
+\begin{listing}[!ht]
+\begin{minted}{coq}
+Inductive Node : Type :=
+  mkNode
+    {
+    content : string
+    ;correctness : Correctness
+    ; children : list Node
+    }.
+\end{minted}
+\caption{Node inductive type}
+\label{listing:2}
+\end{listing}
+
+\subsection{Functions}
+Apart from the generic debugging algorithm, we have designed some auxiliary functions needed to reason about debugging trees:
+
+\begin{itemize}
+\item \verb|or_list|: recursive function to calculate the disjunction of a list of propositions.
+\item \verb|and_list|: recursive function to calculate the conjunction of a list of propositions.
+\item \verb|is_node_in_tree|: recursive function to find if the content of a node is in a tree.
+\item \verb|weight|: recursive function to calculate the weight of a tree, inspired by the definition in \cite{optimal_strategy}.
+\item \verb|are_all_idk|: recursive function to check that all nodes in tree have a correctness value of \verb|I don't know|.
+\item \verb|is_debugging_tree|: check if a tree is a debugging tree, defined as the root being incorrect and all children undefined (\verb|I don't know|) recursively.
+\item \verb|get_debugging_tree_from_tree|: returns the same tree as the input, only changing the correctness of the root node to incorrect.
+\item \verb|generic_debugging_algorithm|: a dependently-typed program, which takes as input a debugging tree and finds the buggy node. We provide a measure, the weight of the input tree, which we must prove it decreases with each recursive call to prove termination of the algorithm.
+To simplify the proofs, the navigation strategy used is Top-down and the user always answers that the node is incorrect, therefore choosing the first child as the next focus of the algorithm.
+\end{itemize}
+
+\begin{listing}[!ht]
+\begin{minted}{coq}
+
+Fixpoint is_node_in_tree (c : string) (m : Node) : Prop :=
+  or (c = content m)
+     (or_list
+        (map
+            (fun child => is_node_in_tree c child)
+                (children m))).
+
+\end{minted}
+\caption{is\_node\_in\_tree function}
+\label{listing:3}
+\end{listing}
+
+\begin{listing}[!ht]
+\begin{minted}{coq}
+
+Fixpoint and_list (l : list Prop) : Prop :=
+  match l with
+    nil => True
+  | hd::tl => and hd (and_list tl)
+  end.
+
+\end{minted}
+\caption{and\_list function}
+\label{listing:4}
+\end{listing}
+
+\begin{listing}[!ht]
+\begin{minted}{coq}
+Fixpoint weight (node : Node) : nat :=
+  match children node with
+    nil => 1
+  | children => S (list_sum (map (fun child => weight child) (children)))
+  end.
+\end{minted}
+\caption{weight function}
+\label{listing:4}
+\end{listing}
+
+\begin{listing}[!ht]
+\begin{minted}{coq}
+Fixpoint are_all_idk (node : Node) : Prop :=
+  and
+    (node.(correctness) = idk)
+    (and_list
+        (map
+            (fun child => are_all_idk child)
+                (children node))).
+\end{minted}
+\caption{are\_all\_idk function}
+\label{listing:4}
+\end{listing}
+
+
+\begin{listing}[!ht]
+\begin{minted}{coq}
+Definition is_debugging_tree (node : Node) : Prop :=
+  and
+    (node.(correctness) = no)
+        (and_list
+            (map
+                (fun child => are_all_idk child)
+                    (children node))).
+\end{minted}
+\caption{is\_debugging\_tree function}
+\label{listing:4}
+\end{listing}
+
+
+\begin{listing}[!ht]
+\begin{minted}{coq}
+Definition get_debugging_tree_from_tree (n : Node) : Node :=
+  mkNode (content n) no (children n).
+\end{minted}
+\caption{get\_debugging\_tree\_from\_tree function}
+\label{listing:4}
+\end{listing}
+
+
+\begin{listing}[!ht]
+\begin{minted}{coq}
+Program Fixpoint generic_debugging_algorithm
+    (n : {n: Node | is_debugging_tree n})
+    {measure (weight n)}:
+    {m: Node | is_debugging_tree m /\ children m = nil} :=
+  match children n with
+    nil => n
+  | head::tail => generic_debugging_algorithm
+    (get_debugging_tree_from_tree head)
+  end.
+\end{minted}
+\caption{generic\_debugging\_algorithm function}
+\label{listing:4}
+\end{listing}
+
+\subsection{Lemmas}
+The main goal of our verification effort is to confirm that the general debugging algorithm defined in Figure \ref{} type checks. To do this, we have to discharge four proof obligations:
+\begin{enumerate}
+    \item The algorithm returns a debugging tree without children nodes when it receives as input a debugging tree without children nodes.
+    
+    This is proved by simplification, that is, execution, of the pattern matching.
+    \item The algorithm returns a debugging tree when it receives a debugging tree with children nodes as input.
+    This is proved by noting that:
+    \begin{itemize}
+        \item \verb|are_all_idk head| is a true proposition, since all children nodes of a debugging tree satisfy \verb|are_all_idk| 
+        \item \verb|get_debugging_tree_from_tree| returns a debugging tree when it receives a \verb|are_all_idk| tree, which is the case for \verb|verb| 
+    \end{itemize}
+    \item The weight of \verb|get_debugging_tree_from_tree head| is smaller than the weight of the input tree.
+    \begin{itemize}
+        \item the weight of \verb|get_debugging_tree_from_tree head| is equal to the weight of \verb|head|, since \verb|get_debugging_tree_from_tree| always returns a tree with the same weight as its input tree.  
+        \item the weight of \verb|head| is smaller than the weight of its parent.
+    \end{itemize}
+    \item The weight of the input tree is a well-founded measure.
+        
+    This is proven by noting that the weight function returns a natural number, which is well-founded.
+\end{enumerate}
+
+\todo[color=green]{Tengo 24 lemmas auxiliares que me han ayudado a demostrar el algoritmo generico. Los menciono?}To discharge the proof obligation of the generic debugging algorithm, twenty four auxiliary lemmas were defined.
 
 \todo{Esta sección es exageradamente corta, tiene que desarrollarse mucho más, dando ideas intuitivas. Si la sección son 2 párrafos parece que no tiene mucho valor}
 

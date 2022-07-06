@@ -17,18 +17,17 @@ A node n is a function/method execution, denoted \(f(I) \to O\), where:
 \item \(I\) is a 3-tuple of inputs to \(f\), \(I = \{I_o, I_a, I_g\}\), where:
 \begin{itemize}
 \item \(I_o\) is the object state when \(f\) was called if \(f\) is a method, $\bot$ otherwise.
-\item \(I_a\) is an n-tuple of input arguments when \(f\) was called (if any).
-\item \(I_g\) is a set of global variables when \(f\) was called (if any).
+\item \(I_a\) is an n-tuple of input arguments when \(f\) was called.
+\item \(I_g\) is a set of global variables when \(f\) was called.
 \end{itemize}
 \item \(O\) is a 4-tuple of outputs of \(f\), \(O = \{O_o, O_a, O_g, O_r\}\), where:
 \begin{itemize}
 \item \(O_o\) is the object state when \(f\) returns if \(f\) is a method, $\bot$ otherwise.
-\item \(O_a\) is the m-tuple of output arguments when \(f\) returns (if there were passed as reference or pointer). Note that \(m <= n\), where $m=\mathbf{card}(O_a)$ and $n=\mathbf{card}(I_a)$
-\item \(O_g\) is the set of global variables when it returned (if any).
-\item \(O_r\) is the return value (if any).
+\item \(O_a\) is the m-tuple of output arguments when \(f\) returns if there were passed as reference or pointer. Note that \(m <= n\), where $m=\mathbf{card}(O_a)$ and $n=\mathbf{card}(I_a)$
+\item \(O_g\) is the set of global variables when it returned.
+\item \(O_r\) is the return value.
 \end{itemize}
 \end{itemize}
-\todo[color=green]{Se podrian quitar los (if any)? al final un set puede ser vacio}
 \todo{Yo los quitaría, sí.}
 \begin{exmp}
 Figure \ref{fig:carNode} is the node extracted from the execution of the method \verb|Car::move| with arguments 10 and 5, called from \verb|main| in Listing~\ref{lst:carClass}. This listing consists of a \verb|Car| class, which only has one method, \verb|Car::move| and the \verb|main| function, from which we instantiate a \verb|Car| object and move it. Note that it has no children nodes. It is composed of:

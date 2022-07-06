@@ -1,7 +1,7 @@
 \chapter{Preliminaries}
 \label{cap:preliminaries}
 
-In this chapter we will introduce declarative debugging, the C++ programming language and the technologies used to develop DDC.
+In this chapter we will introduce declarative debugging, the C++ programming language, Coq, and the technologies used to develop DDC.
 
 \section{Declarative debugging}
 Declarative debugging \cite{shapiro1982algorithmic}, also called algorithmic debugging, is a debugging technique that consists in (i) taking a program execution which the user deems incorrect, (ii) building an debugging tree (DT) abstracting the execution of this program, and (iii) asking questions about the correctness of computations to an oracle (usually the user, but other sources such as test cases can be used) until a certain computation is narrowed down as buggy.
@@ -87,7 +87,7 @@ When asked about the correctness of a certain node, the user usually has the fol
     All nodes representing an execution of this function or method can be removed from the debugging tree, no matter the inputs received.
     \item I don't know: the user cannot evaluate the correctness of this sub computation. 
     
-    The node can be removed from the debugging tree or the navigation strategy can choose another node, leaving this node in the tree. \todo{Contar que puede introducir incompletitud y que hay estrategias para paliarlo (volver a preguntar al final, por ejemplo).}
+    The node can be removed from the debugging tree or the navigation strategy can choose another node, leaving this node in the tree. If the node is left in the tree, the debugging algorithm would be incomplete. To alleviate this issue, a debugger could ask again about these nodes at the end of the debugging session.\todo{Contar que puede introducir incompletitud y que hay estrategias para paliarlo (volver a preguntar al final, por ejemplo).}
 \end{itemize}
 
 \section{C++ programming language}
@@ -125,13 +125,22 @@ Being statically typed gives the advantage of providing type information for fun
 The process of compilation usually removes a lot of information about the source code, with the purpose of creating a faster and smaller binary file.
 However, source code information is necessary to make the debugging session user friendly. This information includes class, function and variable names, among others.
 To make this information available for the debugger, the C++ program must be compiled with the debug information flag set to true.
+\section{The Coq Proof Assistant}
+Coq \cite{coq} is an interactive theorem prover.
+Coq implements a dependently-typed functional programming language. It also provides a series of tactics to transform incomplete proof goals into a complete proof \cite{coqTactics}. User defined lemmas can be used to solve more complex lemmas or theorems, which we use extensively. 
 
+Of special interest for this Master's thesis is Coq's Program tactic \cite{Program_coq}, which can be used to develop certified programs, that is, programs whose implementation and specification are intertwined.
+
+This is the approach taken to verify our implementation of the generic debugging algorithm, whose details can be found in Chapter \ref{cap:verificationAndTesting}.
+
+Once a verified program has been implemented in Coq, it can be extracted to an executable programming language such as OCaml, Haskell or Scheme \cite{coqExtraction}. Since \verb|GDB| only provides a Python API, we would need to call one of the extraction languages from Python, using a library such as \verb|pythonlib| \cite{ocamlFromPython}.
 \section{Technologies used}
 There are two main dependencies in this project:
 \begin{itemize}
     \item GDB, used as the general framework on DDC is built.
     \item rr, used for its reverse execution features.
 \end{itemize}
+
 
 \subsection{GDB: The GNU Project Debugger}
 
